@@ -1,4 +1,4 @@
-import {getDatabase, ref, push, set, onValue} from 'firebase/database';
+import {getDatabase, ref, push, set, child, get} from 'firebase/database';
 import {app} from './src/firebase/config';
 /* 
 page loads
@@ -30,7 +30,57 @@ const prompt = ref(db, 'prompts/' + promptID);
 */
 const db = getDatabase(app);
 
-function getPrompt() {}
+function setPrompt(text) {
+  promptID = getPromptID();
+  date = Date.now();
+  push(ref(db, 'prompt/prompts'), {
+    text: text,
+    promptID: promptID,
+    date: date,
+  });
+}
+
+function getPrompt() {
+  return new Promise((resolve, reject) => {
+    const dbRef = ref(db);
+    get(child(dbRef, 'prompt/prompts'))
+      .then(snapshot => {
+        if (snapshot.exists()) {
+          const latestPrompt = Object.values(snapshot.val()).reduce(function (
+            prev,
+            curr,
+          ) {
+            return prev.date > curr.date ? prev : curr;
+          });
+          resolve(latestPrompt.text);
+        } else {
+          reject('No prompt data available');
+        }
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+}
+
+function getMessages() {
+  const dbRef = ref(db);
+  return get(child(dbRef, `comments/1`))
+    .then(snapshot => {
+      if (snapshot.exists()) {
+        return Promise.resolve(
+          Object.values(snapshot.val()).map(obj => obj.text),
+        );
+      } else {
+        console.log('No data available');
+        return Promise.resolve([]);
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      return Promise.reject(error);
+    });
+}
 
 function getPromptID() {
   //get list of prompts
@@ -38,18 +88,25 @@ function getPromptID() {
   //get prompt id
   //return
 
-  return promptID;
+  return 1;
 }
 
-function respondToPrompt(promptID, userID, text, commentID) {
+function respondToPrompt(userID, text, commentID) {
   //add commentID to prompt responses
   //add comment to comments
-  const comments_list = ref(db, 'prompts/' + promptID + 'comments/');
+  promptID = getPromptID();
+  const comments_list = ref(db, 'comments/' + promptID);
   const new_comment = push(comments_list);
-  set(new_comment, {
+  push(comments_list, {
     text: text,
     commentID: commentID,
     userID: userID,
+    responses: [],
+  });
+
+  const prompt_responses = ref(db, 'prompt/responses');
+  push(prompt_responses, {
+    commentID: commentID,
   });
 }
 
@@ -70,4 +127,4 @@ onValue(commentRef, (snapshot) => {
   updateComments(postElement, data);
 });
 */
-export default respondToPrompt;
+export {setPrompt, respondToPrompt, getPrompt, getMessages};

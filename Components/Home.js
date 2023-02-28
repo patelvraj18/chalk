@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Image, Button, ThemeProvider, createTheme} from '@rneui/themed';
-import respondToPrompt from '../db_operations.js';
+import * as db_operations from '../db_operations.js';
 
 const theme = createTheme({
   lightColors: {
@@ -50,11 +50,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const test = () => {
-  console.log('fuck');
-  respondToPrompt(1, 2, 'god fucking damn it', 10);
-};
-
 const Home = ({navigation}) => {
   return (
     <ThemeProvider theme={theme}>
@@ -74,19 +69,6 @@ const Home = ({navigation}) => {
             }}
             onPress={() => navigation.navigate('Login')}
             title="Log In"
-            radius="50"
-            titleStyle={{
-              color: theme.lightColors.secondary,
-            }}></Button>
-          <Button
-            buttonStyle={{
-              width: 150,
-              height: 60,
-              margin: 15,
-              backgroundColor: theme.darkColors.primary,
-            }}
-            onPress={() => test()}
-            title="Sign Up"
             radius="50"
             titleStyle={{
               color: theme.lightColors.secondary,

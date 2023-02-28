@@ -13,10 +13,14 @@ import LoginScreen from './Components/LoginScreen';
 import MessageBoard from './Components/MessageBoard';
 import Home from './Components/Home';
 
-import {decode, encode} from 'base-64'
+import {decode, encode} from 'base-64';
 
-if (!global.btoa) {  global.btoa = encode }
-if (!global.atob) { global.atob = decode }
+if (!global.btoa) {
+  global.btoa = encode;
+}
+if (!global.atob) {
+  global.atob = decode;
+}
 
 const Stack = createNativeStackNavigator();
 
@@ -27,12 +31,12 @@ function App() {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{headerShown: false}}
+          // options={{headerShown: false}}
         />
         <Stack.Screen
           name="Login"
           component={LoginScreen}
-          options={{headerShown: false}}
+          // options={{headerShown: false}}
         />
         <Stack.Screen
           name="MessageBoard"
