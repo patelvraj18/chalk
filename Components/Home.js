@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Image, Button, ThemeProvider, createTheme} from '@rneui/themed';
+import respondToPrompt from '../db_operations.js';
 
 const theme = createTheme({
   lightColors: {
@@ -49,6 +50,11 @@ const styles = StyleSheet.create({
   },
 });
 
+const test = () => {
+  console.log('fuck');
+  respondToPrompt(1, 2, 'god fucking damn it', 10);
+};
+
 const Home = ({navigation}) => {
   return (
     <ThemeProvider theme={theme}>
@@ -79,7 +85,7 @@ const Home = ({navigation}) => {
               margin: 15,
               backgroundColor: theme.darkColors.primary,
             }}
-            onPress={() => navigation.navigate('Signup')}
+            onPress={() => test()}
             title="Sign Up"
             radius="50"
             titleStyle={{
