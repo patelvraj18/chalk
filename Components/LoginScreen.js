@@ -23,14 +23,7 @@ const LoginScreen = ({navigation}) => {
           style={styles.input}
           value={email}
           onChangeText={text => setEmail(text)}
-          placeholder="Email"
-        />
-        <TextInput
-          style={styles.input}
-          value={password}
-          onChangeText={text => setPassword(text)}
-          placeholder="Password"
-          secureTextEntry={true}
+          placeholder="Username"
         />
         <Button title="Login" onPress={handleLogin} />
       </View>
