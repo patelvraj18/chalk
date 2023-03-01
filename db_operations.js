@@ -69,7 +69,10 @@ function getMessages() {
     .then(snapshot => {
       if (snapshot.exists()) {
         return Promise.resolve(
-          Object.values(snapshot.val()).map(obj => obj.text),
+          Object.values(snapshot.val()).map(obj => ({
+            text: obj.text,
+            userID: obj.userID,
+          })),
         );
       } else {
         console.log('No data available');
