@@ -3,11 +3,11 @@ import {View, TextInput, Button, StyleSheet} from 'react-native';
 import {Image} from '@rneui/themed';
 
 const LoginScreen = ({navigation}) => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    navigation.navigate('MessageBoard');
+    navigation.navigate('MessageBoard', {username});
   };
 
   return (
@@ -21,8 +21,8 @@ const LoginScreen = ({navigation}) => {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          value={email}
-          onChangeText={text => setEmail(text)}
+          value={username}
+          onChangeText={text => setUsername(text)}
           placeholder="Username"
         />
         <Button title="Login" onPress={handleLogin} />

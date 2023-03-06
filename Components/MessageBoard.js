@@ -9,11 +9,11 @@ import {
 } from 'react-native';
 import * as db_operations from '../db_operations.js';
 
-const MessageBoard = () => {
+const MessageBoard = ({route}) => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [promptText, setPromptText] = useState('');
-
+  const {username} = route.params;
   useEffect(() => {
     db_operations.getPrompt().then(prompt => {
       setPromptText(prompt);
@@ -25,10 +25,12 @@ const MessageBoard = () => {
   }, []);
 
   const handleSend = async () => {
-    const userID = 'myUserID'; // replace with your actual userID
+    const userID = username; // replace with your actual userID
     const commentID = '1'; // replace with your actual commentID
     await db_operations.respondToPrompt(userID, inputText, commentID);
-    setMessages([...messages, inputText]);
+    const newMessage = {userID: username, text: inputText};
+
+    setMessages([...messages, newMessage]);
     setInputText('');
   };
 
@@ -41,8 +43,8 @@ const MessageBoard = () => {
         <View style={styles.messageContainer}>
           {messages.map((message, index) => (
             <View key={index} style={styles.message}>
-              <Text style={styles.username}>username</Text>
-              <Text style={styles.messageText}>{message}</Text>
+              <Text style={styles.username}>{message.userID}</Text>
+              <Text style={styles.messageText}>{message.text}</Text>
             </View>
           ))}
         </View>
