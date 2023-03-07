@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Image, Button, ThemeProvider, createTheme} from '@rneui/themed';
-import * as db_operations from '../db_operations.js';
 
 const theme = createTheme({
   lightColors: {
@@ -66,13 +65,28 @@ const Home = ({navigation}) => {
               width: 150,
               height: 60,
               backgroundColor: theme.lightColors.primary,
+              borderRadius: 50,
             }}
             onPress={() => navigation.navigate('Login')}
             title="Log In"
-            radius="50"
             titleStyle={{
               color: theme.lightColors.secondary,
-            }}></Button>
+            }}
+          />
+          <Button
+            buttonStyle={{
+              width: 150,
+              height: 60,
+              backgroundColor: theme.lightColors.primary,
+              marginTop: 25,
+              borderRadius: 50,
+            }}
+            onPress={() => navigation.navigate('Sign up')}
+            title="Sign up"
+            titleStyle={{
+              color: theme.lightColors.secondary,
+            }}
+          />
         </View>
       </View>
     </ThemeProvider>

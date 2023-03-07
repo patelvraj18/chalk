@@ -40,6 +40,38 @@ function setPrompt(text) {
   });
 }
 
+function setUsername(username, userCredential) {
+  const user = userCredential.user;
+  set(ref(db, `users/${user.uid}`), {
+    username: username,
+    email: user.email,
+  });
+}
+
+function getUsername(email) {
+  return new Promise((resolve, reject) => {
+    const dbRef = ref(db);
+    get(child(dbRef, `users`))
+      .then(snapshot => {
+        if (snapshot.exists()) {
+          const users = snapshot.val();
+          for (const userId in users) {
+            const user = users[userId];
+            if (user.email === email) {
+              resolve(user.username);
+            }
+          }
+          reject('User with email not found');
+        } else {
+          reject('No user data available');
+        }
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+}
+
 function getPrompt() {
   return new Promise((resolve, reject) => {
     const dbRef = ref(db);
@@ -130,4 +162,11 @@ onValue(commentRef, (snapshot) => {
   updateComments(postElement, data);
 });
 */
-export {setPrompt, respondToPrompt, getPrompt, getMessages};
+export {
+  setUsername,
+  getUsername,
+  setPrompt,
+  respondToPrompt,
+  getPrompt,
+  getMessages,
+};

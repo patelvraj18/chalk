@@ -1,13 +1,34 @@
 import React, {useState} from 'react';
 import {View, TextInput, Button, StyleSheet} from 'react-native';
 import {Image} from '@rneui/themed';
+import {getUsername} from '../db_operations';
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import {auth} from '../src/firebase/config';
 
 const LoginScreen = ({navigation}) => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    navigation.navigate('MessageBoard', {username});
+  const handleLogin = async () => {
+    try {
+      if (!email || !password) {
+        console.log('Please enter an email and password.');
+        return;
+      }
+      const userCredentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      if (!userCredentials.user.emailVerified) {
+        console.log('Please verify your email first.');
+        return;
+      }
+      const username = await getUsername(email);
+      navigation.navigate('MessageBoard', {username});
+    } catch (error) {
+      console.log('Login failed:', error.message);
+    }
   };
 
   return (
@@ -21,9 +42,16 @@ const LoginScreen = ({navigation}) => {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          value={username}
-          onChangeText={text => setUsername(text)}
-          placeholder="Username"
+          value={email}
+          onChangeText={text => setEmail(text)}
+          placeholder="Email"
+        />
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={text => setPassword(text)}
+          placeholder="Password"
+          secureTextEntry
         />
         <Button title="Login" onPress={handleLogin} />
       </View>
