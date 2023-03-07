@@ -12,6 +12,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LoginScreen from './Components/LoginScreen';
 import MessageBoard from './Components/MessageBoard';
 import Home from './Components/Home';
+import Signup from './Components/Signup';
 
 import {decode, encode} from 'base-64';
 
@@ -36,6 +37,11 @@ function App() {
         <Stack.Screen
           name="Login"
           component={LoginScreen}
+          // options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Sign up"
+          component={Signup}
           // options={{headerShown: false}}
         />
         <Stack.Screen
