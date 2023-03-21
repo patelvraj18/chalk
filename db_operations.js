@@ -1,4 +1,12 @@
-import {getDatabase, ref, push, set, child, get} from 'firebase/database';
+import {
+  getDatabase,
+  ref,
+  push,
+  set,
+  child,
+  get,
+  update,
+} from 'firebase/database';
 import {app} from './src/firebase/config';
 /* 
 page loads
@@ -31,13 +39,14 @@ const prompt = ref(db, 'prompts/' + promptID);
 const db = getDatabase(app);
 
 function setPrompt(text) {
-  promptID = getPromptID();
-  date = Date.now();
-  push(ref(db, 'prompt/prompts'), {
+  const promptsRef = ref(db, 'prompt/prompts');
+  const newPromptRef = push(promptsRef, {
     text: text,
-    promptID: promptID,
-    date: date,
+    date: Date.now(),
+    responses: [],
   });
+  const promptID = newPromptRef.key;
+  update(newPromptRef, {promptID: promptID});
 }
 
 function setUsername(username, userCredential) {
@@ -84,7 +93,7 @@ function getPrompt() {
           ) {
             return prev.date > curr.date ? prev : curr;
           });
-          resolve(latestPrompt.text);
+          resolve(latestPrompt);
         } else {
           reject('No prompt data available');
         }
@@ -95,15 +104,16 @@ function getPrompt() {
   });
 }
 
-function getMessages() {
+function getResponses(promptID) {
   const dbRef = ref(db);
-  return get(child(dbRef, `comments/1`))
+  return get(child(dbRef, `responses/${promptID}`))
     .then(snapshot => {
       if (snapshot.exists()) {
         return Promise.resolve(
           Object.values(snapshot.val()).map(obj => ({
             text: obj.text,
             userID: obj.userID,
+            responseID: obj.responseID,
           })),
         );
       } else {
@@ -126,23 +136,27 @@ function getPromptID() {
   return 1;
 }
 
-function respondToPrompt(userID, text, commentID) {
+function respondToPrompt(userID, text, promptID) {
   //add commentID to prompt responses
   //add comment to comments
-  promptID = getPromptID();
-  const comments_list = ref(db, 'comments/' + promptID);
-  const new_comment = push(comments_list);
-  push(comments_list, {
-    text: text,
-    commentID: commentID,
-    userID: userID,
-    responses: [],
-  });
+  // promptID = getPromptID();
+  // const comments_list = ref(db, 'comments/' + promptID);
+  // const new_comment = push(comments_list);
+  // push(comments_list, {
+  //   text: text,
+  //   commentID: commentID,
+  //   userID: userID,
+  //   responses: [],
+  // });
 
-  const prompt_responses = ref(db, 'prompt/responses');
-  push(prompt_responses, {
-    commentID: commentID,
+  const responsesRef = ref(db, `responses/${promptID}`);
+  const newResponse = push(responsesRef, {
+    text: text,
+    userID: userID,
+    comments: [],
   });
+  const responseID = newResponse.key;
+  update(newResponse, {responseID: responseID});
 }
 
 function respondToComment(responseID, userID, text, commentID) {
@@ -168,5 +182,5 @@ export {
   setPrompt,
   respondToPrompt,
   getPrompt,
-  getMessages,
+  getResponses,
 };
