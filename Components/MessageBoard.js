@@ -6,10 +6,11 @@ import {
   TextInput,
   Button,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import * as db_operations from '../db_operations.js';
 
-const MessageBoard = ({route}) => {
+const MessageBoard = ({navigation, route}) => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [promptText, setPromptText] = useState('');
@@ -19,10 +20,10 @@ const MessageBoard = ({route}) => {
     db_operations.getPrompt().then(prompt => {
       setPromptText(prompt.text);
       setPromptID(prompt.promptID);
-    });
 
-    db_operations.getResponses().then(messages => {
-      setMessages(messages);
+      db_operations.getResponses(prompt.promptID).then(messages => {
+        setMessages(messages);
+      });
     });
   }, []);
 
@@ -35,6 +36,15 @@ const MessageBoard = ({route}) => {
     setInputText('');
   };
 
+  const handleReply = (responseText, responseID, userID) => {
+    navigation.navigate('ReplyScreen', {
+      responseText,
+      promptID,
+      responseID,
+      userID,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -44,8 +54,13 @@ const MessageBoard = ({route}) => {
         <View style={styles.messageContainer}>
           {messages.map((message, index) => (
             <View key={index} style={styles.message}>
-              <Text style={styles.username}>{message.userID}</Text>
-              <Text style={styles.messageText}>{message.text}</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  handleReply(message.text, message.responseID, message.userID)
+                }>
+                <Text style={styles.username}>{message.userID}</Text>
+                <Text style={styles.messageText}>{message.text}</Text>
+              </TouchableOpacity>
             </View>
           ))}
         </View>
