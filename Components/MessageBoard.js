@@ -13,21 +13,22 @@ const MessageBoard = ({route}) => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [promptText, setPromptText] = useState('');
+  const [promptID, setPromptID] = useState('');
   const {username} = route.params;
   useEffect(() => {
     db_operations.getPrompt().then(prompt => {
-      setPromptText(prompt);
+      setPromptText(prompt.text);
+      setPromptID(prompt.promptID);
     });
 
-    db_operations.getMessages().then(messages => {
+    db_operations.getResponses().then(messages => {
       setMessages(messages);
     });
   }, []);
 
   const handleSend = async () => {
     const userID = username; // replace with your actual userID
-    const commentID = '1'; // replace with your actual commentID
-    await db_operations.respondToPrompt(userID, inputText, commentID);
+    await db_operations.respondToPrompt(userID, inputText, promptID);
     const newMessage = {userID: username, text: inputText};
 
     setMessages([...messages, newMessage]);
