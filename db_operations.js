@@ -117,7 +117,7 @@ function getResponses(promptID) {
           })),
         );
       } else {
-        console.log('No data available blah');
+        console.log('No data available');
         return Promise.resolve([]);
       }
     })
@@ -128,7 +128,6 @@ function getResponses(promptID) {
 }
 
 function getComments(responseID) {
-  console.log('Testttt');
   const dbRef = ref(db);
   return get(child(dbRef, `comments/${responseID}`))
     .then(snapshot => {
@@ -177,7 +176,6 @@ function respondToPrompt(userID, text, promptID) {
 function replyToResponse(userID, text, responseID) {
   //add commentID to comment responses
   //add comment to comments
-  console.log('yo');
   const commentRef = ref(db, `comments/${responseID}`);
   const newComment = push(commentRef, {
     text: text,
