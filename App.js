@@ -13,6 +13,7 @@ import LoginScreen from './Components/LoginScreen';
 import MessageBoard from './Components/MessageBoard';
 import Home from './Components/Home';
 import Signup from './Components/Signup';
+import ReplyScreen from './Components/ReplyScreen';
 
 import {decode, encode} from 'base-64';
 
@@ -47,6 +48,11 @@ function App() {
         <Stack.Screen
           name="MessageBoard"
           component={MessageBoard}
+          // options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ReplyScreen"
+          component={ReplyScreen}
           // options={{headerShown: false}}
         />
       </Stack.Navigator>

@@ -127,13 +127,27 @@ function getResponses(promptID) {
     });
 }
 
-function getPromptID() {
-  //get list of prompts
-  //filter through prompts for most recent one
-  //get prompt id
-  //return
-
-  return 1;
+function getComments(responseID) {
+  const dbRef = ref(db);
+  return get(child(dbRef, `comments/${responseID}`))
+    .then(snapshot => {
+      if (snapshot.exists()) {
+        return Promise.resolve(
+          Object.values(snapshot.val()).map(obj => ({
+            text: obj.text,
+            userID: obj.userID,
+            commentID: obj.commentID,
+          })),
+        );
+      } else {
+        console.log('No data available');
+        return Promise.resolve([]);
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      return Promise.reject(error);
+    });
 }
 
 function respondToPrompt(userID, text, promptID) {
@@ -157,16 +171,19 @@ function respondToPrompt(userID, text, promptID) {
   });
   const responseID = newResponse.key;
   update(newResponse, {responseID: responseID});
+  return responseID;
 }
 
-function respondToComment(responseID, userID, text, commentID) {
+function replyToResponse(userID, text, responseID) {
   //add commentID to comment responses
   //add comment to comments
-  push(ref(db, 'comments/' + commentID), {
+  const commentRef = ref(db, `comments/${responseID}`);
+  const newComment = push(commentRef, {
     text: text,
-    commentID: commentID,
     userID: userID,
   });
+  const commentID = newComment.key;
+  update(newComment, {commentID: commentID});
 }
 
 /* real-time listening 
@@ -183,4 +200,6 @@ export {
   respondToPrompt,
   getPrompt,
   getResponses,
+  getComments,
+  replyToResponse,
 };
