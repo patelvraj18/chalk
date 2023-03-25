@@ -29,19 +29,30 @@ const MessageBoard = ({navigation, route}) => {
 
   const handleSend = async () => {
     const userID = username; // replace with your actual userID
-    await db_operations.respondToPrompt(userID, inputText, promptID);
-    const newMessage = {userID: username, text: inputText};
+    const responseID = await db_operations.respondToPrompt(
+      userID,
+      inputText,
+      promptID,
+    );
+    const newMessage = {
+      userID: username,
+      text: inputText,
+      responseID: responseID,
+    };
 
     setMessages([...messages, newMessage]);
     setInputText('');
   };
 
   const handleReply = (responseText, responseID, userID) => {
-    navigation.navigate('ReplyScreen', {
-      responseText,
-      promptID,
-      responseID,
-      userID,
+    db_operations.getResponses(promptID).then(() => {
+      navigation.navigate('ReplyScreen', {
+        responseText,
+        promptID,
+        responseID,
+        userID,
+        username,
+      });
     });
   };
 

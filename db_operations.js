@@ -171,6 +171,7 @@ function respondToPrompt(userID, text, promptID) {
   });
   const responseID = newResponse.key;
   update(newResponse, {responseID: responseID});
+  return responseID;
 }
 
 function replyToResponse(userID, text, responseID) {

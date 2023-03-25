@@ -10,7 +10,7 @@ import {
 import * as db_operations from '../db_operations.js';
 
 const ReplyScreen = ({route}) => {
-  const {responseText, responseID, userID} = route.params;
+  const {responseText, responseID, responseUserID, username} = route.params;
   const [response, setResponse] = useState(null);
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState('');
@@ -24,8 +24,8 @@ const ReplyScreen = ({route}) => {
 
   const handleSubmitComment = () => {
     if (commentText.trim() !== '') {
-      db_operations.replyToResponse(userID, commentText, responseID);
-      setComments([...comments, {userID: userID, text: commentText}]);
+      db_operations.replyToResponse(username, commentText, responseID);
+      setComments([...comments, {userID: username, text: commentText}]);
       setCommentText('');
     }
   };
@@ -34,7 +34,7 @@ const ReplyScreen = ({route}) => {
     <View style={styles.container}>
       {response && (
         <View style={styles.responseContainer}>
-          <Text style={styles.username}>{userID}</Text>
+          <Text style={styles.username}>{responseUserID}</Text>
           <Text style={styles.responseText}>{responseText}</Text>
         </View>
       )}
