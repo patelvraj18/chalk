@@ -30,12 +30,19 @@ export default function Signup({navigation}) {
   return (
     <View style={styles.container}>
       <Input
+        style={styles.user}
         placeholder="Username"
         onChangeText={setUsername}
         value={username}
       />
-      <Input placeholder="Email" onChangeText={setEmail} value={email} />
       <Input
+        style={styles.email}
+        placeholder="Email"
+        onChangeText={setEmail}
+        value={email}
+      />
+      <Input
+        style={styles.password}
         placeholder="Password"
         secureTextEntry={true}
         onChangeText={setPassword}
@@ -51,5 +58,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    fontSize: 13,
+    paddingLeft: 3,
   },
 });

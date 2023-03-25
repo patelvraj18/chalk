@@ -1,11 +1,28 @@
-import React, {useState} from 'react';
-import {View, TextInput, Button, StyleSheet} from 'react-native';
-import {Image} from '@rneui/themed';
-import {getUsername} from '../db_operations';
-import {signInWithEmailAndPassword} from 'firebase/auth';
-import {auth} from '../src/firebase/config';
+import React, { useState } from 'react';
+import { View, TextInput, Button, StyleSheet } from 'react-native';
+import { Image } from '@rneui/themed';
+import { Text } from 'react-native';
+import { getUsername } from '../db_operations';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../src/firebase/config';
+import { ThemeProvider, createTheme } from '@rneui/themed';
 
-const LoginScreen = ({navigation}) => {
+const theme = createTheme({
+  lightColors: {
+    primary: '#979797',
+    secondary: '#ffffff',
+  },
+  darkColors: {
+    primary: '#555454',
+    secondary: '#757373',
+  },
+  navigationColors: {
+    primary: '#5c64b0',
+  },
+  mode: 'light',
+});
+
+const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -25,37 +42,42 @@ const LoginScreen = ({navigation}) => {
         return;
       }
       const username = await getUsername(email);
-      navigation.navigate('MessageBoard', {username});
+      navigation.navigate('MessageBoard', { username });
     } catch (error) {
       console.log('Login failed:', error.message);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image
-          style={styles.image}
-          source={require('../assets/images/login..png')}
-        />
+    <ThemeProvider theme={theme}>
+      <View style={styles.container}>
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.image}
+            source={require('../assets/images/login..png')}
+          />
+        </View>
+        <View>
+          <Text style={styles.text1}>Welcome back to Chalk!</Text>
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={text => setEmail(text)}
+            placeholder="Email"
+          />
+          <TextInput
+            style={styles.input}
+            value={password}
+            onChangeText={text => setPassword(text)}
+            placeholder="Password"
+            secureTextEntry
+          />
+          <Button title="Login" onPress={handleLogin} />
+        </View>
       </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={text => setEmail(text)}
-          placeholder="Email"
-        />
-        <TextInput
-          style={styles.input}
-          value={password}
-          onChangeText={text => setPassword(text)}
-          placeholder="Password"
-          secureTextEntry
-        />
-        <Button title="Login" onPress={handleLogin} />
-      </View>
-    </View>
+    </ThemeProvider>
   );
 };
 
@@ -68,8 +90,9 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    justifyContent: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'flex-start',
   },
   inputContainer: {
     flex: 1,
@@ -90,9 +113,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   image: {
-    width: 175,
-    height: 175,
+    width: 200,
+    height: 200,
     resizeMode: 'contain',
+    marginRight: 120,
+    paddingBottom: 30,
+  },
+  text1: {
+    color: theme.darkColors.secondary,
+    fontSize: 15,
+    marginRight: 145,
+    fontFamily: 'InriaSans-Light',
   },
 });
 
