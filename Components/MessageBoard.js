@@ -6,10 +6,11 @@ import {
   TextInput,
   Button,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import * as db_operations from '../db_operations.js';
 
-const MessageBoard = ({route}) => {
+const MessageBoard = ({navigation, route}) => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [promptText, setPromptText] = useState('');
@@ -19,20 +20,40 @@ const MessageBoard = ({route}) => {
     db_operations.getPrompt().then(prompt => {
       setPromptText(prompt.text);
       setPromptID(prompt.promptID);
-    });
 
-    db_operations.getResponses().then(messages => {
-      setMessages(messages);
+      db_operations.getResponses(prompt.promptID).then(messages => {
+        setMessages(messages);
+      });
     });
   }, []);
 
   const handleSend = async () => {
     const userID = username; // replace with your actual userID
-    await db_operations.respondToPrompt(userID, inputText, promptID);
-    const newMessage = {userID: username, text: inputText};
+    const responseID = await db_operations.respondToPrompt(
+      userID,
+      inputText,
+      promptID,
+    );
+    const newMessage = {
+      userID: username,
+      text: inputText,
+      responseID: responseID,
+    };
 
     setMessages([...messages, newMessage]);
     setInputText('');
+  };
+
+  const handleReply = (responseText, responseID, userID) => {
+    db_operations.getResponses(promptID).then(() => {
+      navigation.navigate('ReplyScreen', {
+        responseText,
+        promptID,
+        responseID,
+        userID,
+        username,
+      });
+    });
   };
 
   return (
@@ -44,8 +65,13 @@ const MessageBoard = ({route}) => {
         <View style={styles.messageContainer}>
           {messages.map((message, index) => (
             <View key={index} style={styles.message}>
-              <Text style={styles.username}>{message.userID}</Text>
-              <Text style={styles.messageText}>{message.text}</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  handleReply(message.text, message.responseID, message.userID)
+                }>
+                <Text style={styles.username}>{message.userID}</Text>
+                <Text style={styles.messageText}>{message.text}</Text>
+              </TouchableOpacity>
             </View>
           ))}
         </View>
