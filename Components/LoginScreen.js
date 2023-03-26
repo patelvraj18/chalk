@@ -22,6 +22,8 @@ const theme = createTheme({
   mode: 'light',
 });
 
+// const CustomTextInput = (props) => (<TextInput autoCapitalize="none" ...props />)
+
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -63,18 +65,25 @@ const LoginScreen = ({ navigation }) => {
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
+            autoCorrect={false}
             value={email}
             onChangeText={text => setEmail(text)}
             placeholder="Email"
+            autoCapitalize="none"
           />
           <TextInput
             style={styles.input}
             value={password}
             onChangeText={text => setPassword(text)}
+            autoCorrect={false}
             placeholder="Password"
             secureTextEntry
+            autoCapitalize="none"
           />
-          <Button title="Login" onPress={handleLogin} />
+          <Button
+            style={styles.button}
+            title="Login" onPress={handleLogin}
+          />
         </View>
       </View>
     </ThemeProvider>
@@ -102,6 +111,7 @@ const styles = StyleSheet.create({
     width: '100%',
     margin: 20,
     padding: 10,
+    fontFamily: 'Arial',
   },
   input: {
     width: '100%',
@@ -122,8 +132,11 @@ const styles = StyleSheet.create({
   text1: {
     color: theme.darkColors.secondary,
     fontSize: 15,
+    fontFamily: 'Arial',
     marginRight: 145,
-    fontFamily: 'InriaSans-Light',
+  },
+  button: {
+
   },
 });
 
