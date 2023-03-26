@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet } from 'react-native';
-import { Image } from '@rneui/themed';
-import { Text } from 'react-native';
-import { getUsername } from '../db_operations';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../src/firebase/config';
-import { ThemeProvider, createTheme } from '@rneui/themed';
+import React, {useState} from 'react';
+import {View, TextInput, Button, StyleSheet} from 'react-native';
+import {Image} from '@rneui/themed';
+import {Text} from 'react-native';
+import {getUsername} from '../db_operations';
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import {auth} from '../src/firebase/config';
+import {ThemeProvider, createTheme} from '@rneui/themed';
 
 const theme = createTheme({
   lightColors: {
@@ -44,7 +44,7 @@ const LoginScreen = ({ navigation }) => {
         return;
       }
       const username = await getUsername(email);
-      navigation.navigate('MessageBoard', { username });
+      navigation.navigate('MessageBoard', {username});
     } catch (error) {
       console.log('Login failed:', error.message);
     }
