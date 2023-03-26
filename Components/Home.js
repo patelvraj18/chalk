@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Image, Button, ThemeProvider, createTheme } from '@rneui/themed';
@@ -66,6 +67,7 @@ const Home = ({ navigation }) => {
               height: 60,
               backgroundColor: theme.lightColors.primary,
               borderRadius: 50,
+              fontSize: 17,
             }}
             onPress={() => navigation.navigate('Login')}
             title="Log In"
@@ -80,9 +82,10 @@ const Home = ({ navigation }) => {
               backgroundColor: theme.darkColors.primary,
               marginTop: 25,
               borderRadius: 50,
+              fontSize: 17,
             }}
             onPress={() => navigation.navigate('Sign up')}
-            title="Sign up"
+            title="Sign Up"
             titleStyle={{
               color: theme.lightColors.secondary,
             }}
