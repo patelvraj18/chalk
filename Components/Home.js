@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {View, StyleSheet} from 'react-native';
-import {Image, Button, ThemeProvider, createTheme} from '@rneui/themed';
+import React, { useState } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Image, Button, ThemeProvider, createTheme } from '@rneui/themed';
 
 const theme = createTheme({
   lightColors: {
@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 175,
-    height: 175,
+    width: 200,
+    height: 200,
     resizeMode: 'contain',
   },
   buttonContainer: {
@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     width: '100%',
-    margin: 20,
     padding: 10,
+    marginBottom: 50,
   },
   button: {
     width: 150,
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   return (
     <ThemeProvider theme={theme}>
       <View style={styles.container}>
@@ -77,7 +77,7 @@ const Home = ({navigation}) => {
             buttonStyle={{
               width: 150,
               height: 60,
-              backgroundColor: theme.lightColors.primary,
+              backgroundColor: theme.darkColors.primary,
               marginTop: 25,
               borderRadius: 50,
             }}
