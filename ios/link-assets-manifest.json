@@ -1,0 +1,133 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/InriaSans-Bold.ttf",
+      "sha1": "296ff7429ddf34cf155d05bbf9855012e94e8e02"
+    },
+    {
+      "path": "assets/fonts/InriaSans-BoldItalic.ttf",
+      "sha1": "304267fdc84b4711eef47b1a61d83d1de3554c42"
+    },
+    {
+      "path": "assets/fonts/InriaSans-Italic.ttf",
+      "sha1": "6de9355dfea86b93fd58af526b9944097a458357"
+    },
+    {
+      "path": "assets/fonts/InriaSans-Light.ttf",
+      "sha1": "153c0cbf554ef91c8fe43c8b464fc3e128cd4c92"
+    },
+    {
+      "path": "assets/fonts/InriaSans-LightItalic.ttf",
+      "sha1": "46e6b62c6c16e627d78ce372597d34c44e6b0805"
+    },
+    {
+      "path": "assets/fonts/InriaSans-Regular.ttf",
+      "sha1": "b56ee911415e9bbb591caf6bfc3d8283e9339f41"
+    },
+    {
+      "path": "assets/fonts/JosefinSans-Bold.ttf",
+      "sha1": "dc9bf9dd3c3207275c97e8e66d37544867c15566"
+    },
+    {
+      "path": "assets/fonts/JosefinSans-BoldItalic.ttf",
+      "sha1": "93254151670bd7bed3f6adaa4172c5eee70df96f"
+    },
+    {
+      "path": "assets/fonts/JosefinSans-ExtraLight.ttf",
+      "sha1": "1b4f795659a0c600cd6a2281834b27f1039bd406"
+    },
+    {
+      "path": "assets/fonts/JosefinSans-ExtraLightItalic.ttf",
+      "sha1": "12d7b688f11cc8b5733854bd429993b8eb9818b1"
+    },
+    {
+      "path": "assets/fonts/JosefinSans-Italic.ttf",
+      "sha1": "9d109af51c83f5ca848087ffbe67ec5929a69234"
+    },
+    {
+      "path": "assets/fonts/JosefinSans-Light.ttf",
+      "sha1": "869f678f03202d133387df8a2058d4d437b7c798"
+    },
+    {
+      "path": "assets/fonts/JosefinSans-LightItalic.ttf",
+      "sha1": "382b8b27cf502c6c5859f29c22dc3f6d4903961a"
+    },
+    {
+      "path": "assets/fonts/JosefinSans-Medium.ttf",
+      "sha1": "16e7e4b48d1c7fe6e1d66a49dd9bcedb5bbf0a82"
+    },
+    {
+      "path": "assets/fonts/JosefinSans-MediumItalic.ttf",
+      "sha1": "9113b9be24515f44b9334c34db04e7c712ddcb0b"
+    },
+    {
+      "path": "assets/fonts/JosefinSans-Regular.ttf",
+      "sha1": "cde899ddf3a6086a9fed95de0f43af7826bd084b"
+    },
+    {
+      "path": "assets/fonts/JosefinSans-SemiBold.ttf",
+      "sha1": "c44288eff3bef462af865705575c59cee971c112"
+    },
+    {
+      "path": "assets/fonts/JosefinSans-SemiBoldItalic.ttf",
+      "sha1": "552da9da8b0b40e20639dc11083d5706e2ccb03c"
+    },
+    {
+      "path": "assets/fonts/JosefinSans-Thin.ttf",
+      "sha1": "d9c350051affd911c6b11a22733788d598edf157"
+    },
+    {
+      "path": "assets/fonts/JosefinSans-ThinItalic.ttf",
+      "sha1": "4d063575e8ef66aed64619ad57b215a931c68d66"
+    },
+    {
+      "path": "assets/fonts/Roboto-Black.ttf",
+      "sha1": "3f8e401d808f6ce84b542266726514ac8be73171"
+    },
+    {
+      "path": "assets/fonts/Roboto-BlackItalic.ttf",
+      "sha1": "03d6e3747d862385dbe48e8296385b9236101a62"
+    },
+    {
+      "path": "assets/fonts/Roboto-Bold.ttf",
+      "sha1": "62442a18a9fe9457c1afeabf683d263a691b7798"
+    },
+    {
+      "path": "assets/fonts/Roboto-BoldItalic.ttf",
+      "sha1": "2f10ad9e8cab0880182705c4e0fbaeabae706e64"
+    },
+    {
+      "path": "assets/fonts/Roboto-Italic.ttf",
+      "sha1": "65f3f6a7e1bd2fa6f2df35e4b07775d7f1dde4f0"
+    },
+    {
+      "path": "assets/fonts/Roboto-Light.ttf",
+      "sha1": "18788c5d630fa695f9283f6393bfa541b2031508"
+    },
+    {
+      "path": "assets/fonts/Roboto-LightItalic.ttf",
+      "sha1": "6e01f9df9449565697032b002706a94b51862bbe"
+    },
+    {
+      "path": "assets/fonts/Roboto-Medium.ttf",
+      "sha1": "3c6a09fcc6a454924c81af7dff94fc6d399ed79b"
+    },
+    {
+      "path": "assets/fonts/Roboto-MediumItalic.ttf",
+      "sha1": "b3aa2d8f16d5a331fdced82f213a052b204eaca0"
+    },
+    {
+      "path": "assets/fonts/Roboto-Regular.ttf",
+      "sha1": "56c5c0d38bde4c1f1549dda43db37b09c608aad3"
+    },
+    {
+      "path": "assets/fonts/Roboto-Thin.ttf",
+      "sha1": "58c733e22bceeaf9609ce578eca92ac303c6d92f"
+    },
+    {
+      "path": "assets/fonts/Roboto-ThinItalic.ttf",
+      "sha1": "cc79d5a23bd0ec08b1d99f5390bf33cacc3082f4"
+    }
+  ]
+}

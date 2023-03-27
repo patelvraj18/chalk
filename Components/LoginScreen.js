@@ -44,7 +44,7 @@ const LoginScreen = ({ navigation }) => {
         return;
       }
       const username = await getUsername(email);
-      navigation.navigate('MessageBoard', { username });
+      navigation.navigate('MessageBoard', {username});
     } catch (error) {
       console.log('Login failed:', error.message);
     }
