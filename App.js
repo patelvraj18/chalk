@@ -38,12 +38,12 @@ function App() {
         <Stack.Screen
           name="Login"
           component={LoginScreen}
-        // options={{ headerShown: false }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Sign up"
           component={Signup}
-        // options={{ headerShown: false }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="MessageBoard"

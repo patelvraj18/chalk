@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Input } from '@rneui/themed';
@@ -9,6 +10,9 @@ import {
 import * as db_operations from '../db_operations.js';
 import { ThemeProvider, createTheme } from '@rneui/themed';
 import { Image } from '@rneui/themed';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TextInput } from 'react-native-gesture-handler';
+import { Text } from 'react-native';
 
 const theme = createTheme({
   lightColors: {
@@ -18,6 +22,7 @@ const theme = createTheme({
   darkColors: {
     primary: '#555454',
     secondary: '#757373',
+    tertiary: '#D9D9D9',
   },
   navigationColors: {
     primary: '#5c64b0',
@@ -46,83 +51,148 @@ export default function Signup({ navigation }) {
   };
   return (
     <ThemeProvider theme={theme}>
-      <View style={styles.imageContainer}>
-        <Image
-          style={styles.image}
-          source={require('../assets/images/signup.png')}
-        />
-      </View>
       <View style={styles.container}>
-        <Input
-          style={[styles.user, styles.input]}
-          autoCorrect={false}
-          placeholder="Username"
-          onChangeText={setUsername}
-          value={username}
-          autoCapitalize="none"
-        />
-        <Input
-          style={[styles.email, styles.input]}
-          autoCorrect={false}
-          placeholder="Email"
-          onChangeText={setEmail}
-          value={email}
-          autoCapitalize="none"
-        />
-        <Input
-          style={[styles.password, styles.input]}
-          autoCorrect={false}
-          placeholder="Password"
-          secureTextEntry={true}
-          onChangeText={setPassword}
-          value={password}
-          autoCapitalize="none"
-        />
-        <Button
-          title="Sign Up" onPress={handleSignup}
-          buttonStyle={{
-            width: 300,
-            height: 60,
-            backgroundColor: theme.darkColors.primary,
-            borderRadius: 15,
-            marginLeft: 18,
-            fontFamily: 'Arial',
-          }} />
+        <View style={styles.iconContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Image
+              style={styles.icon}
+              source={require('../assets/images/x-icon.png')}
+              resizeMethod="stretch"
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.image}
+            source={require('../assets/images/signup.png')}
+          />
+        </View>
+        <View style={styles.welcomeContainer}>
+          <Text style={styles.textWelcome}>Welcome to Chalk!</Text>
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            autoCorrect={false}
+            placeholder="USERNAME"
+            onChangeText={setUsername}
+            value={username}
+            autoCapitalize="none"
+          />
+          <TextInput
+            style={styles.input}
+            autoCorrect={false}
+            placeholder="EMAIL"
+            onChangeText={setEmail}
+            value={email}
+            autoCapitalize="none"
+          />
+          <TextInput
+            style={styles.input}
+            autoCorrect={false}
+            placeholder="PASSWORD"
+            secureTextEntry={true}
+            onChangeText={setPassword}
+            value={password}
+            autoCapitalize="none"
+          />
+        </View>
+        <View>
+          <Button
+            title="Sign Up" onPress={handleSignup}
+            color={theme.lightColors.secondary}
+            buttonStyle={{
+              width: 300,
+              height: 55,
+              paddingTop: 9,
+              borderRadius: 50,
+              backgroundColor: theme.darkColors.primary,
+              marginTop: 20,
+              marginLeft: 23,
+              fontFamily: 'Arial',
+              fontSize: 13,
+            }} />
+        </View>
+        <View style={styles.logInContainer}>
+          <Text style={styles.logIn}>
+            Already have an account?
+          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.logLink}>  Log in.
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ThemeProvider>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+    fontFamily: 'Arial',
+  },
+  iconContainer: {
+    position: 'absolute',
+    top: 55,
+    right: 30,
+  },
+  icon: {
+    width: 18,
+    height: 18,
+  },
+  imageContainer: {
+    justifyContent: 'flex-start',
+    position: 'absolute',
+    top: 115,
+    left: 50,
+    height: '18%',
+  },
   image: {
-    width: 200,
+    width: 235,
     height: 200,
     resizeMode: 'contain',
   },
-  imageContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    marginRight: 100,
-    marginLeft: 20,
-    paddingBottom: 30,
+  welcomeContainer: {
+    position: 'absolute',
+    top: 265,
+    left: 50,
   },
-  container: {
-    flex: 1,
-    fontSize: 13,
-    paddingLeft: 3,
+  textWelcome: {
+    color: theme.darkColors.secondary,
+    fontSize: 14,
+  },
+  inputContainer: {
+    padding: 10,
     fontFamily: 'Arial',
     alignItems: 'center',
+    marginTop: 100,
   },
   input: {
-    width: '100%',
+    width: '90%',
     height: 40,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#ccc',
-    borderRadius: 15,
-    paddingHorizontal: 10,
-    marginBottom: 10,
+    borderRadius: 7,
+    paddingHorizontal: 15,
+    marginBottom: 15,
+    backgroundColor: theme.darkColors.tertiary,
+    color: theme.darkColors.secondary,
     fontSize: 13,
+  },
+  logInContainer: {
+    position: 'absolute',
+    bottom: 40,
+    left: 75,
+    flexDirection: 'row',
+  },
+  logIn: {
+    color: theme.lightColors.primary,
+  },
+  logLink: {
+    color: theme.navigationColors.primary,
+    fontWeight: 'bold',
   },
 });
