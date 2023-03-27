@@ -14,6 +14,7 @@ import MessageBoard from './Components/MessageBoard';
 import Home from './Components/Home';
 import Signup from './Components/Signup';
 import ReplyScreen from './Components/ReplyScreen';
+import ResetPasswordScreen from './Components/ResetPasswordScreen'
 
 import { decode, encode } from 'base-64';
 
@@ -53,6 +54,11 @@ function App() {
         <Stack.Screen
           name="ReplyScreen"
           component={ReplyScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ResetPasswordScreen"
+          component={ResetPasswordScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
