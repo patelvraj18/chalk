@@ -213,24 +213,35 @@ const incrementLike = async (promptID, responseID) => {
   update(commentRef, {likeCount: commentObj.likeCount + 1})
 }
 
+const decrementLike = async (promptID, responseID) => {
+  commentObj = await getComment(promptID, responseID)
+  commentRef = ref(db, `responses/${promptID}/${responseID}`)
+  update(commentRef, {likeCount: commentObj.likeCount - 1})
+}
 const handleLike = async (username, promptID, responseID) => {
   userObj = await getUser(username)
   if (!userObj.hasOwnProperty('likedResponses')) {
     userObj.likedResponses = []
   }
-  console.log('Test123')
-  if(userObj.likedResponses.includes(responseID)){
-    const index = userObj.likedResponses.indexOf(responseID)
-    userObj.likedResponses.splice(index,1)
-    console.log(userObj)
-  }
-  else{
-  console.log('Test1234')
+  console.log('before pushing response ID in handleLike')
   userObj.likedResponses.push(responseID)
-  }
   userRef = ref(db, `users/${userObj.userId}`)
   update(userRef, userObj);
   console.log('Db op liked responmes', userObj.likedResponses)
+  return userObj.likedResponses
+}
+const handleDislike = async (username, promptID, responseID) => {
+  userObj = await getUser(username)
+  if (!userObj.hasOwnProperty('likedResponses')) {
+    userObj.likedResponses = []
+  }
+  console.log('before removing responseId in handleDislike')
+  const index = userObj.likedResponses.indexOf(responseID)
+  userObj.likedResponses.splice(index,1)
+  console.log(userObj)
+  userRef = ref(db, `users/${userObj.userId}`)
+  update(userRef, userObj);
+  console.log('Db op disliked responmes', userObj.likedResponses)
   return userObj.likedResponses
 
 }
@@ -283,6 +294,8 @@ export {
   replyToResponse,
   getComment,
   incrementLike,
+  decrementLike,
+  handleDislike,
   handleLike,
   getLikedMessages,
 };

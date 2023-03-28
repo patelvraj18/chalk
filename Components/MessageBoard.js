@@ -58,6 +58,24 @@ const MessageBoard = ({navigation, route}) => {
       setMessages(messages);
     });
   };
+  const handleDislike = async (username, promptID, responseID) => {
+    console.log(likedResponseIDs)
+    db_operations.decrementLike(promptID, responseID)
+    const newLikedResponseIDs = await db_operations.handleDislike(username,promptID, responseID)
+    console.log('disliked responmes',newLikedResponseIDs)
+    setLikedResponseIDs(newLikedResponseIDs);
+    db_operations.getResponses(promptID).then(messages => {
+      setMessages(messages);
+    });
+  };
+
+  const handleLongPress = async (username, promptID, responseID) => {
+    if (likedResponseIDs.includes(responseID)) {
+      await handleDislike(username, promptID, responseID)
+    } else {
+      await handleLike(username, promptID, responseID)
+    }
+  }
   
   const handleReply = (responseText, responseID, userID) => {
     db_operations.getResponses(promptID).then(() => {
@@ -86,7 +104,7 @@ const MessageBoard = ({navigation, route}) => {
             ]}>
               <TouchableOpacity
                 onLongPress={() => {
-                  handleLike(username, promptID, message.responseID)
+                  handleLongPress(username, promptID, message.responseID)
                   }
                 }
                 onPress={() => {
