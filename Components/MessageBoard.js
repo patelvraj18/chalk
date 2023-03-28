@@ -89,6 +89,10 @@ const MessageBoard = ({navigation, route}) => {
     });
   };
 
+  const getLikes = async (responseID) => {
+    return await db_operations.getLikes(promptID,responseID)
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -113,6 +117,7 @@ const MessageBoard = ({navigation, route}) => {
                 }>
                 <Text style={styles.username}>{message.userID}</Text>
                 <Text style={styles.messageText}>{message.text}</Text>
+                <Text style={styles.likeCountText}>Likes: {message.likeCount}</Text>
               </TouchableOpacity>
             </View>
           ))}
@@ -162,12 +167,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   likedMessage: {
-    backgroundColor: 'blue',
+    backgroundColor: '#ADD8E6',
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
   },
-  
+  likeCountText: {
+    color: 'black',
+    fontWeight: 'bold',
+  },
   username: {
     fontWeight: 'bold',
     marginBottom: 5,
