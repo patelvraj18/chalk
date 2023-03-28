@@ -54,6 +54,7 @@ function MessageBoardTabs({route: {params}}) {
 function App() {
   return (
     <NavigationContainer>
+
         <Stack.Navigator initalRouteName="Home">
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />

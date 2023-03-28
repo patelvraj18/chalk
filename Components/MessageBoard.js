@@ -12,6 +12,7 @@ import * as db_operations from '../db_operations.js';
 
 const MessageBoard = ({ navigation, route }) => {
   const [messages, setMessages] = useState([]);
+  const [likedResponseIDs, setLikedResponseIDs] = useState([]);
   const [inputText, setInputText] = useState('');
   const [promptText, setPromptText] = useState('');
   const [promptID, setPromptID] = useState('');
@@ -23,6 +24,9 @@ const MessageBoard = ({ navigation, route }) => {
 
       db_operations.getResponses(prompt.promptID).then(messages => {
         setMessages(messages);
+      });
+      db_operations.getLikedMessages(username).then(likedMessages =>{
+       setLikedResponseIDs(likedMessages)
       });
     });
   }, []);
@@ -44,6 +48,35 @@ const MessageBoard = ({ navigation, route }) => {
     setInputText('');
   };
 
+  const handleLike = async (username, promptID, responseID) => {
+    console.log(likedResponseIDs)
+    db_operations.incrementLike(promptID, responseID)
+    const newLikedResponseIDs = await db_operations.handleLike(username,promptID, responseID)
+    console.log('liked responmes',newLikedResponseIDs)
+    setLikedResponseIDs(newLikedResponseIDs);
+    db_operations.getResponses(promptID).then(messages => {
+      setMessages(messages);
+    });
+  };
+  const handleDislike = async (username, promptID, responseID) => {
+    console.log(likedResponseIDs)
+    db_operations.decrementLike(promptID, responseID)
+    const newLikedResponseIDs = await db_operations.handleDislike(username,promptID, responseID)
+    console.log('disliked responmes',newLikedResponseIDs)
+    setLikedResponseIDs(newLikedResponseIDs);
+    db_operations.getResponses(promptID).then(messages => {
+      setMessages(messages);
+    });
+  };
+
+  const handleLongPress = async (username, promptID, responseID) => {
+    if (likedResponseIDs.includes(responseID)) {
+      await handleDislike(username, promptID, responseID)
+    } else {
+      await handleLike(username, promptID, responseID)
+    }
+  }
+  
   const handleReply = (responseText, responseID, userID) => {
     db_operations.getResponses(promptID).then(() => {
       navigation.navigate('ReplyScreen', {
@@ -56,6 +89,10 @@ const MessageBoard = ({ navigation, route }) => {
     });
   };
 
+  const getLikes = async (responseID) => {
+    return await db_operations.getLikes(promptID,responseID)
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -65,13 +102,23 @@ const MessageBoard = ({ navigation, route }) => {
       <ScrollView style={styles.scrollView}>
         <View style={styles.messageContainer}>
           {messages.map((message, index) => (
-            <View key={index} style={styles.message}>
+            <View key={index}
+            style={[
+              styles.message,
+              likedResponseIDs != undefined && likedResponseIDs.includes(message.responseID) && styles.likedMessage,
+            ]}>
               <TouchableOpacity
-                onPress={() =>
-                  handleReply(message.text, message.responseID, message.userID)
+                onLongPress={() => {
+                  handleLongPress(username, promptID, message.responseID)
+                  }
+                }
+                onPress={() => {
+                    handleReply(message.text, message.responseID, message.userID)
+                  }
                 }>
                 <Text style={styles.username}>{message.userID}</Text>
                 <Text style={styles.messageText}>{message.text}</Text>
+                <Text style={styles.likeCountText}>Likes: {message.likeCount}</Text>
               </TouchableOpacity>
             </View>
           ))}
@@ -124,6 +171,16 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
+  },
+  likedMessage: {
+    backgroundColor: '#ADD8E6',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  likeCountText: {
+    color: 'black',
+    fontWeight: 'bold',
   },
   username: {
     fontWeight: 'bold',

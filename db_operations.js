@@ -54,6 +54,8 @@ function setUsername(username, userCredential) {
   set(ref(db, `users/${user.uid}`), {
     username: username,
     email: user.email,
+    karma: 0,
+    likedResponses: [],
   });
 }
 
@@ -114,6 +116,7 @@ function getResponses(promptID) {
             text: obj.text,
             userID: obj.userID,
             responseID: obj.responseID,
+            likeCount: obj.likeCount,
           })),
         );
       } else {
@@ -137,6 +140,7 @@ function getComments(responseID) {
             text: obj.text,
             userID: obj.userID,
             commentID: obj.commentID,
+            likeCount: obj.likeCount,
           })),
         );
       } else {
@@ -168,6 +172,7 @@ function respondToPrompt(userID, text, promptID) {
     text: text,
     userID: userID,
     comments: [],
+    likeCount: 0,
   });
   const responseID = newResponse.key;
   update(newResponse, {responseID: responseID});
@@ -181,10 +186,99 @@ function replyToResponse(userID, text, responseID) {
   const newComment = push(commentRef, {
     text: text,
     userID: userID,
+    likeCount: 0,
   });
   const commentID = newComment.key;
   update(newComment, {commentID: commentID});
 }
+
+function getComment(promptID, responseID) {
+  const commentRef = ref(db, `responses/${promptID}/${responseID}`);
+  return get(commentRef).then(snapshot => {
+      if (snapshot.exists()) {
+        return Promise.resolve(snapshot.val())
+      } else {
+        console.log('No data available');
+        return Promise.resolve([]);
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      return Promise.reject(error);
+    });
+}
+const getLikes = async (promptID, responseID) => {
+  commentObj = await getComment(promptID, responseID)
+  return commentObj.likeCount
+}
+const incrementLike = async (promptID, responseID) => {
+  commentObj = await getComment(promptID, responseID)
+  commentRef = ref(db, `responses/${promptID}/${responseID}`)
+  update(commentRef, {likeCount: commentObj.likeCount + 1})
+}
+
+const decrementLike = async (promptID, responseID) => {
+  commentObj = await getComment(promptID, responseID)
+  commentRef = ref(db, `responses/${promptID}/${responseID}`)
+  update(commentRef, {likeCount: commentObj.likeCount - 1})
+}
+const handleLike = async (username, promptID, responseID) => {
+  userObj = await getUser(username)
+  if (!userObj.hasOwnProperty('likedResponses')) {
+    userObj.likedResponses = []
+  }
+  console.log('before pushing response ID in handleLike')
+  userObj.likedResponses.push(responseID)
+  userRef = ref(db, `users/${userObj.userId}`)
+  update(userRef, userObj);
+  console.log('Db op liked responmes', userObj.likedResponses)
+  return userObj.likedResponses
+}
+const handleDislike = async (username, promptID, responseID) => {
+  userObj = await getUser(username)
+  if (!userObj.hasOwnProperty('likedResponses')) {
+    userObj.likedResponses = []
+  }
+  console.log('before removing responseId in handleDislike')
+  const index = userObj.likedResponses.indexOf(responseID)
+  userObj.likedResponses.splice(index,1)
+  console.log(userObj)
+  userRef = ref(db, `users/${userObj.userId}`)
+  update(userRef, userObj);
+  console.log('Db op disliked responmes', userObj.likedResponses)
+  return userObj.likedResponses
+
+}
+const getLikedMessages= async (username) => {
+  const userObj = await getUser(username);
+  if (!userObj.hasOwnProperty('likedResponses')) {
+    userObj.likedResponses = []
+  }
+  return userObj.likedResponses;
+}
+function getUser(username) {
+    const dbRef = ref(db);
+    return get(child(dbRef, `users`))
+      .then(snapshot => {
+        if (snapshot.exists()) {
+          const users = snapshot.val();
+          for (const userId in users) {
+            const user = users[userId];
+            if (user.username === username) {
+              users[userId].userId = userId
+              return users[userId];
+            }
+          }
+          console.log(`User with username ${username} not found`);
+        } else {
+          console.error('No user data available');
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+}
+
 
 /* real-time listening 
 const commentRef = ref(db, 'prompts/' + promptID + '/starCount');
@@ -202,4 +296,11 @@ export {
   getResponses,
   getComments,
   replyToResponse,
+  getComment,
+  incrementLike,
+  decrementLike,
+  handleDislike,
+  handleLike,
+  getLikedMessages,
+  getLikes,
 };
