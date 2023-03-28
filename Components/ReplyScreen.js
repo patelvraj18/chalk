@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,9 +8,29 @@ import {
   Button,
 } from 'react-native';
 import * as db_operations from '../db_operations.js';
+import { ThemeProvider, createTheme } from '@rneui/themed';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Image } from '@rneui/themed';
 
-const ReplyScreen = ({route}) => {
-  const {responseText, responseID, responseUserID, username} = route.params;
+const theme = createTheme({
+  lightColors: {
+    primary: '#979797',
+    secondary: '#ffffff',
+  },
+  darkColors: {
+    primary: '#555454',
+    secondary: '#757373',
+    tertiary: '#D9D9D9',
+  },
+  navigationColors: {
+    primary: '#5c64b0',
+    secondary: '#E47F7F',
+  },
+  mode: 'light',
+});
+
+const ReplyScreen = ({ route }) => {
+  const { responseText, responseID, responseUserID, username } = route.params;
   const [response, setResponse] = useState(null);
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState('');
@@ -25,37 +45,40 @@ const ReplyScreen = ({route}) => {
   const handleSubmitComment = () => {
     if (commentText.trim() !== '') {
       db_operations.replyToResponse(username, commentText, responseID);
-      setComments([...comments, {userID: username, text: commentText}]);
+      setComments([...comments, { userID: username, text: commentText }]);
       setCommentText('');
     }
   };
 
   return (
-    <View style={styles.container}>
-      {response && (
-        <View style={styles.responseContainer}>
-          <Text style={styles.username}>{responseUserID}</Text>
-          <Text style={styles.responseText}>{responseText}</Text>
-        </View>
-      )}
-      <ScrollView style={styles.scrollView}>
-        {comments.map((comment, index) => (
-          <View key={index} style={styles.comment}>
-            <Text style={styles.username}>{comment.userID}</Text>
-            <Text style={styles.commentText}>{comment.text}</Text>
+    <ThemeProvider theme={theme}>
+      <View style={styles.container}>
+        {response && (
+          <View style={styles.responseContainer}>
+            <Text style={styles.username}>{responseUserID}</Text>
+            <Text style={styles.responseText}>{responseText}</Text>
           </View>
-        ))}
-      </ScrollView>
-      <View style={styles.commentInputContainer}>
-        <TextInput
-          style={styles.commentInput}
-          placeholder="Add a comment"
-          value={commentText}
-          onChangeText={text => setCommentText(text)}
-        />
-        <Button title="Submit" onPress={handleSubmitComment} />
+        )}
+        <ScrollView style={styles.scrollView}>
+          {comments.map((comment, index) => (
+            <View key={index} style={styles.comment}>
+              <Text style={styles.username}>{comment.userID}</Text>
+              <Text style={styles.commentText}>{comment.text}</Text>
+            </View>
+          ))}
+        </ScrollView>
+        <View style={styles.commentInputContainer}>
+          <TextInput
+            style={styles.commentInput}
+            placeholder="Add a comment"
+            value={commentText}
+            onChangeText={text => setCommentText(text)}
+          />
+          <Button title="Submit" onPress={handleSubmitComment} />
+        </View>
       </View>
-    </View>
+    </ThemeProvider>
+
   );
 };
 
