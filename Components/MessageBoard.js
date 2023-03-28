@@ -44,6 +44,11 @@ const MessageBoard = ({navigation, route}) => {
     setInputText('');
   };
 
+  const handleLike = (username, promptID, responseID) => {
+    db_operations.incrementLike(promptID, responseID)
+    db_operations.handleLike(username,responseID)
+  };
+  
   const handleReply = (responseText, responseID, userID) => {
     db_operations.getResponses(promptID).then(() => {
       navigation.navigate('ReplyScreen', {
@@ -66,8 +71,14 @@ const MessageBoard = ({navigation, route}) => {
           {messages.map((message, index) => (
             <View key={index} style={styles.message}>
               <TouchableOpacity
-                onPress={() =>
-                  handleReply(message.text, message.responseID, message.userID)
+                onLongPress={() => {
+                  console.warn("long press")
+                  handleLike(username, promptID, message.responseID)
+                  }
+                }
+                onPress={() => {
+                    handleReply(message.text, message.responseID, message.userID)
+                  }
                 }>
                 <Text style={styles.username}>{message.userID}</Text>
                 <Text style={styles.messageText}>{message.text}</Text>
