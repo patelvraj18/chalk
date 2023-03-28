@@ -12,6 +12,7 @@ import * as db_operations from '../db_operations.js';
 
 const MessageBoard = ({navigation, route}) => {
   const [messages, setMessages] = useState([]);
+  const [likedResponseIDs, setLikedResponseIDs] = useState([]);
   const [inputText, setInputText] = useState('');
   const [promptText, setPromptText] = useState('');
   const [promptID, setPromptID] = useState('');
@@ -23,6 +24,9 @@ const MessageBoard = ({navigation, route}) => {
 
       db_operations.getResponses(prompt.promptID).then(messages => {
         setMessages(messages);
+      });
+      db_operations.getLikedMessages(username).then(likedMessages =>{
+       setLikedResponseIDs(likedMessages)
       });
     });
   }, []);
@@ -44,9 +48,15 @@ const MessageBoard = ({navigation, route}) => {
     setInputText('');
   };
 
-  const handleLike = (username, promptID, responseID) => {
+  const handleLike = async (username, promptID, responseID) => {
+    console.log(likedResponseIDs)
     db_operations.incrementLike(promptID, responseID)
-    db_operations.handleLike(username,responseID)
+    const newLikedResponseIDs = await db_operations.handleLike(username,promptID, responseID)
+    console.log('liked responmes',newLikedResponseIDs)
+    setLikedResponseIDs(newLikedResponseIDs);
+    db_operations.getResponses(promptID).then(messages => {
+      setMessages(messages);
+    });
   };
   
   const handleReply = (responseText, responseID, userID) => {
@@ -69,10 +79,13 @@ const MessageBoard = ({navigation, route}) => {
       <ScrollView style={styles.scrollView}>
         <View style={styles.messageContainer}>
           {messages.map((message, index) => (
-            <View key={index} style={styles.message}>
+            <View key={index}
+            style={[
+              styles.message,
+              likedResponseIDs != undefined && likedResponseIDs.includes(message.responseID) && styles.likedMessage,
+            ]}>
               <TouchableOpacity
                 onLongPress={() => {
-                  console.warn("long press")
                   handleLike(username, promptID, message.responseID)
                   }
                 }
@@ -130,6 +143,13 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
   },
+  likedMessage: {
+    backgroundColor: 'blue',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  
   username: {
     fontWeight: 'bold',
     marginBottom: 5,

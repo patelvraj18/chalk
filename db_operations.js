@@ -213,25 +213,34 @@ const incrementLike = async (promptID, responseID) => {
   update(commentRef, {likeCount: commentObj.likeCount + 1})
 }
 
-const handleLike = async (username, responseID) => {
+const handleLike = async (username, promptID, responseID) => {
   userObj = await getUser(username)
-  if (!userObj.hasOwnProperty('karma')) {
-    userObj.karma = 0
-  }
   if (!userObj.hasOwnProperty('likedResponses')) {
     userObj.likedResponses = []
   }
-  userObj.likedResponses = []
-  userObj.karma = userObj.karma + 1
-  userObj.likedResponses = userObj.likedResponses.push(responseID)
-  console.log([].push("hi"))
-  console.log(userObj)
-  console.log(`users/${userObj.userId}`)
+  console.log('Test123')
+  if(userObj.likedResponses.includes(responseID)){
+    const index = userObj.likedResponses.indexOf(responseID)
+    userObj.likedResponses.splice(index,1)
+    console.log(userObj)
+  }
+  else{
+  console.log('Test1234')
+  userObj.likedResponses.push(responseID)
+  }
   userRef = ref(db, `users/${userObj.userId}`)
   update(userRef, userObj);
+  console.log('Db op liked responmes', userObj.likedResponses)
+  return userObj.likedResponses
 
 }
-
+const getLikedMessages= async (username) => {
+  const userObj = await getUser(username);
+  if (!userObj.hasOwnProperty('likedResponses')) {
+    userObj.likedResponses = []
+  }
+  return userObj.likedResponses;
+}
 function getUser(username) {
     const dbRef = ref(db);
     return get(child(dbRef, `users`))
@@ -275,4 +284,5 @@ export {
   getComment,
   incrementLike,
   handleLike,
+  getLikedMessages,
 };
