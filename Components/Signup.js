@@ -26,6 +26,7 @@ const theme = createTheme({
   },
   navigationColors: {
     primary: '#5c64b0',
+    secondary: '#E47F7F',
   },
   mode: 'light',
 });
@@ -34,9 +35,14 @@ export default function Signup({ navigation }) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleSignup = async () => {
     try {
+      if (!username || !email || !password) {
+        setError('Please enter a username, email, and password.');
+        return;
+      }
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -44,9 +50,9 @@ export default function Signup({ navigation }) {
       );
       await sendEmailVerification(userCredential.user);
       db_operations.setUsername(username, userCredential);
-      navigation.navigate('Login');
+      navigation.navigate('SuccessSignUp');
     } catch (error) {
-      console.error(error);
+      setError('Sign Up Failed -> ' + error.message);
     }
   };
   return (
@@ -57,7 +63,6 @@ export default function Signup({ navigation }) {
             <Image
               style={styles.icon}
               source={require('../assets/images/x-icon.png')}
-              resizeMethod="stretch"
             />
           </TouchableOpacity>
         </View>
@@ -113,6 +118,11 @@ export default function Signup({ navigation }) {
               fontSize: 13,
             }} />
         </View>
+        {error ? (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>{error}</Text>
+          </View>
+        ) : null}
         <View style={styles.logInContainer}>
           <Text style={styles.logIn}>
             Already have an account?
@@ -181,6 +191,20 @@ const styles = StyleSheet.create({
     backgroundColor: theme.darkColors.tertiary,
     color: theme.darkColors.secondary,
     fontSize: 13,
+  },
+  errorContainer: {
+    position: 'absolute',
+    bottom: 175,
+    right: 25,
+    width: '100%',
+    alignItems: 'center',
+  },
+  errorText: {
+    color: theme.navigationColors.secondary,
+    fontFamily: 'Arial',
+    fontStyle: 'italic',
+    fontWeight: '700',
+    textAlign: 'center',
   },
   logInContainer: {
     position: 'absolute',

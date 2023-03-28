@@ -15,8 +15,12 @@ import Home from './Components/Home';
 import Signup from './Components/Signup';
 import ReplyScreen from './Components/ReplyScreen';
 import ResetPasswordScreen from './Components/ResetPasswordScreen'
+import SuccessSignUp from './Components/SuccessSignUp';
+import SuccessResetPassword from './Components/SuccessResetPassword';
+
 
 import { decode, encode } from 'base-64';
+import SignupSuccessPage from './Components/SuccessSignUp';
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -54,11 +58,21 @@ function App() {
         <Stack.Screen
           name="ReplyScreen"
           component={ReplyScreen}
-          options={{ headerShown: false }}
+        // options={{ headerShown: false }}
         />
         <Stack.Screen
           name="ResetPasswordScreen"
           component={ResetPasswordScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SuccessSignUp"
+          component={SuccessSignUp}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SuccessResetPassword"
+          component={SuccessResetPassword}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

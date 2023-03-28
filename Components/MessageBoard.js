@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -10,12 +10,12 @@ import {
 } from 'react-native';
 import * as db_operations from '../db_operations.js';
 
-const MessageBoard = ({navigation, route}) => {
+const MessageBoard = ({ navigation, route }) => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [promptText, setPromptText] = useState('');
   const [promptID, setPromptID] = useState('');
-  const {username} = route.params;
+  const { username } = route.params;
   useEffect(() => {
     db_operations.getPrompt().then(prompt => {
       setPromptText(prompt.text);
@@ -28,7 +28,7 @@ const MessageBoard = ({navigation, route}) => {
   }, []);
 
   const handleSend = async () => {
-    const userID = username; // replace with your actual userID
+    const userID = username;
     const responseID = await db_operations.respondToPrompt(
       userID,
       inputText,
@@ -59,6 +59,7 @@ const MessageBoard = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <Text style={styles.qotd}>Question of the Day: </Text>
         <Text style={styles.logo}>{promptText}</Text>
       </View>
       <ScrollView style={styles.scrollView}>
@@ -95,16 +96,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   header: {
-    height: 60,
+    height: 70,
     backgroundColor: '#fff',
-    borderBottomWidth: 1,
     borderBottomColor: '#ddd',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 40,
+  },
+  qotd: {
+    fontWeight: 'bold',
+    fontFamily: 'Helvetica',
+    fontSize: 20,
   },
   logo: {
+    fontFamily: 'Helvetica',
     fontSize: 20,
-    fontWeight: 'bold',
   },
   scrollView: {
     flex: 1,
@@ -130,7 +136,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
-    borderTopWidth: 1,
     borderTopColor: '#ddd',
     padding: 10,
   },
@@ -141,7 +146,9 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 5,
     padding: 10,
+    marginBottom: 15,
     fontSize: 16,
+
   },
 });
 
