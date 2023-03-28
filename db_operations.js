@@ -207,6 +207,10 @@ function getComment(promptID, responseID) {
       return Promise.reject(error);
     });
 }
+const getLikes = async (promptID, responseID) => {
+  commentObj = await getComment(promptID, responseID)
+  return commentObj.likeCount
+}
 const incrementLike = async (promptID, responseID) => {
   commentObj = await getComment(promptID, responseID)
   commentRef = ref(db, `responses/${promptID}/${responseID}`)
@@ -298,4 +302,5 @@ export {
   handleDislike,
   handleLike,
   getLikedMessages,
+  getLikes,
 };
