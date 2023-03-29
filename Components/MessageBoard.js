@@ -16,6 +16,11 @@ const MessageBoard = ({ navigation, route }) => {
   const [inputText, setInputText] = useState('');
   const [promptText, setPromptText] = useState('');
   const [promptID, setPromptID] = useState('');
+  const SORTBYTOP = 0
+  const SORTBYNEW = 1
+  const SORTBYLOCATION = 2
+  const SORTBYOLD = 3
+  const [sortType, setSortType] = useState(SORTBYTOP)
   const { username } = route.params;
   useEffect(() => {
     db_operations.getPrompt().then(prompt => {
@@ -33,6 +38,50 @@ const MessageBoard = ({ navigation, route }) => {
       });
     });
   }, []);
+
+  const getCompareFunc = (sortType) => {
+    if (sortType === SORTBYTOP) {
+      return (message_a, message_b) => { 
+        if (message_a.likeCount > message_b.likeCount) {
+          return 1
+        } else if (message_a.likeCount < message_b.likeCount) {
+          return -1
+        } else { 
+          return 0
+        }
+      }
+    } else if (sortType === SORTBYNEW) {
+      return (message_a, message_b) => {
+        if (message_a.timestamp > message_b.timestamp) {
+          return 1
+        } else if (message_a.timestamp < message_b.timestamp) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    } else if (sortType === SORTBYOLD) {
+      return (message_a, message_b) => {
+        if (message_a.timestamp > message_b.timestamp) {
+          return -1
+        } else if (message_a.timestamp < message_b.timestamp) {
+          return 1
+        } else {
+          return 0
+        }
+      }
+    }
+  }
+
+  const handleSort = async (sortType) => {
+    const compare = getCompareFunc(sortType)
+    var new_messages = await db_operations.getResponses(promptID)
+    console.log(messages)
+    new_messages.sort(compare)
+    console.log(messages)
+    setMessages(new_messages)
+    
+  }
 
   const handleSend = async () => {
     const userID = username;
@@ -108,6 +157,15 @@ const MessageBoard = ({ navigation, route }) => {
         <Text style={styles.qotd}>Question of the Day: </Text>
         <Text style={styles.logo}>{promptText}</Text>
       </View>
+      <Button onPress = {
+        () => handleSort(SORTBYTOP)
+      } title = "Top" />
+      <Button onPress = {
+        () => handleSort(SORTBYNEW)
+      } title = "New" />
+      <Button onPress = {
+        () => handleSort(SORTBYOLD)
+      } title = "Old" />
       <ScrollView style={styles.scrollView}>
         <View style={styles.messageContainer}>
           {messages.map((message, index) => (

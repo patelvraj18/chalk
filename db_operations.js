@@ -122,6 +122,7 @@ function getResponses(promptID) {
             userID: obj.userID,
             responseID: obj.responseID,
             likeCount: obj.likeCount,
+            timestamp: obj.timestamp,
           })),
         );
       } else {
@@ -147,6 +148,7 @@ function getComments(responseID) {
             userID: obj.userID,
             commentID: obj.commentID,
             likeCount: obj.likeCount,
+            timestamp: obj.timestamp,
           })),
         );
       } else {
@@ -182,6 +184,7 @@ function respondToPrompt(userID, text, promptID) {
     userID: userID,
     comments: [],
     likeCount: 0,
+    timestamp: Date.now(),
   });
   const responseID = newResponse.key;
   update(newResponse, {responseID: responseID});
@@ -197,6 +200,7 @@ function replyToResponse(userID, text, responseID) {
     text: text,
     userID: userID,
     likeCount: 0,
+    timestamp: Date.now(),
   });
   const commentID = newComment.key;
   update(newComment, {commentID: commentID});
