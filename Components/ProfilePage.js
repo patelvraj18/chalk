@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
+import * as db_operations from '../db_operations.js';
 
 const ProfilePage = ({navigation, route}) => {
   const {username} = route.params
@@ -8,16 +9,11 @@ const ProfilePage = ({navigation, route}) => {
   const [likes, setLikes] = useState(0); // number of likes user has gotten
   
 
-  // useEffect(() => {
-  //   db_operations.getPrompt().then(prompt => {
-  //     setPromptText(prompt.text);
-  //     setPromptID(prompt.promptID);
-
-  //     db_operations.getResponses(prompt.promptID).then(messages => {
-  //       setMessages(messages);
-  //     });
-  //   });
-  // }, []);
+  useEffect(() => {
+    db_operations.getKarma(username).then(karma => {
+      setLikes(karma)
+    });
+  }, []);
 
   const handleNameChange = (text) => {
     setName(text);

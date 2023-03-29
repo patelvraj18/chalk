@@ -39,6 +39,7 @@ const prompt = ref(db, 'prompts/' + promptID);
 const db = getDatabase(app);
 
 function setPrompt(text) {
+  console.debug('setPrompt ', text)
   const promptsRef = ref(db, 'prompt/prompts');
   const newPromptRef = push(promptsRef, {
     text: text,
@@ -50,6 +51,7 @@ function setPrompt(text) {
 }
 
 function setUsername(username, userCredential) {
+  console.debug("setUsername", username, userCredential)
   const user = userCredential.user;
   set(ref(db, `users/${user.uid}`), {
     username: username,
@@ -60,14 +62,15 @@ function setUsername(username, userCredential) {
 }
 
 function getUsername(email) {
+  console.debug("getUsername", email)
   return new Promise((resolve, reject) => {
     const dbRef = ref(db);
     get(child(dbRef, `users`))
       .then(snapshot => {
         if (snapshot.exists()) {
           const users = snapshot.val();
-          for (const userId in users) {
-            const user = users[userId];
+          for (const userID in users) {
+            const user = users[userID];
             if (user.email === email) {
               resolve(user.username);
             }
@@ -84,6 +87,7 @@ function getUsername(email) {
 }
 
 function getPrompt() {
+  console.debug("getPrompt called")
   return new Promise((resolve, reject) => {
     const dbRef = ref(db);
     get(child(dbRef, 'prompt/prompts'))
@@ -107,6 +111,7 @@ function getPrompt() {
 }
 
 function getResponses(promptID) {
+  console.debug("getResponses", promptID)
   const dbRef = ref(db);
   return get(child(dbRef, `responses/${promptID}`))
     .then(snapshot => {
@@ -120,7 +125,7 @@ function getResponses(promptID) {
           })),
         );
       } else {
-        console.log('No data available');
+        console.debug('get Responses: No data available');
         return Promise.resolve([]);
       }
     })
@@ -131,6 +136,7 @@ function getResponses(promptID) {
 }
 
 function getComments(responseID) {
+  console.debug("getComments", responseID)
   const dbRef = ref(db);
   return get(child(dbRef, `comments/${responseID}`))
     .then(snapshot => {
@@ -144,7 +150,7 @@ function getComments(responseID) {
           })),
         );
       } else {
-        console.log('No data available');
+        console.debug('getComments: No data available');
         return Promise.resolve([]);
       }
     })
@@ -167,7 +173,10 @@ function respondToPrompt(userID, text, promptID) {
   //   responses: [],
   // });
 
+  console.debug('respondToPrompt', userID, text, promptID)
+
   const responsesRef = ref(db, `responses/${promptID}`);
+  console.debug(responsesRef)
   const newResponse = push(responsesRef, {
     text: text,
     userID: userID,
@@ -180,6 +189,7 @@ function respondToPrompt(userID, text, promptID) {
 }
 
 function replyToResponse(userID, text, responseID) {
+  console.debug('replyToResponse', userID, text, responseID)
   //add commentID to comment responses
   //add comment to comments
   const commentRef = ref(db, `comments/${responseID}`);
@@ -192,13 +202,21 @@ function replyToResponse(userID, text, responseID) {
   update(newComment, {commentID: commentID});
 }
 
+function getResponseRef (promptID, responseID) {
+  console.debug('getResponseRef', promptID, responseID)
+  return ref(db, `responses/${promptID}/${responseID}`)
+}
+
 function getComment(promptID, responseID) {
-  const commentRef = ref(db, `responses/${promptID}/${responseID}`);
+  console.debug('getComment', promptID, responseID)
+  const commentRef = getResponseRef(promptID, responseID)
+  console.debug(commentRef)
   return get(commentRef).then(snapshot => {
       if (snapshot.exists()) {
+        console.debug(snapshot.val())
         return Promise.resolve(snapshot.val())
       } else {
-        console.log('No data available');
+        console.debug('getComment: No data available');
         return Promise.resolve([]);
       }
     })
@@ -208,47 +226,27 @@ function getComment(promptID, responseID) {
     });
 }
 const getLikes = async (promptID, responseID) => {
+  console.debug('getLikes', promptID, responseID)
   commentObj = await getComment(promptID, responseID)
   return commentObj.likeCount
 }
+
 const incrementLike = async (promptID, responseID) => {
+  console.debug('incrementLike', promptID, responseID)
   commentObj = await getComment(promptID, responseID)
-  commentRef = ref(db, `responses/${promptID}/${responseID}`)
+  commentRef = getResponseRef(promptID, responseID)
   update(commentRef, {likeCount: commentObj.likeCount + 1})
 }
 
 const decrementLike = async (promptID, responseID) => {
+  console.debug('decrementLike', promptID, responseID)
   commentObj = await getComment(promptID, responseID)
-  commentRef = ref(db, `responses/${promptID}/${responseID}`)
+  console.debug('decrementLike after getComment', promptID, responseID)
+  commentRef = getResponseRef(promptID, responseID) 
+  console.debug('decrementLike after getResponseRef', promptID, responseID)
   update(commentRef, {likeCount: commentObj.likeCount - 1})
 }
-const handleLike = async (username, promptID, responseID) => {
-  userObj = await getUser(username)
-  if (!userObj.hasOwnProperty('likedResponses')) {
-    userObj.likedResponses = []
-  }
-  console.log('before pushing response ID in handleLike')
-  userObj.likedResponses.push(responseID)
-  userRef = ref(db, `users/${userObj.userId}`)
-  update(userRef, userObj);
-  console.log('Db op liked responmes', userObj.likedResponses)
-  return userObj.likedResponses
-}
-const handleDislike = async (username, promptID, responseID) => {
-  userObj = await getUser(username)
-  if (!userObj.hasOwnProperty('likedResponses')) {
-    userObj.likedResponses = []
-  }
-  console.log('before removing responseId in handleDislike')
-  const index = userObj.likedResponses.indexOf(responseID)
-  userObj.likedResponses.splice(index,1)
-  console.log(userObj)
-  userRef = ref(db, `users/${userObj.userId}`)
-  update(userRef, userObj);
-  console.log('Db op disliked responmes', userObj.likedResponses)
-  return userObj.likedResponses
 
-}
 const getLikedMessages= async (username) => {
   const userObj = await getUser(username);
   if (!userObj.hasOwnProperty('likedResponses')) {
@@ -256,29 +254,115 @@ const getLikedMessages= async (username) => {
   }
   return userObj.likedResponses;
 }
-function getUser(username) {
-    const dbRef = ref(db);
-    return get(child(dbRef, `users`))
-      .then(snapshot => {
-        if (snapshot.exists()) {
-          const users = snapshot.val();
-          for (const userId in users) {
-            const user = users[userId];
-            if (user.username === username) {
-              users[userId].userId = userId
-              return users[userId];
-            }
-          }
-          console.log(`User with username ${username} not found`);
-        } else {
-          console.error('No user data available');
-        }
-      })
-      .catch(error => {
-        console.error(error);
-      });
+
+const likeResponse = async (username, responseID) => {
+  userObj = await getUser(username)
+  if (!userObj.hasOwnProperty('likedResponses')) {
+    userObj.likedResponses = []
+  }
+  userObj.likedResponses.push(responseID)
+  userRef = await getUserRef(username)  
+  update(userRef, userObj);
+  return userObj.likedResponses
 }
 
+const getUserRef = async (username) => {
+  const userObj = await getUser(username)
+  const userRef = ref(db, `users/${userObj.userID}`)
+  return userRef
+}
+
+const dislikeResponse = async (username, responseID) => {
+  console.debug('dislikeResponse', username, responseID)
+  userObj = await getUser(username)
+  //technically shouldn't be needed, but in case our data is dirty useful to have
+  if (!userObj.hasOwnProperty('likedResponses')) {
+    userObj.likedResponses = []
+  }
+  const index = userObj.likedResponses.indexOf(responseID)
+  userObj.likedResponses.splice(index,1)
+
+  userRef = await getUserRef(username)
+  update(userRef, userObj);
+
+  return userObj.likedResponses
+}
+
+const handleLike = async (username, posterUsername, promptID, responseID) => {
+  console.debug('handleLike', username, posterUsername, promptID, responseID)
+  await incrementLike(promptID, responseID)
+  await incrementKarma(posterUsername)
+  newLikes = await likeResponse(username, responseID)
+  return newLikes
+}
+
+const handleDislike = async (username, posterUsername, promptID, responseID) => {
+  console.debug('handleDislike', username, posterUsername, promptID, responseID)
+  await decrementLike(promptID, responseID)
+  await decrementKarma(posterUsername)
+  newLikes = await dislikeResponse(username, responseID)
+  return newLikes
+
+}
+
+function getUser(username) {
+  console.debug('getUser', username)
+  const dbRef = ref(db);
+  return get(child(dbRef, `users`))
+    .then(snapshot => {
+      if (snapshot.exists()) {
+        const users = snapshot.val();
+        for (const userID in users) {
+          const user = users[userID];
+          if (user.username === username) {
+            users[userID].userID = userID
+            return users[userID];
+          }
+        }
+        console.debug(`User with username ${username} not found`);
+      } else {
+        console.error('No user data available');
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+}
+
+const getKarma = async (username) => {
+  console.debug('getKarma', username)
+  const userObj = await getUser(username);
+  if (userObj.hasOwnProperty("karma")) {
+    return userObj.karma
+  } else {
+    return -1 
+  }
+}
+
+const incrementKarma = async (username) => {
+  console.debug('incrementKarma', username)
+  const userObj = await getUser(username);
+  const userRef = await getUserRef(username)
+  if (!userObj.hasOwnProperty("karma")) {
+    userObj.karma = 0
+  }
+  userObj.karma = userObj.karma + 1
+  update(userRef, userObj)
+}
+
+const decrementKarma = async (username) => { 
+  console.debug('decrementKarma', username)
+  const userObj = await getUser(username);
+  const userRef = await getUserRef(username)
+
+  //technically shouldn't be needed, but in case our data is dirty useful to have
+  if (!userObj.hasOwnProperty("karma")) {
+    userObj.karma = 0
+  }
+
+  userObj.karma = userObj.karma - 1
+  update(userRef, userObj)
+}
 
 /* real-time listening 
 const commentRef = ref(db, 'prompts/' + promptID + '/starCount');
@@ -303,4 +387,7 @@ export {
   handleLike,
   getLikedMessages,
   getLikes,
+  getKarma,
+  incrementKarma,
+  decrementKarma
 };

@@ -19,6 +19,9 @@ const MessageBoard = ({ navigation, route }) => {
   const { username } = route.params;
   useEffect(() => {
     db_operations.getPrompt().then(prompt => {
+      if ([prompt.text, prompt.promptID].includes(undefined)) {
+        console.error("got undefined in useEffect")
+      }
       setPromptText(prompt.text);
       setPromptID(prompt.promptID);
 
@@ -48,36 +51,42 @@ const MessageBoard = ({ navigation, route }) => {
     setInputText('');
   };
 
-  const handleLike = async (username, promptID, responseID) => {
-    console.log(likedResponseIDs)
-    db_operations.incrementLike(promptID, responseID)
-    const newLikedResponseIDs = await db_operations.handleLike(username,promptID, responseID)
-    console.log('liked responmes',newLikedResponseIDs)
+  const handleLike = async (username, posterUsername, promptID, responseID) => {
+    console.debug(likedResponseIDs)
+    const newLikedResponseIDs = await db_operations.handleLike(username, posterUsername, promptID, responseID)
+    console.debug('liked responmes',newLikedResponseIDs)
     setLikedResponseIDs(newLikedResponseIDs);
     db_operations.getResponses(promptID).then(messages => {
       setMessages(messages);
     });
   };
-  const handleDislike = async (username, promptID, responseID) => {
-    console.log(likedResponseIDs)
-    db_operations.decrementLike(promptID, responseID)
-    const newLikedResponseIDs = await db_operations.handleDislike(username,promptID, responseID)
-    console.log('disliked responmes',newLikedResponseIDs)
+  const handleDislike = async (username, posterUsername, promptID, responseID) => {
+    console.debug(likedResponseIDs)
+    const newLikedResponseIDs = await db_operations.handleDislike(username, posterUsername,promptID, responseID)
+    console.debug('disliked responmes',newLikedResponseIDs)
     setLikedResponseIDs(newLikedResponseIDs);
     db_operations.getResponses(promptID).then(messages => {
       setMessages(messages);
     });
   };
 
-  const handleLongPress = async (username, promptID, responseID) => {
+  const handleLongPress = async (username, posterUsername, promptID, responseID) => {
+    if ([username, posterUsername, promptID, responseID].includes(undefined)) {
+      console.error(`got undefined in handleLongPress: username: ${username}, posterUsername: ${posterUsername}, promptID: ${promptID}, responseID: ${responseID}`)
+      
+    }
+    console.debug(`handlelongpress: ${username}, posterUsername: ${posterUsername}, promptID: ${promptID}, responseID: ${responseID}`)
     if (likedResponseIDs.includes(responseID)) {
-      await handleDislike(username, promptID, responseID)
+      await handleDislike(username, posterUsername, promptID, responseID)
     } else {
-      await handleLike(username, promptID, responseID)
+      await handleLike(username, posterUsername, promptID, responseID)
     }
   }
   
   const handleReply = (responseText, responseID, userID) => {
+    if ([responseText, responseID, userID].includes(undefined)) {
+      console.error("got undefined in handleReply")
+    }
     db_operations.getResponses(promptID).then(() => {
       navigation.navigate('ReplyScreen', {
         responseText,
@@ -109,7 +118,7 @@ const MessageBoard = ({ navigation, route }) => {
             ]}>
               <TouchableOpacity
                 onLongPress={() => {
-                  handleLongPress(username, promptID, message.responseID)
+                  handleLongPress(username, message.userID, promptID, message.responseID)
                   }
                 }
                 onPress={() => {
