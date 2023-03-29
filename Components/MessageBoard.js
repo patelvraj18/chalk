@@ -125,7 +125,13 @@ const MessageBoard = ({ navigation, route }) => {
                     handleReply(message.text, message.responseID, message.userID)
                   }
                 }>
-                <Text style={styles.username}>{message.userID}</Text>
+                <Text style={styles.username} onPress={
+                  () => {
+                    navigation.navigate('ProfilePage', {
+                      username: message.userID,
+                    });
+                  }
+                }>{message.userID}</Text>
                 <Text style={styles.messageText}>{message.text}</Text>
                 <Text style={styles.likeCountText}>Likes: {message.likeCount}</Text>
               </TouchableOpacity>
