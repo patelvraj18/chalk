@@ -16,11 +16,11 @@ const MessageBoard = ({ navigation, route }) => {
   const [inputText, setInputText] = useState('');
   const [promptText, setPromptText] = useState('');
   const [promptID, setPromptID] = useState('');
-  const SORTBYTOP = 0
-  const SORTBYNEW = 1
-  const SORTBYLOCATION = 2
-  const SORTBYOLD = 3
-  const [sortType, setSortType] = useState(SORTBYTOP)
+  const SORTBYTOP = 0;
+  const SORTBYNEW = 1;
+  const SORTBYLOCATION = 2;
+  const SORTBYOLD = 3;
+  const [sortType, setSortType] = useState(SORTBYTOP);
   const { username } = route.params;
   useEffect(() => {
     db_operations.getPrompt().then(prompt => {
@@ -33,20 +33,20 @@ const MessageBoard = ({ navigation, route }) => {
       db_operations.getResponses(prompt.promptID).then(messages => {
         setMessages(messages);
       });
-      db_operations.getLikedMessages(username).then(likedMessages =>{
-       setLikedResponseIDs(likedMessages)
+      db_operations.getLikedMessages(username).then(likedMessages => {
+        setLikedResponseIDs(likedMessages)
       });
     });
   }, []);
 
   const getCompareFunc = (sortType) => {
     if (sortType === SORTBYTOP) {
-      return (message_a, message_b) => { 
+      return (message_a, message_b) => {
         if (message_a.likeCount > message_b.likeCount) {
           return 1
         } else if (message_a.likeCount < message_b.likeCount) {
           return -1
-        } else { 
+        } else {
           return 0
         }
       }
@@ -80,7 +80,7 @@ const MessageBoard = ({ navigation, route }) => {
     new_messages.sort(compare)
     console.log(messages)
     setMessages(new_messages)
-    
+
   }
 
   const handleSend = async () => {
@@ -103,7 +103,7 @@ const MessageBoard = ({ navigation, route }) => {
   const handleLike = async (username, posterUsername, promptID, responseID) => {
     console.debug(likedResponseIDs)
     const newLikedResponseIDs = await db_operations.handleLike(username, posterUsername, promptID, responseID)
-    console.debug('liked responmes',newLikedResponseIDs)
+    console.debug('liked responmes', newLikedResponseIDs)
     setLikedResponseIDs(newLikedResponseIDs);
     db_operations.getResponses(promptID).then(messages => {
       setMessages(messages);
@@ -111,8 +111,8 @@ const MessageBoard = ({ navigation, route }) => {
   };
   const handleDislike = async (username, posterUsername, promptID, responseID) => {
     console.debug(likedResponseIDs)
-    const newLikedResponseIDs = await db_operations.handleDislike(username, posterUsername,promptID, responseID)
-    console.debug('disliked responmes',newLikedResponseIDs)
+    const newLikedResponseIDs = await db_operations.handleDislike(username, posterUsername, promptID, responseID)
+    console.debug('disliked responmes', newLikedResponseIDs)
     setLikedResponseIDs(newLikedResponseIDs);
     db_operations.getResponses(promptID).then(messages => {
       setMessages(messages);
@@ -122,7 +122,7 @@ const MessageBoard = ({ navigation, route }) => {
   const handleLongPress = async (username, posterUsername, promptID, responseID) => {
     if ([username, posterUsername, promptID, responseID].includes(undefined)) {
       console.error(`got undefined in handleLongPress: username: ${username}, posterUsername: ${posterUsername}, promptID: ${promptID}, responseID: ${responseID}`)
-      
+
     }
     console.debug(`handlelongpress: ${username}, posterUsername: ${posterUsername}, promptID: ${promptID}, responseID: ${responseID}`)
     if (likedResponseIDs.includes(responseID)) {
@@ -131,7 +131,7 @@ const MessageBoard = ({ navigation, route }) => {
       await handleLike(username, posterUsername, promptID, responseID)
     }
   }
-  
+
   const handleReply = (responseText, responseID, userID) => {
     if ([responseText, responseID, userID].includes(undefined)) {
       console.error("got undefined in handleReply")
@@ -148,7 +148,7 @@ const MessageBoard = ({ navigation, route }) => {
   };
 
   const getLikes = async (responseID) => {
-    return await db_operations.getLikes(promptID,responseID)
+    return await db_operations.getLikes(promptID, responseID)
   }
 
   return (
@@ -157,31 +157,31 @@ const MessageBoard = ({ navigation, route }) => {
         <Text style={styles.qotd}>Question of the Day: </Text>
         <Text style={styles.logo}>{promptText}</Text>
       </View>
-      <Button onPress = {
+      <Button onPress={
         () => handleSort(SORTBYTOP)
-      } title = "Top" />
-      <Button onPress = {
+      } title="Top" />
+      <Button onPress={
         () => handleSort(SORTBYNEW)
-      } title = "New" />
-      <Button onPress = {
+      } title="New" />
+      <Button onPress={
         () => handleSort(SORTBYOLD)
-      } title = "Old" />
+      } title="Old" />
       <ScrollView style={styles.scrollView}>
         <View style={styles.messageContainer}>
           {messages.map((message, index) => (
             <View key={index}
-            style={[
-              styles.message,
-              likedResponseIDs != undefined && likedResponseIDs.includes(message.responseID) && styles.likedMessage,
-            ]}>
+              style={[
+                styles.message,
+                likedResponseIDs != undefined && likedResponseIDs.includes(message.responseID) && styles.likedMessage,
+              ]}>
               <TouchableOpacity
                 onLongPress={() => {
                   handleLongPress(username, message.userID, promptID, message.responseID)
-                  }
+                }
                 }
                 onPress={() => {
-                    handleReply(message.text, message.responseID, message.userID)
-                  }
+                  handleReply(message.text, message.responseID, message.userID)
+                }
                 }>
                 <Text style={styles.username} onPress={
                   () => {
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   },
   qotd: {
     fontWeight: 'bold',
-    fontFamily: 'Helvetica',
+    fontFamily: 'InriaSans-Regular',
     fontSize: 20,
   },
   logo: {
