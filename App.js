@@ -14,6 +14,7 @@ import SuccessResetPassword from './Components/SuccessResetPassword';
 import ProfilePage from './Components/ProfilePage';
 import CommentPage from './Components/CommentPage';
 import ChatPage from './Components/ChatPage';
+import ConfirmationPage from './Components/ConfirmationPage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { decode, encode } from 'base-64';
 
@@ -40,7 +41,7 @@ function MessageBoardTabStack({ route: { params } }) {
 function MessageBoardTabs({ route: { params } }) {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={MessageBoardTabStack} initialParams={params} options={{
+      <Tab.Screen name="Home Page" component={MessageBoardTabStack} initialParams={params} options={{
         headerShown: false,
         tabBarIcon: ({ color, size }) => (
           <Icon name="message" color={color} size={size} />
@@ -77,9 +78,10 @@ function App() {
         <Stack.Screen name="Sign up" component={Signup} options={{ headerShown: false }} />
         <Stack.Screen name="MessageBoard" component={MessageBoardTabs} options={{ headerShown: false }} />
         <Stack.Screen name="Chat" component={ChatPage} options={{ headerShown: false }} />
-        <Stack.Screen name="CommentPage" component={CommentPage} screenOptions={{ headerShown: false }} />
+        <Stack.Screen name="CommentPage" component={CommentPage} options={{ headerShown: false }} />
         <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} options={{ headerShown: false }} />
         <Stack.Screen name="SuccessSignUp" component={SuccessSignUp} options={{ headerShown: false }} />
+        <Stack.Screen name="ConfirmationPage" component={ConfirmationPage} options={{ headerShown: false }} />
         <Stack.Screen name="SuccessResetPassword" component={SuccessResetPassword} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
+  Component,
   StyleSheet,
   View,
   Text,
@@ -7,8 +8,37 @@ import {
   Button,
   ScrollView,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import * as db_operations from '../db_operations.js';
+import { ThemeProvider, createTheme } from '@rneui/themed';
+import { Dropdown } from 'react-native-material-dropdown';
+import { SelectList } from 'react-native-dropdown-select-list'
+
+const theme = createTheme({
+  lightColors: {
+    primary: '#979797',
+    secondary: '#ffffff',
+  },
+  darkColors: {
+    primary: '#555454',
+    secondary: '#757373',
+    tertiary: '#D9D9D9',
+  },
+  navigationColors: {
+    primary: '#5c64b0',
+    secondary: '#E47F7F',
+  },
+  createCommentColors: {
+    first: '#616161',
+    second: '#ADADAD',
+    third: '#777777',
+    fourth: '#A7A7A7',
+    fifth: '#DBDBDB',
+    sixth: '#403F3F',
+  },
+  mode: 'light',
+});
 
 const MessageBoard = ({ navigation, route }) => {
   const [messages, setMessages] = useState([]);
@@ -22,6 +52,15 @@ const MessageBoard = ({ navigation, route }) => {
   const SORTBYOLD = 3;
   const [sortType, setSortType] = useState(SORTBYTOP);
   const { username } = route.params;
+  const [selected, setSelected] = React.useState("");
+
+  const data = [
+    { key: '1', value: 'best posts' },
+    { key: '2', value: 'featured' },
+    { key: '3', value: 'latest' },
+  ]
+
+
   useEffect(() => {
     db_operations.getPrompt().then(prompt => {
       if ([prompt.text, prompt.promptID].includes(undefined)) {
@@ -152,61 +191,83 @@ const MessageBoard = ({ navigation, route }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.qotd}>Question of the Day: </Text>
-        <Text style={styles.logo}>{promptText}</Text>
-      </View>
-      <Button onPress={
-        () => handleSort(SORTBYTOP)
-      } title="Top" />
-      <Button onPress={
-        () => handleSort(SORTBYNEW)
-      } title="New" />
-      <Button onPress={
-        () => handleSort(SORTBYOLD)
-      } title="Old" />
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.messageContainer}>
-          {messages.map((message, index) => (
-            <View key={index}
-              style={[
-                styles.message,
-                likedResponseIDs != undefined && likedResponseIDs.includes(message.responseID) && styles.likedMessage,
-              ]}>
-              <TouchableOpacity
-                onLongPress={() => {
-                  handleLongPress(username, message.userID, promptID, message.responseID)
-                }
-                }
-                onPress={() => {
-                  handleReply(message.text, message.responseID, message.userID)
-                }
-                }>
-                <Text style={styles.username} onPress={
-                  () => {
-                    navigation.navigate('ProfilePage', {
-                      username: message.userID,
-                    });
-                  }
-                }>{message.userID}</Text>
-                <Text style={styles.messageText}>{message.text}</Text>
-                <Text style={styles.likeCountText}>Likes: {message.likeCount}</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
+    <ThemeProvider>
+      <View style={styles.container}>
+        <View style={styles.logoContainer}>
+          <Image
+            style={styles.logoChalk}
+            source={require('../assets/images/chalk_logo.png')}
+          />
         </View>
-      </ScrollView>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          onChangeText={text => setInputText(text)}
-          value={inputText}
-          placeholder="Add a comment..."
-        />
-        <Button title="Post" onPress={handleSend} />
+        <View style={styles.header}>
+          <Text style={styles.qotd}>Question of the Day: </Text>
+          <Text style={styles.logo}>{promptText}</Text>
+        </View>
+        <View style={styles.rank}>
+          <View style={styles.rankRocket}>
+            <Image
+              style={styles.rocket}
+              source={require('../assets/icons/rocket_icon.png')}
+            />
+          </View>
+          <View style={styles.rankStack}>
+            <Image
+              style={styles.stack}
+              source={require('../assets/icons/stackview_icon.png')}
+            />
+          </View>
+        </View>
+        <Button onPress={
+          () => handleSort(SORTBYNEW)
+        } title="Top" />
+        <Button onPress={
+          () => handleSort(SORTBYOLD)
+        } title="New" />
+        <Button onPress={
+          () => handleSort(SORTBYTOP)
+        } title="Old" />
+        <ScrollView style={styles.scrollView}>
+          <View style={styles.messageContainer}>
+            {messages.map((message, index) => (
+              <View key={index}
+                style={[
+                  styles.message,
+                  likedResponseIDs != undefined && likedResponseIDs.includes(message.responseID) && styles.likedMessage,
+                ]}>
+                <TouchableOpacity
+                  onLongPress={() => {
+                    handleLongPress(username, message.userID, promptID, message.responseID)
+                  }
+                  }
+                  onPress={() => {
+                    handleReply(message.text, message.responseID, message.userID)
+                  }
+                  }>
+                  <Text style={styles.username} onPress={
+                    () => {
+                      navigation.navigate('Profile', {
+                        username: message.userID,
+                      });
+                    }
+                  }>{message.userID}</Text>
+                  <Text style={styles.messageText}>{message.text}</Text>
+                  <Text style={styles.likeCountText}>Likes: {message.likeCount}</Text>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        </ScrollView>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            onChangeText={text => setInputText(text)}
+            value={inputText}
+            placeholder="Add a comment..."
+          />
+          <Button title="Post" onPress={handleSend} />
+        </View>
       </View>
-    </View>
+    </ThemeProvider>
   );
 };
 
@@ -221,16 +282,46 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ddd',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 40,
+    marginTop: 5,
+  },
+  logoContainer: {
+    marginTop: 50,
+    alignItems: 'center',
+  },
+  logoChalk: {
+    width: 250,
+    height: 80,
+    resizeMode: 'contain',
   },
   qotd: {
     fontWeight: 'bold',
-    fontFamily: 'InriaSans-Regular',
-    fontSize: 20,
+    fontSize: 30,
+    color: theme.createCommentColors.sixth,
   },
   logo: {
+    fontStyle: 'italic',
     fontFamily: 'Helvetica',
-    fontSize: 20,
+    fontSize: 15,
+    marginTop: 7,
+  },
+  rank: {
+
+  },
+  rankRocket: {
+
+  },
+  rankStack: {
+
+  },
+  stack: {
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
+  },
+  rocket: {
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
   },
   scrollView: {
     flex: 1,
