@@ -213,7 +213,7 @@ const MessageBoard = ({ navigation, route }) => {
           <View style={styles.rankStack}>
             <Image
               style={styles.stack}
-              source={require('../assets/icons/stackview_icon.png')}
+              source={require('../assets/icons/stackview_icon.png')} git
             />
           </View>
         </View>
