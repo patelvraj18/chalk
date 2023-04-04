@@ -36,6 +36,7 @@ function MessageBoardTabStack({route: {params}}){
 }
 
 function MessageBoardTabs({route: {params}}) {
+  
   return (
     <Tab.Navigator>
       <Tab.Screen name="MessageBoard" component={MessageBoardTabStack} initialParams={params} options={{ headerShown: false, 
@@ -46,7 +47,20 @@ function MessageBoardTabs({route: {params}}) {
        tabBarIcon: ({ color, size }) => (
         <Icon name="person" color={color} size={size} />
       ),
-      }}/>
+      }}
+      listeners={({ navigation, route }) => ({
+        focus: () => {
+          console.log(route.params.isDefaultUser)
+          if(route.params.isDefaultUser === undefined || route.params.isDefaultUser){
+            navigation.navigate('ProfilePage', { username: params.username });
+          }
+          else{
+            navigation.navigate('ProfilePage', { username: route.params.username });
+          }
+          
+        },
+      })}
+      />
     </Tab.Navigator>
   );
 }
