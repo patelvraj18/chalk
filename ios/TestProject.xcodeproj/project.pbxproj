@@ -239,7 +239,6 @@
 			children = (
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
-				AC50EA2429D56BE800F3C59F /* fonts */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
@@ -388,8 +387,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AC50EA2629D56BE800F3C59F /* fonts in Resources */,
-				AC8CE50929D5F38F008A58F1 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -442,7 +439,6 @@
 				82C23210FFF74C909D0F7F61 /* Fontisto.ttf in Resources */,
 				6AF2B37C33834414A8B669C9 /* Foundation.ttf in Resources */,
 				203C8058737946188EBC194F /* Ionicons.ttf in Resources */,
-				AC50EA2529D56BE800F3C59F /* fonts in Resources */,
 				B2BFFA2AAE7447CEA8223767 /* MaterialCommunityIcons.ttf in Resources */,
 				E8A5C8E2CE7B44DD9FFDFCE9 /* MaterialIcons.ttf in Resources */,
 				B57D695E48FD496C86515F54 /* Octicons.ttf in Resources */,
