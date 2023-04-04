@@ -83,7 +83,7 @@ const MessageBoard = ({ navigation, route }) => {
       return (message_a, message_b) => {
         if (message_a.likeCount > message_b.likeCount) {
           return 1
-        } else if (message_a.likeCount < message_b.likeCount) {
+        } else if (message_a.likeCount > message_b.likeCount) {
           return -1
         } else {
           return 0
@@ -91,9 +91,9 @@ const MessageBoard = ({ navigation, route }) => {
       }
     } else if (sortType === SORTBYNEW) {
       return (message_a, message_b) => {
-        if (message_a.timestamp > message_b.timestamp) {
+        if (message_a.timestamp < message_b.timestamp) {
           return 1
-        } else if (message_a.timestamp < message_b.timestamp) {
+        } else if (message_a.timestamp > message_b.timestamp) {
           return -1
         } else {
           return 0
@@ -101,9 +101,9 @@ const MessageBoard = ({ navigation, route }) => {
       }
     } else if (sortType === SORTBYOLD) {
       return (message_a, message_b) => {
-        if (message_a.timestamp > message_b.timestamp) {
+        if (message_a.timestamp < message_b.timestamp) {
           return -1
-        } else if (message_a.timestamp < message_b.timestamp) {
+        } else if (message_a.timestamp > message_b.timestamp) {
           return 1
         } else {
           return 0
@@ -115,9 +115,7 @@ const MessageBoard = ({ navigation, route }) => {
   const handleSort = async (sortType) => {
     const compare = getCompareFunc(sortType)
     var new_messages = await db_operations.getResponses(promptID)
-    console.log(messages)
     new_messages.sort(compare)
-    console.log(messages)
     setMessages(new_messages)
 
   }
@@ -241,6 +239,20 @@ const MessageBoard = ({ navigation, route }) => {
                   }
                   onPress={() => {
                     handleReply(message.text, message.responseID, message.userID)
+                }>
+                <Text style={styles.username} onPress={
+                  () => {
+                    if(message.userID === username){
+                      navigation.navigate('ProfilePage', {
+                        username: username,
+                        isDefaultUser: true,
+                      });
+                    }else{
+                      navigation.navigate('ProfilePage', {
+                        username: message.userID,
+                        isDefaultUser: false,
+                      });
+                    }
                   }
                   }>
                   <Text style={styles.username} onPress={

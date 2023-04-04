@@ -38,33 +38,32 @@ function MessageBoardTabStack({ route: { params } }) {
   )
 }
 
-function MessageBoardTabs({ route: { params } }) {
+function MessageBoardTabs({route: {params}}) {
+  
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home Page" component={MessageBoardTabStack} initialParams={params} options={{
-        headerShown: false,
-        tabBarIcon: ({ color, size }) => (
-          <Icon name="message" color={color} size={size} />
-        ),
-      }} />
-      <Tab.Screen name="Create" component={CommentPage} initialParams={params} options={{
-        headerShown: false,
-        tabBarIcon: ({ color, size }) => (
-          <Icon name="person" color={color} size={size} />
-        ),
-      }} />
-      <Tab.Screen name="Chat" component={ChatPage} initialParams={params} options={{
-        headerShown: false,
-        tabBarIcon: ({ color, size }) => (
-          <Icon name="person" color={color} size={size} />
-        ),
-      }} />
-      <Tab.Screen name="Profile" component={ProfilePage} initialParams={params} options={{
-        headerShown: false,
-        tabBarIcon: ({ color, size }) => (
-          <Icon name="person" color={color} size={size} />
-        ),
-      }} />
+      <Tab.Screen name="MessageBoard" component={MessageBoardTabStack} initialParams={params} options={{ headerShown: false, 
+      tabBarIcon: ({ color, size }) => (
+            <Icon name="message" color={color} size={size} />
+          ), }} />
+      <Tab.Screen name="ProfilePage" component={ProfilePage} initialParams={params} options={{ headerShown: false,
+       tabBarIcon: ({ color, size }) => (
+        <Icon name="person" color={color} size={size} />
+      ),
+      }}
+      listeners={({ navigation, route }) => ({
+        focus: () => {
+          console.log(route.params.isDefaultUser)
+          if(route.params.isDefaultUser === undefined || route.params.isDefaultUser){
+            navigation.navigate('ProfilePage', { username: params.username });
+          }
+          else{
+            navigation.navigate('ProfilePage', { username: route.params.username });
+          }
+          
+        },
+      })}
+      />
     </Tab.Navigator>
   );
 }
