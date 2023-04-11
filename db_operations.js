@@ -123,6 +123,7 @@ function getResponses(promptID) {
             responseID: obj.responseID,
             likeCount: obj.likeCount,
             timestamp: obj.timestamp,
+            replyCount: obj.replyCount,
           })),
         );
       } else {
@@ -163,18 +164,6 @@ function getComments(responseID) {
 }
 
 function respondToPrompt(userID, text, promptID) {
-  //add commentID to prompt responses
-  //add comment to comments
-  // promptID = getPromptID();
-  // const comments_list = ref(db, 'comments/' + promptID);
-  // const new_comment = push(comments_list);
-  // push(comments_list, {
-  //   text: text,
-  //   commentID: commentID,
-  //   userID: userID,
-  //   responses: [],
-  // });
-
   console.debug('respondToPrompt', userID, text, promptID)
 
   const responsesRef = ref(db, `responses/${promptID}`);
@@ -185,17 +174,19 @@ function respondToPrompt(userID, text, promptID) {
     comments: [],
     likeCount: 0,
     timestamp: Date.now(),
+    replyCount: 0,
   });
   const responseID = newResponse.key;
   update(newResponse, { responseID: responseID });
   return responseID;
 }
 
-function replyToResponse(userID, text, responseID) {
+function replyToResponse(userID, text, promptID, responseID) {
   console.debug('replyToResponse', userID, text, responseID)
   //add commentID to comment responses
   //add comment to comments
   const commentRef = ref(db, `comments/${responseID}`);
+
   const newComment = push(commentRef, {
     text: text,
     userID: userID,
@@ -204,6 +195,21 @@ function replyToResponse(userID, text, responseID) {
   });
   const commentID = newComment.key;
   update(newComment, { commentID: commentID });
+  //TODO SEE IF THIS WORKS
+  const responsesRef = getResponseRef(promptID, responseID)
+  get(responsesRef).then(snapshot => {
+    if (snapshot.exists()) {
+      update(responsesRef, {replyCount: snapshot.val().replyCount + 1})
+      // return Promise.resolve(snapshot.val())
+    } else {
+      update(responsesRef, {replyCount: 0})
+    }
+  })
+    .catch(error => {
+      console.error(error);
+      return Promise.reject(error);
+    });
+  
 }
 
 function getResponseRef(promptID, responseID) {
