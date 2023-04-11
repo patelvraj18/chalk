@@ -52,6 +52,7 @@ function CommentTabStack({ route: {params}}){
 }
 
 function MessageBoardTabs({route: {params}}) {
+  const { username: currentUser } = params;
   return (
     <Tab.Navigator>
       <Tab.Screen name="Message Board" component={MessageBoardTabStack} initialParams={params} options={{ headerShown: false, 
@@ -63,7 +64,7 @@ function MessageBoardTabs({route: {params}}) {
         <Icon name="message" color={color} size={size} />
       ), }}
       />
-      <Tab.Screen name="Profile Page" component={ProfilePage} initialParams={params} options={{ headerShown: false,
+      <Tab.Screen name="Profile Page" component={ProfilePage} initialParams={{username: currentUser, current_username: currentUser}} options={{ headerShown: false,
        tabBarIcon: ({ color, size }) => (
         <Icon name="person" color={color} size={size} />
       ),

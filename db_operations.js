@@ -373,7 +373,50 @@ const decrementKarma = async (username) => {
   userObj.karma = userObj.karma - 1
   update(userRef, userObj)
 }
+async function getUserIDByUsername(username) {
+  const userObj = await getUser(username);
+  return userObj.userID;
+}
 
+async function getFollowing(username) {
+  const userObj = await getUser(username);
+  if (!userObj.hasOwnProperty('following')) {
+    userObj.following = [];
+  }
+  return userObj.following;
+}
+
+async function isFollowing(username, targetUsername) {
+  const following = await getFollowing(username);
+  const targetUserID = await getUserIDByUsername(targetUsername);
+  return following.includes(targetUserID);
+}
+
+async function followUser(username, targetUsername) {
+  const userObj = await getUser(username);
+  const userRef = await getUserRef(username);
+  const targetUserID = await getUserIDByUsername(targetUsername);
+
+  if (!userObj.hasOwnProperty('following')) {
+    userObj.following = [];
+  }
+
+  if (!userObj.following.includes(targetUserID)) {
+    userObj.following.push(targetUserID);
+    update(userRef, userObj);
+  }
+}
+
+async function unfollowUser(username, targetUsername) {
+  const userObj = await getUser(username);
+  const userRef = await getUserRef(username);
+  const targetUserID = await getUserIDByUsername(targetUsername);
+
+  if (userObj.hasOwnProperty('following') && userObj.following.includes(targetUserID)) {
+    userObj.following = userObj.following.filter(id => id !== targetUserID);
+    update(userRef, userObj);
+  }
+}
 /* real-time listening 
 const commentRef = ref(db, 'prompts/' + promptID + '/starCount');
 onValue(commentRef, (snapshot) => {
@@ -399,5 +442,10 @@ export {
   getLikes,
   getKarma,
   incrementKarma,
-  decrementKarma
+  decrementKarma,
+  getUserIDByUsername,
+  getFollowing,
+  isFollowing,
+  followUser,
+  unfollowUser
 };

@@ -48,6 +48,7 @@ const MessageBoard = ({ navigation, route }) => {
   const [inputText, setInputText] = useState('');
   const [promptText, setPromptText] = useState('');
   const [promptID, setPromptID] = useState('');
+  const [showFollowing, setShowFollowing] = useState(false);
   const SORTBYTOP = 0
   const SORTBYNEW = 1
   const SORTBYLOCATION = 2
@@ -84,6 +85,12 @@ const MessageBoard = ({ navigation, route }) => {
       db_operations.getLikedMessages(username).then(likedMessages =>{
        setLikedResponseIDs(likedMessages)
       });
+      const refreshMessages = async () => {
+        const filteredMessages = await getFilteredMessages();
+        filteredMessages.sort(getCompareFunc(sortType));
+        setMessages(filteredMessages);
+      };
+      refreshMessages();
       
       setPromptIDC(promptID)
       setPromptTextC(promptText)
@@ -91,7 +98,7 @@ const MessageBoard = ({ navigation, route }) => {
      
     });
     
-  }, [usernameC, promptIDC, promptTextC]);
+  }, [usernameC, promptIDC, promptTextC, showFollowing]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -116,9 +123,39 @@ const MessageBoard = ({ navigation, route }) => {
       setUsernameC(username)
      
     });
+    const filteredMessages = await getFilteredMessages();
+    filteredMessages.sort(getCompareFunc(sortType));
+    setMessages(filteredMessages);
     setRefreshing(false);
 
   }
+
+  const getFilteredMessages = async () => {
+    const allMessages = await db_operations.getResponses(promptID);
+    if (showFollowing) {
+      const followingUsernames = await db_operations.getFollowing(username);
+      console.log("got following usernames: ", followingUsernames);
+      console.log("all messages: ", allMessages);
+  
+      // Convert the followingUsernames to userIds
+      const followingUserIds = await Promise.all(
+        followingUsernames.map(async (username) => {
+          const { userID } = await db_operations.getUserIDByUsername(username);
+          return userID;
+        })
+      );
+  
+      // Filter messages based on userIds
+      const filteredMessages = allMessages.filter((msg) =>
+        followingUserIds.includes(msg.userID)
+      );
+  
+      return filteredMessages;
+    } else {
+      return allMessages;
+    }
+  };
+  
 
   const getCompareFunc = (sortType) => {
     if (sortType === SORTBYTOP) {
@@ -285,6 +322,33 @@ const MessageBoard = ({ navigation, route }) => {
               />
             </View>
           </View>
+          <View style={styles.followingButtonContainer}>
+            <TouchableOpacity
+              style={styles.followingButton}
+              onPress={() => setShowFollowing(!showFollowing)}
+            >
+              <View style={styles.followingButtonSection}>
+                <Text
+                  style={[
+                    styles.followingButtonText,
+                    !showFollowing && styles.followingButtonSelected,
+                  ]}
+                >
+                  All
+                </Text>
+              </View>
+              <View style={styles.followingButtonSection}>
+                <Text
+                  style={[
+                    styles.followingButtonText,
+                    showFollowing && styles.followingButtonSelected,
+                  ]}
+                >
+                  Following
+                </Text>
+              </View>
+            </TouchableOpacity>
+        </View>
         </View>
         {/* <Button onPress={
           () => handleSort(SORTBYNEW)
@@ -316,7 +380,8 @@ const MessageBoard = ({ navigation, route }) => {
                         <Text style={styles.username} onPress={
                           () => {
                             navigation.navigate('Profile Page', {
-                              username: message.userID,
+                              username: message.userID, 
+                              current_username: username,
                               isDefaultUser: false,
                             });
                           }
@@ -411,7 +476,9 @@ const styles = StyleSheet.create({
   },
   rank: {
     flexDirection: 'row',
-    marginLeft: 30,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 30,
     marginTop: 15,
   },
   list1: {
@@ -592,6 +659,24 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     fontSize: 16,
 
+  },  
+  followingButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  followingButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  followingButtonSection: {
+    paddingHorizontal: 4,
+  },
+  followingButtonText: {
+    fontSize: 13,
+    color: '#5c64b0',
+  },
+  followingButtonSelected: {
+    fontWeight: 'bold',
   },
 });
 
