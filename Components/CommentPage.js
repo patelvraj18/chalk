@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,8 +8,9 @@ import {
   StyleSheet,
   Button,
 } from 'react-native';
+import AppContext from '../AppContext';
+import * as db_operations from '../db_operations.js';
 import { ThemeProvider, createTheme } from '@rneui/themed';
-
 const theme = createTheme({
   lightColors: {
     primary: '#979797',
@@ -37,32 +38,47 @@ const theme = createTheme({
 const CommentPage = ({ navigation, route }) => {
   // const { username } = route.params;
   // const [name, setName] = useState(username); // account name
-  const [value, onChangeText] = React.useState('');
+  const [text, setText] = useState('');
   const [imageUri, setImageUri] = useState('');
   const [voiceMemoUri, setVoiceMemoUri] = useState('');
   const [characterCount, setCharacterCount] = useState(0);
-  // this.setCharacterCount({
-  //   textLength: maxLength - text.length,
-  //   text,
-  // })
+  const { usernameC, setUsernameC, promptIDC, setPromptIDC, promptTextC, setPromptTextC, inputTextC, setInputTextC } = useContext(AppContext);
+  const { isEditing, messageText } = route.params;
+  const [edit, setEdit] = useState(isEditing)
+  console.log('test', messageText)
+  useEffect(() => {
+    if(edit){
+      setText(messageText)
+      setEdit(false)
+    }
+  })
+  
 
-  const handlePost = () => {
-    navigation.navigate('ConfirmationPage')
+  const handlePost = async () => {
+    // navigation.navigate('ConfirmationPage')
+    const userID = usernameC;
+    const responseID = await db_operations.respondToPrompt(
+      userID,
+      text,
+      promptIDC,
+    );
+    setText('');
+    setInputTextC('');
+    setCharacterCount(0);
+  }
+
+  const handleTextChange = (text) =>{
+    setText(text);
+    setCharacterCount(text.length)
   }
 
   return (
     <ThemeProvider>
       <View style={styles.container}>
         <View style={styles.iconContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate('Home Page')}>
-            <Image
-              style={styles.icon}
-              source={require('../assets/images/x-icon.png')}
-            />
-          </TouchableOpacity>
-          <Text style={styles.timeText}>
+          {/* <Text style={styles.timeText}>
             18:13:24 - 2 hrs late
-          </Text>
+          </Text> */}
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={handlePost}>
               <Image
@@ -72,7 +88,10 @@ const CommentPage = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.addedIconContainer1}>
+        <View style={styles.promptTextView}>
+          <Text style={styles.promptText}>{promptTextC}</Text>
+        </View>
+        {/* <View style={styles.addedIconContainer1}>
           <TouchableOpacity>
             <Image
               style={styles.addedIcon}
@@ -87,7 +106,7 @@ const CommentPage = ({ navigation, route }) => {
               source={require('../assets/icons/picture_upload_icon.png')}
             />
           </TouchableOpacity>
-        </View>
+        </View> */}
         <View style={styles.charContainer}>
           <Text style={styles.char}> {characterCount}/300</Text>
         </View>
@@ -95,8 +114,8 @@ const CommentPage = ({ navigation, route }) => {
           style={styles.commentInput}
           placeholderTextColor={theme.createCommentColors.first}
           placeholder='Give me your best response.'
-          onChangeText={text => onChangeText(text)}
-          value={value}
+          onChangeText={text => handleTextChange(text)}
+          value={text}
           maxLength={300}
           multiline={true}
         />
@@ -130,6 +149,16 @@ const styles = StyleSheet.create({
     left: 30,
     // backgroundColor: 'red',
   },
+  promptTextView: {
+    paddingTop: 20,
+    paddingLeft: 20,
+    marginTop: 75,
+    marginBottom: -15,
+  },
+  promptText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
   icon: {
     width: 18,
     height: 18,
@@ -144,7 +173,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
-    right: -115,
+    right: -320,
     top: -15,
   },
   button: {
@@ -173,7 +202,7 @@ const styles = StyleSheet.create({
   },
   charContainer: {
     position: 'absolute',
-    top: 170,
+    top: 250,
     left: 36,
     // backgroundColor: 'pink'
   },
@@ -186,10 +215,12 @@ const styles = StyleSheet.create({
     // backgroundColor: 'blue',
     height: 250,
     borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
     padding: 10,
     marginRight: 20,
     marginLeft: 18,
-    marginTop: 180,
+    marginTop: 160,
     color: theme.createCommentColors.first,
     fontFamily: 'Helvetica',
     fontWeight: 'bold',

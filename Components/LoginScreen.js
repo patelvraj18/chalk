@@ -46,7 +46,7 @@ const LoginScreen = ({ navigation }) => {
         return;
       }
       const username = await getUsername(email);
-      navigation.navigate('MessageBoard', { username });
+      navigation.navigate('MessageBoard', { username: username, promptID: undefined, promptText: undefined });
     } catch (error) {
       setError('Log In Failed -> ' + error.message);
     }
