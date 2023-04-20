@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import * as db_operations from '../db_operations.js';
 
-const ProfilePage = ({navigation, route}) => {
+const ProfilePage = ({ navigation, route }) => {
   const username = route.params.username
   const current_username = route.params.current_username
   console.log('username', username);
@@ -11,7 +11,7 @@ const ProfilePage = ({navigation, route}) => {
   const [questions, setQuestions] = useState([]); // array of past questions answered
   const [likes, setLikes] = useState(0); // number of likes user has gotten
   const [isFollowing, setIsFollowing] = useState(false);
- 
+
 
   useEffect(() => {
     setName(username)
@@ -22,7 +22,7 @@ const ProfilePage = ({navigation, route}) => {
       db_operations.getKarma(username).then(karma => {
         setLikes(karma)
       });
-    }, 5000); 
+    }, 5000);
     const checkFollowingStatus = async () => {
       const isUserFollowing = await db_operations.isFollowing(current_username, username);
       setIsFollowing(isUserFollowing);
@@ -47,46 +47,219 @@ const ProfilePage = ({navigation, route}) => {
     }
     setIsFollowing(!isFollowing);
   };
+
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Image
-        source={{ uri: 'https://placekitten.com/200/200' }} // replace with user's profile picture
-        style={{ width: 150, height: 150, borderRadius: 75 }}
-      />
-      <Text style={{ fontSize: 24, marginTop: 20 }}>{name}</Text>
-      {/* <TextInput
-        value={name}
-        onChangeText={handleNameChange}
-        style={{ borderWidth: 1, borderColor: 'gray', padding: 8, margin: 20, width: '80%' }}
-      /> */}
-      {/* <Text style={{ fontSize: 18, marginVertical: 10 }}>Questions you've answered:</Text>
-      {questions.map((question, index) => (
-        <Text key={index}>{question}</Text>
-      ))} */}
-      <Text style={{ fontSize: 18, marginVertical: 10 }}>Likes sd dsfdsdsreceived: {likes}</Text>
-      {username === current_username && 
-      (<TouchableOpacity
-        onPress={handleLogout}
-        style={{ backgroundColor: 'red', padding: 10, borderRadius: 5, marginTop: 20 }}
-      >
-        <Text style={{ color: 'white', fontSize: 16 }}>Log out</Text>
-      </TouchableOpacity>)
+    <View style={styles.container}>
+      <View style={styles.profilePicContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
+          <Image
+            source={require('../assets/images/dog_picture.jpg')}
+            style={styles.profilePicture}
+          />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.usernameContainer}>
+        <Text style={styles.username}>{name}</Text>
+      </View>
+      <View style={styles.itemsContainer}>
+        <View style={styles.followersContainer}>
+          <Text style={styles.followers}>Followers</Text>
+        </View>
+        <View style={styles.followingContainer}>
+          <Text style={styles.following}>Following</Text>
+        </View>
+        <View style={styles.charmaContainer}>
+          <Text style={styles.charma}>Charma</Text>
+        </View>
+      </View>
+      <View style={styles.itemsNumContainer}>
+        <View style={styles.followersNumContainer}>
+          <Text style={styles.followersNum}>76</Text>
+        </View>
+        <View style={styles.followingNumContainer}>
+          <Text style={styles.followingNum}>142</Text>
+        </View>
+        <View style={styles.charmaNumContainer}>
+          <Text style={styles.charmaNum}>{likes}</Text>
+        </View>
+      </View>
+      <View style={styles.bioContainer}>
+        <View style={styles.bioContainerBold} >
+          <Text style={styles.bio}>
+            Bio
+          </Text>
+        </View>
+        <View style={styles.bioTextContainer}>
+          <Text style={styles.bioText}>
+            i am a cool person.
+          </Text>
+        </View>
+      </View>
+      <View style={styles.memoriesContainer}>
+        <View style={styles.urMemoriesContainer}>
+          <Text style={styles.urMemories}>Your Memories</Text>
+        </View>
+        <View style={styles.visibleContainer}>
+          <Text style={styles.visible}>(visible only to you)</Text>
+        </View>
+      </View>
+      {username === current_username &&
+        (<TouchableOpacity
+          onPress={handleLogout}
+        // style={{ backgroundColor: 'red', padding: 10, borderRadius: 5, marginTop: 20 }}
+        >
+          {/* <Text>Log out</Text> */}
+        </TouchableOpacity>)
       }
       {username != current_username &&
         (<TouchableOpacity
-        onPress={handleFollow}
-        style={{
-          backgroundColor: isFollowing ? 'gray' : 'blue',
-          padding: 10,
-          borderRadius: 5,
-          marginTop: 20,
-        }}
-      >
-        <Text style={{ color: 'white', fontSize: 16 }}>{isFollowing ? 'Unfollow' : 'Follow'}</Text>
-      </TouchableOpacity>)
+          onPress={handleFollow}
+        // style={{
+        //   backgroundColor: isFollowing ? 'gray' : 'blue',
+        //   padding: 10,
+        //   borderRadius: 5,
+        //   marginTop: 20,
+        // }}
+        >
+          <Text>{isFollowing ? 'Unfollow' : 'Follow'}</Text>
+        </TouchableOpacity>)
       }
     </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  profilePicContainer: {
+    marginTop: 75,
+    alignItems: 'center',
+  },
+  profilePicture: {
+    height: 160,
+    width: 160,
+    borderRadius: 80,
+  },
+  usernameContainer: {
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  username: {
+    color: '#464646',
+    fontFamily: 'Arial',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  itemsContainer: {
+    flexDirection: 'row',
+    marginTop: 60,
+  },
+  followersContainer: {
+    marginLeft: 40,
+  },
+  followers: {
+    color: '#616161',
+    fontFamily: 'Arial',
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
+  followingContainer: {
+    marginLeft: 40,
+  },
+  following: {
+    color: '#616161',
+    fontFamily: 'Arial',
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
+  charmaContainer: {
+    marginLeft: 40,
+  },
+  charma: {
+    color: '#616161',
+    fontFamily: 'Arial',
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
+  itemsNumContainer: {
+    flexDirection: 'row',
+    marginTop: 15,
+  },
+  followersNumContainer: {
+    marginLeft: 70,
+  },
+  followersNum: {
+    color: '#969696',
+    opacity: 0.52,
+    fontFamily: 'Arial',
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
+  followingNumContainer: {
+    marginLeft: 95,
+  },
+  followingNum: {
+    color: '#969696',
+    opacity: 0.52,
+    fontFamily: 'Arial',
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
+  charmaNumContainer: {
+    marginLeft: 93,
+  },
+  charmaNum: {
+    color: '#969696',
+    opacity: 0.52,
+    fontFamily: 'Arial',
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
+  bioContainer: {
+    marginLeft: 10,
+    marginTop: 30,
+  },
+  bioContainerBold: {
+    marginLeft: 30,
+  },
+  bio: {
+    color: '#616161',
+    fontFamily: 'Arial',
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
+  bioTextContainer: {
+    marginLeft: 60,
+  },
+  bioText: {
+    color: '#969696',
+    fontFamily: 'Arial',
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginTop: 20,
+  },
+  memoriesContainer: {
+    marginTop: 30,
+    marginLeft: 40,
+  },
+  urMemories: {
+    color: '#616161',
+    fontFamily: 'Arial',
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
+  visibleContainer: {
+    marginTop: 3,
+  },
+  visible: {
+    color: '#999999',
+    fontFamily: 'Arial',
+    fontSize: 11,
+    marginLeft: 7,
+    fontWeight: 'bold',
+  },
+});
+
 
 export default ProfilePage;

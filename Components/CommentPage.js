@@ -47,12 +47,12 @@ const CommentPage = ({ navigation, route }) => {
   const [edit, setEdit] = useState(isEditing)
   console.log('test', messageText)
   useEffect(() => {
-    if(edit){
+    if (edit) {
       setText(messageText)
       setEdit(false)
     }
   })
-  
+
 
   const handlePost = async () => {
     // navigation.navigate('ConfirmationPage')
@@ -67,7 +67,7 @@ const CommentPage = ({ navigation, route }) => {
     setCharacterCount(0);
   }
 
-  const handleTextChange = (text) =>{
+  const handleTextChange = (text) => {
     setText(text);
     setCharacterCount(text.length)
   }
@@ -150,9 +150,8 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red',
   },
   promptTextView: {
-    paddingTop: 20,
-    paddingLeft: 20,
-    marginTop: 75,
+    marginLeft: 50,
+    marginTop: 105,
     marginBottom: -15,
   },
   promptText: {
@@ -173,7 +172,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
-    right: -320,
+    right: -340,
     top: -15,
   },
   button: {
@@ -202,7 +201,7 @@ const styles = StyleSheet.create({
   },
   charContainer: {
     position: 'absolute',
-    top: 250,
+    top: 225,
     left: 36,
     // backgroundColor: 'pink'
   },
@@ -215,12 +214,11 @@ const styles = StyleSheet.create({
     // backgroundColor: 'blue',
     height: 250,
     borderColor: '#ccc',
-    borderWidth: 1,
     borderRadius: 5,
     padding: 10,
     marginRight: 20,
     marginLeft: 18,
-    marginTop: 160,
+    marginTop: 120,
     color: theme.createCommentColors.first,
     fontFamily: 'Helvetica',
     fontWeight: 'bold',
