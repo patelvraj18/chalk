@@ -18,9 +18,7 @@ const MessageBoard = ({ navigation, route }) => {
   const [promptID, setPromptID] = useState('');
   const SORTBYTOP = 0
   const SORTBYNEW = 1
-  const SORTBYLOCATION = 2
   const SORTBYOLD = 3
-  const [sortType, setSortType] = useState(SORTBYTOP)
   const { username } = route.params;
   useEffect(() => {
     db_operations.getPrompt().then(prompt => {
@@ -76,9 +74,7 @@ const MessageBoard = ({ navigation, route }) => {
   const handleSort = async (sortType) => {
     const compare = getCompareFunc(sortType)
     var new_messages = await db_operations.getResponses(promptID)
-    console.log(messages)
     new_messages.sort(compare)
-    console.log(messages)
     setMessages(new_messages)
     
   }
