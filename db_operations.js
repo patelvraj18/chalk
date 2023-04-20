@@ -7,7 +7,7 @@ import {
   get,
   update,
 } from 'firebase/database';
-import {app} from './src/firebase/config';
+import { app } from './src/firebase/config';
 /* 
 page loads
 fetch comments (query db based on the date)
@@ -47,7 +47,7 @@ function setPrompt(text) {
     responses: [],
   });
   const promptID = newPromptRef.key;
-  update(newPromptRef, {promptID: promptID});
+  update(newPromptRef, { promptID: promptID });
 }
 
 function setUsername(username, userCredential) {
@@ -123,6 +123,7 @@ function getResponses(promptID) {
             responseID: obj.responseID,
             likeCount: obj.likeCount,
             timestamp: obj.timestamp,
+            replyCount: obj.replyCount,
           })),
         );
       } else {
@@ -163,18 +164,6 @@ function getComments(responseID) {
 }
 
 function respondToPrompt(userID, text, promptID) {
-  //add commentID to prompt responses
-  //add comment to comments
-  // promptID = getPromptID();
-  // const comments_list = ref(db, 'comments/' + promptID);
-  // const new_comment = push(comments_list);
-  // push(comments_list, {
-  //   text: text,
-  //   commentID: commentID,
-  //   userID: userID,
-  //   responses: [],
-  // });
-
   console.debug('respondToPrompt', userID, text, promptID)
 
   const responsesRef = ref(db, `responses/${promptID}`);
@@ -185,17 +174,19 @@ function respondToPrompt(userID, text, promptID) {
     comments: [],
     likeCount: 0,
     timestamp: Date.now(),
+    replyCount: 0,
   });
   const responseID = newResponse.key;
-  update(newResponse, {responseID: responseID});
+  update(newResponse, { responseID: responseID });
   return responseID;
 }
 
-function replyToResponse(userID, text, responseID) {
+function replyToResponse(userID, text, promptID, responseID) {
   console.debug('replyToResponse', userID, text, responseID)
   //add commentID to comment responses
   //add comment to comments
   const commentRef = ref(db, `comments/${responseID}`);
+
   const newComment = push(commentRef, {
     text: text,
     userID: userID,
@@ -203,10 +194,25 @@ function replyToResponse(userID, text, responseID) {
     timestamp: Date.now(),
   });
   const commentID = newComment.key;
-  update(newComment, {commentID: commentID});
+  update(newComment, { commentID: commentID });
+  //TODO SEE IF THIS WORKS
+  const responsesRef = getResponseRef(promptID, responseID)
+  get(responsesRef).then(snapshot => {
+    if (snapshot.exists()) {
+      update(responsesRef, {replyCount: snapshot.val().replyCount + 1})
+      // return Promise.resolve(snapshot.val())
+    } else {
+      update(responsesRef, {replyCount: 0})
+    }
+  })
+    .catch(error => {
+      console.error(error);
+      return Promise.reject(error);
+    });
+  
 }
 
-function getResponseRef (promptID, responseID) {
+function getResponseRef(promptID, responseID) {
   console.debug('getResponseRef', promptID, responseID)
   return ref(db, `responses/${promptID}/${responseID}`)
 }
@@ -216,14 +222,14 @@ function getComment(promptID, responseID) {
   const commentRef = getResponseRef(promptID, responseID)
   console.debug(commentRef)
   return get(commentRef).then(snapshot => {
-      if (snapshot.exists()) {
-        console.debug(snapshot.val())
-        return Promise.resolve(snapshot.val())
-      } else {
-        console.debug('getComment: No data available');
-        return Promise.resolve([]);
-      }
-    })
+    if (snapshot.exists()) {
+      console.debug(snapshot.val())
+      return Promise.resolve(snapshot.val())
+    } else {
+      console.debug('getComment: No data available');
+      return Promise.resolve([]);
+    }
+  })
     .catch(error => {
       console.error(error);
       return Promise.reject(error);
@@ -239,19 +245,19 @@ const incrementLike = async (promptID, responseID) => {
   console.debug('incrementLike', promptID, responseID)
   commentObj = await getComment(promptID, responseID)
   commentRef = getResponseRef(promptID, responseID)
-  update(commentRef, {likeCount: commentObj.likeCount + 1})
+  update(commentRef, { likeCount: commentObj.likeCount + 1 })
 }
 
 const decrementLike = async (promptID, responseID) => {
   console.debug('decrementLike', promptID, responseID)
   commentObj = await getComment(promptID, responseID)
   console.debug('decrementLike after getComment', promptID, responseID)
-  commentRef = getResponseRef(promptID, responseID) 
+  commentRef = getResponseRef(promptID, responseID)
   console.debug('decrementLike after getResponseRef', promptID, responseID)
-  update(commentRef, {likeCount: commentObj.likeCount - 1})
+  update(commentRef, { likeCount: commentObj.likeCount - 1 })
 }
 
-const getLikedMessages= async (username) => {
+const getLikedMessages = async (username) => {
   const userObj = await getUser(username);
   if (!userObj.hasOwnProperty('likedResponses')) {
     userObj.likedResponses = []
@@ -265,7 +271,7 @@ const likeResponse = async (username, responseID) => {
     userObj.likedResponses = []
   }
   userObj.likedResponses.push(responseID)
-  userRef = await getUserRef(username)  
+  userRef = await getUserRef(username)
   update(userRef, userObj);
   return userObj.likedResponses
 }
@@ -284,7 +290,7 @@ const dislikeResponse = async (username, responseID) => {
     userObj.likedResponses = []
   }
   const index = userObj.likedResponses.indexOf(responseID)
-  userObj.likedResponses.splice(index,1)
+  userObj.likedResponses.splice(index, 1)
 
   userRef = await getUserRef(username)
   update(userRef, userObj);
@@ -339,7 +345,7 @@ const getKarma = async (username) => {
   if (userObj.hasOwnProperty("karma")) {
     return userObj.karma
   } else {
-    return -1 
+    return -1
   }
 }
 
@@ -354,7 +360,7 @@ const incrementKarma = async (username) => {
   update(userRef, userObj)
 }
 
-const decrementKarma = async (username) => { 
+const decrementKarma = async (username) => {
   console.debug('decrementKarma', username)
   const userObj = await getUser(username);
   const userRef = await getUserRef(username)
@@ -367,7 +373,50 @@ const decrementKarma = async (username) => {
   userObj.karma = userObj.karma - 1
   update(userRef, userObj)
 }
+async function getUserIDByUsername(username) {
+  const userObj = await getUser(username);
+  return userObj.userID;
+}
 
+async function getFollowing(username) {
+  const userObj = await getUser(username);
+  if (!userObj.hasOwnProperty('following')) {
+    userObj.following = [];
+  }
+  return userObj.following;
+}
+
+async function isFollowing(username, targetUsername) {
+  const following = await getFollowing(username);
+  const targetUserID = await getUserIDByUsername(targetUsername);
+  return following.includes(targetUserID);
+}
+
+async function followUser(username, targetUsername) {
+  const userObj = await getUser(username);
+  const userRef = await getUserRef(username);
+  const targetUserID = await getUserIDByUsername(targetUsername);
+
+  if (!userObj.hasOwnProperty('following')) {
+    userObj.following = [];
+  }
+
+  if (!userObj.following.includes(targetUserID)) {
+    userObj.following.push(targetUserID);
+    update(userRef, userObj);
+  }
+}
+
+async function unfollowUser(username, targetUsername) {
+  const userObj = await getUser(username);
+  const userRef = await getUserRef(username);
+  const targetUserID = await getUserIDByUsername(targetUsername);
+
+  if (userObj.hasOwnProperty('following') && userObj.following.includes(targetUserID)) {
+    userObj.following = userObj.following.filter(id => id !== targetUserID);
+    update(userRef, userObj);
+  }
+}
 /* real-time listening 
 const commentRef = ref(db, 'prompts/' + promptID + '/starCount');
 onValue(commentRef, (snapshot) => {
@@ -393,5 +442,10 @@ export {
   getLikes,
   getKarma,
   incrementKarma,
-  decrementKarma
+  decrementKarma,
+  getUserIDByUsername,
+  getFollowing,
+  isFollowing,
+  followUser,
+  unfollowUser
 };

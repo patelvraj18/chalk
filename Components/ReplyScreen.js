@@ -30,7 +30,7 @@ const theme = createTheme({
 });
 
 const ReplyScreen = ({ route }) => {
-  const { responseText, responseID, responseUserID, username } = route.params;
+  const { responseText, responseID, responseUserID, username, promptID } = route.params;
   const [response, setResponse] = useState(null);
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState('');
@@ -44,7 +44,7 @@ const ReplyScreen = ({ route }) => {
 
   const handleSubmitComment = () => {
     if (commentText.trim() !== '') {
-      db_operations.replyToResponse(username, commentText, responseID);
+      db_operations.replyToResponse(username, commentText, promptID, responseID);
       setComments([...comments, { userID: username, text: commentText }]);
       setCommentText('');
     }
