@@ -51,9 +51,7 @@ const MessageBoard = ({ navigation, route }) => {
   const [showFollowing, setShowFollowing] = useState(false);
   const SORTBYTOP = 0
   const SORTBYNEW = 1
-  const SORTBYLOCATION = 2
   const SORTBYOLD = 3
-  const [sortType, setSortType] = useState(SORTBYTOP)
   const { username } = route.params;
   const { usernameC, setUsernameC, promptIDC, setPromptIDC, promptTextC, setPromptTextC } = useContext(AppContext);
   const [refreshing, setRefreshing] = useState(false);
