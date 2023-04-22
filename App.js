@@ -18,6 +18,7 @@ import EditProfile from './Components/EditProfile';
 import ConfirmationPage from './Components/ConfirmationPage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { decode, encode } from 'base-64';
+import Settings from './Components/Settings';
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -111,7 +112,7 @@ function App() {
           <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} options={{ headerShown: false }} />
           <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
           <Stack.Screen name="SuccessSignUp" component={SuccessSignUp} options={{ headerShown: false }} />
-
+          <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
           <Stack.Screen name="SuccessResetPassword" component={SuccessResetPassword} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>

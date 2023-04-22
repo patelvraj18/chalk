@@ -50,6 +50,12 @@ const ProfilePage = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+        <View style={styles.threeDotsContainer}>
+          <Image source={require('../assets/icons/threedots_icon.png')}
+            style={styles.threeDots} />
+        </View>
+      </TouchableOpacity>
       <View style={styles.profilePicContainer}>
         <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
           <Image
@@ -95,14 +101,24 @@ const ProfilePage = ({ navigation, route }) => {
           </Text>
         </View>
       </View>
-      <View style={styles.memoriesContainer}>
+      <View style={styles.locationContainer}>
+        <View style={styles.locationTextContainer}>
+          <Text style={styles.locationText}>
+            Location
+          </Text>
+        </View>
+        <View style={styles.locationInfoContainer}>
+          <Text style={styles.locationInfo}>los angeles, ca</Text>
+        </View>
+      </View>
+      {/* <View style={styles.memoriesContainer}>
         <View style={styles.urMemoriesContainer}>
           <Text style={styles.urMemories}>Your Memories</Text>
         </View>
         <View style={styles.visibleContainer}>
           <Text style={styles.visible}>(visible only to you)</Text>
         </View>
-      </View>
+      </View> */}
       {username === current_username &&
         (<TouchableOpacity
           onPress={handleLogout}
@@ -133,7 +149,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   profilePicContainer: {
-    marginTop: 75,
+    marginTop: 90,
     alignItems: 'center',
   },
   profilePicture: {
@@ -229,6 +245,12 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: 'bold',
   },
+  locationText: {
+    color: '#616161',
+    fontFamily: 'Arial',
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
   bioTextContainer: {
     marginLeft: 60,
   },
@@ -238,6 +260,22 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: 'bold',
     marginTop: 20,
+  },
+  locationInfo: {
+    color: '#969696',
+    fontFamily: 'Arial',
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginTop: 20,
+  },
+  locationInfoContainer: {
+    marginLeft: 28.5,
+    marginRight: 40,
+    paddingBottom: 60,
+  },
+  locationContainer: {
+    marginTop: 60,
+    marginLeft: 40,
   },
   memoriesContainer: {
     marginTop: 30,
@@ -258,6 +296,16 @@ const styles = StyleSheet.create({
     fontSize: 11,
     marginLeft: 7,
     fontWeight: 'bold',
+  },
+  threeDots: {
+    width: 22,
+    height: 22,
+    opacity: 0.8,
+  },
+  threeDotsContainer: {
+    position: 'absolute',
+    top: 50,
+    right: 30,
   },
 });
 
