@@ -59,7 +59,7 @@ const MessageBoard = ({ navigation, route }) => {
   const { username } = route.params;
   const { usernameC, setUsernameC, promptIDC, setPromptIDC, promptTextC, setPromptTextC } = useContext(AppContext);
   const [refreshing, setRefreshing] = useState(false);
-  
+
   const data1 = [
     { key: SORTBYTOP, value: 'top' },
     { key: SORTBYNEW, value: 'new' },
@@ -85,8 +85,8 @@ const MessageBoard = ({ navigation, route }) => {
         setMessages(messages);
         handleSort(sortType)
       });
-      db_operations.getLikedMessages(username).then(likedMessages =>{
-       setLikedResponseIDs(likedMessages)
+      db_operations.getLikedMessages(username).then(likedMessages => {
+        setLikedResponseIDs(likedMessages)
       });
       const refreshMessages = async () => {
         const filteredMessages = await getFilteredMessages();
@@ -100,7 +100,7 @@ const MessageBoard = ({ navigation, route }) => {
       setUsernameC(username);
       setPromptDate(promptDate);
     });
-    
+
   }, [usernameC, promptIDC, promptTextC, showFollowing]);
 
   const onRefresh = async () => {
@@ -117,14 +117,14 @@ const MessageBoard = ({ navigation, route }) => {
         setMessages(messages);
         handleSort(sortType)
       });
-      db_operations.getLikedMessages(username).then(likedMessages =>{
-       setLikedResponseIDs(likedMessages)
+      db_operations.getLikedMessages(username).then(likedMessages => {
+        setLikedResponseIDs(likedMessages)
       });
-      
+
       setPromptIDC(promptID)
       setPromptTextC(promptText)
       setUsernameC(username)
-     
+
     });
     const filteredMessages = await getFilteredMessages();
     filteredMessages.sort(getCompareFunc(sortType));
@@ -154,22 +154,22 @@ const MessageBoard = ({ navigation, route }) => {
       const filteredMessages = allMessages.filter((msg) =>
         followingUserIds.includes(msg.userId)
       );
-  
+
       return filteredMessages;
     } else {
       return allMessages;
     }
   };
-  
+
 
   const getCompareFunc = (sortType) => {
     if (sortType === SORTBYTOP) {
-      return (message_a, message_b) => { 
+      return (message_a, message_b) => {
         if (message_a.likeCount < message_b.likeCount) {
           return 1
         } else if (message_a.likeCount > message_b.likeCount) {
           return -1
-        } else { 
+        } else {
           return 0
         }
       }
@@ -219,7 +219,7 @@ const MessageBoard = ({ navigation, route }) => {
     var new_messages = await db_operations.getResponses(promptID)
     new_messages.sort(compare)
     setMessages(new_messages)
-    
+
   }
 
   const handleSend = async () => {
@@ -244,7 +244,7 @@ const MessageBoard = ({ navigation, route }) => {
   const handleLike = async (username, posterUsername, promptID, responseID) => {
     console.debug(likedResponseIDs)
     const newLikedResponseIDs = await db_operations.handleLike(username, posterUsername, promptID, responseID)
-    console.debug('liked responmes',newLikedResponseIDs)
+    console.debug('liked responmes', newLikedResponseIDs)
     setLikedResponseIDs(newLikedResponseIDs);
     db_operations.getResponses(promptID).then(messages => {
       setMessages(messages);
@@ -253,8 +253,8 @@ const MessageBoard = ({ navigation, route }) => {
   };
   const handleDislike = async (username, posterUsername, promptID, responseID) => {
     console.debug(likedResponseIDs)
-    const newLikedResponseIDs = await db_operations.handleDislike(username, posterUsername,promptID, responseID)
-    console.debug('disliked responmes',newLikedResponseIDs)
+    const newLikedResponseIDs = await db_operations.handleDislike(username, posterUsername, promptID, responseID)
+    console.debug('disliked responmes', newLikedResponseIDs)
     setLikedResponseIDs(newLikedResponseIDs);
     db_operations.getResponses(promptID).then(messages => {
       setMessages(messages);
@@ -265,7 +265,7 @@ const MessageBoard = ({ navigation, route }) => {
   const handleLongPress = async (username, posterUsername, promptID, responseID) => {
     if ([username, posterUsername, promptID, responseID].includes(undefined)) {
       console.error(`got undefined in handleLongPress: username: ${username}, posterUsername: ${posterUsername}, promptID: ${promptID}, responseID: ${responseID}`)
-      
+
     }
     console.debug(`handlelongpress: ${username}, posterUsername: ${posterUsername}, promptID: ${promptID}, responseID: ${responseID}`)
     if (likedResponseIDs.includes(responseID)) {
@@ -274,7 +274,7 @@ const MessageBoard = ({ navigation, route }) => {
       await handleLike(username, posterUsername, promptID, responseID)
     }
   }
-  
+
   const handleReply = (responseText, responseID, userID) => {
     if ([responseText, responseID, userID].includes(undefined)) {
       console.error("got undefined in handleReply")
@@ -291,7 +291,7 @@ const MessageBoard = ({ navigation, route }) => {
   };
 
   const getLikes = async (responseID) => {
-    return await db_operations.getLikes(promptID,responseID)
+    return await db_operations.getLikes(promptID, responseID)
   }
   
   return (
@@ -354,7 +354,7 @@ const MessageBoard = ({ navigation, route }) => {
                 </Text>
               </View>
             </TouchableOpacity>
-        </View>
+          </View>
         </View>
         {/* <Button onPress={
           () => handleSort(SORTBYNEW)
@@ -366,79 +366,85 @@ const MessageBoard = ({ navigation, route }) => {
           () => handleSort(SORTBYTOP)
         } title="Old" /> */}
         <ScrollView style={styles.scrollView}
-        refreshControl={<RefreshControl
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-        tintColor="#979797" // Change the spinning wheel color, if needed
-      />}
+          refreshControl={<RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#979797" // Change the spinning wheel color, if needed
+          />}
         >
           <View style={styles.messageContainer}>
             {messages.map((message, index) => (
               <View key={index}
                 style={styles.message}>
-                  <View style={styles.allInfo}>
-                    <View style={styles.headerMessage}>
-                      <Image
-                        style={styles.profPicture}
-                        source={require('../assets/images/dog_picture.jpg')}
-                      />
-                      <View style={styles.furtherInfo}>
-                        <Text style={styles.username} onPress={
-                          () => {
-                            navigation.navigate('Profile Page', {
-                              username: message.userID, 
-                              current_username: username,
-                              isDefaultUser: false,
-                            });
-                          }
-                        }>{message.userID}</Text>
-                        <View style={styles.subsetMessage}>
-                          {/* <Text style={styles.location}> Los Angeles ~~~ </Text> */}
-                          {/* <View style={styles.dotMessage}>
+                <View style={styles.allInfo}>
+                  <View style={styles.headerMessage}>
+                    <Image
+                      style={styles.profPicture}
+                      source={require('../assets/images/dog_picture.jpg')}
+                    />
+                    <View style={styles.furtherInfo}>
+                      <Text style={styles.username} onPress={
+                        () => {
+                          navigation.navigate('Profile Page', {
+                            username: message.userID,
+                            current_username: username,
+                            isDefaultUser: false,
+                          });
+                        }
+                      }>{message.userID}</Text>
+                      <View style={styles.subsetMessage}>
+                        {/* <Text style={styles.location}> Los Angeles ~~~ </Text> */}
+                        {/* <View style={styles.dotMessage}>
                             <Text style={styles.dot}> • </Text>
                           </View> */}
-                          <Text style={styles.location}>{timePassed(message.timestamp)}</Text>
-                        </View>
+                        <Text style={styles.location}>{timePassed(message.timestamp)}</Text>
                       </View>
                     </View>
-                    <View styles={styles.mainMessage}>
-                      <Text style={styles.messageText}>{message.text}</Text>
+                    <View style={styles.threeDotsContainer}>
+                      <Image
+                        style={styles.threeDots}
+                        source={require('../assets/icons/threedots_icon.png')}
+                      />
                     </View>
                   </View>
-                  <View style={styles.bottomRow}>
-                    <TouchableOpacity
+                  <View styles={styles.mainMessage}>
+                    <Text style={styles.messageText}>{message.text}</Text>
+                  </View>
+                </View>
+                <View style={styles.bottomRow}>
+                  <TouchableOpacity
                     onPress={() => {
                       handleLongPress(username, message.userID, promptID, message.responseID) //old method with old name... should change later
                     }}>
-                      <Image style={styles.upvoteImage}
-                         source={
-                          likedResponseIDs != undefined && likedResponseIDs.includes(message.responseID) ? require('../assets/icons/blue_thumb_icon.png') : require('../assets/icons/black_thumb_icon.png')} />
-                    </TouchableOpacity>
-                    <Text style={styles.likeCountText}>{message.likeCount}</Text>
-                    <TouchableOpacity
-                     onPress={() => {
+                    <Image style={styles.upvoteImage}
+                      source={
+                        likedResponseIDs != undefined && likedResponseIDs.includes(message.responseID) ? require('../assets/icons/blue_thumb_icon.png') : require('../assets/icons/black_thumb_icon.png')} />
+                  </TouchableOpacity>
+                  <Text style={styles.likeCountText}>{message.likeCount}</Text>
+                  <TouchableOpacity
+                    onPress={() => {
                       handleReply(message.text, message.responseID, message.userID);
                     }
                     }
-                    >
+                  >
                     <Image style={styles.commentImage} source={require('../assets/icons/comments_icon.png')} />
-                    </TouchableOpacity>
-                    <Text style={styles.commentNumber}>{message.replyCount}</Text>
-                    {false && message.userID === username &&
-                     (
-                     <TouchableOpacity
-                     onPress={() => {
-                      navigation.navigate('Comment Page', {
-                        isEditing: true,
-                        messageText: message.text
-                      });
-                     }}>
-                    <Image style={styles.editImage} source={require('../assets/icons/pencil_icon.png')} />
-                    <Text style={styles.editText}>Edit</Text>
-                    </TouchableOpacity>
+                  </TouchableOpacity>
+                  <Text style={styles.commentNumber}>{message.replyCount}</Text>
+                  {false && message.userID === username &&
+                    (
+                      <TouchableOpacity
+                        onPress={() => {
+                          navigation.navigate('Comment Page', {
+                            isEditing: true,
+                            messageText: message.text
+                          });
+                        }}>
+                        <Image style={styles.editImage} source={require('../assets/icons/pencil_icon.png')} />
+                        <Text style={styles.editText}>Edit</Text>
+                      </TouchableOpacity>
                     )}
-                    
-                  </View>
+
+                </View>
               </View>
             ))}
           </View>
@@ -610,6 +616,10 @@ const styles = StyleSheet.create({
     height: 80,
     resizeMode: 'contain',
   },
+  threeDots: {
+    width: 20,
+    height: 20,
+  },
   commentImage: {
     width: 19,
     height: 19,
@@ -665,7 +675,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     fontSize: 16,
 
-  },  
+  },
   followingButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
