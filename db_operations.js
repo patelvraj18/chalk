@@ -33,9 +33,8 @@ fetch responses to coment
 (this needs to be called on every comment and then every subsequent response found)
 
 const prompt = ref(db, 'prompts/' + promptID);
-
-
 */
+
 const db = getDatabase(app);
 
 function setPrompt(text) {

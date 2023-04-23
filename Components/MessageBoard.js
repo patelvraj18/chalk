@@ -15,6 +15,8 @@ import * as db_operations from '../db_operations.js';
 import { ThemeProvider, createTheme } from '@rneui/themed';
 import { Dropdown } from 'react-native-material-dropdown';
 import { SelectList } from 'react-native-dropdown-select-list'
+import Clock from './Clock';
+
 
 const theme = createTheme({
   lightColors: {
@@ -48,10 +50,10 @@ const MessageBoard = ({ navigation, route }) => {
   const [inputText, setInputText] = useState('');
   const [promptText, setPromptText] = useState('');
   const [promptID, setPromptID] = useState('');
+  const [promptDate, setPromptDate] = useState(0);
   const [showFollowing, setShowFollowing] = useState(false);
   const SORTBYTOP = 0
   const SORTBYNEW = 1
-  const SORTBYLOCATION = 2
   const SORTBYOLD = 3
   const [sortType, setSortType] = useState(SORTBYTOP)
   const { username } = route.params;
@@ -77,6 +79,7 @@ const MessageBoard = ({ navigation, route }) => {
       }
       setPromptText(prompt.text);
       setPromptID(prompt.promptID);
+      setPromptDate(prompt.date);
 
       db_operations.getResponses(prompt.promptID).then(messages => {
         setMessages(messages);
@@ -91,11 +94,11 @@ const MessageBoard = ({ navigation, route }) => {
         setMessages(filteredMessages);
       };
       refreshMessages();
-
-      setPromptIDC(promptID)
-      setPromptTextC(promptText)
-      setUsernameC(username)
-
+      
+      setPromptIDC(promptID);
+      setPromptTextC(promptText);
+      setUsernameC(username);
+      setPromptDate(promptDate);
     });
 
   }, [usernameC, promptIDC, promptTextC, showFollowing]);
@@ -133,21 +136,23 @@ const MessageBoard = ({ navigation, route }) => {
   const getFilteredMessages = async () => {
     const allMessages = await db_operations.getResponses(promptID);
     if (showFollowing) {
-      const followingUsernames = await db_operations.getFollowing(username);
-      console.log("got following usernames: ", followingUsernames);
+      const followingUserIds = await db_operations.getFollowing(username);
+      console.log("got following usernames: ", followingUserIds);
       console.log("all messages: ", allMessages);
+  
 
-      // Convert the followingUsernames to userIds
-      const followingUserIds = await Promise.all(
-        followingUsernames.map(async (username) => {
-          const { userID } = await db_operations.getUserIDByUsername(username);
-          return userID;
-        })
-      );
+      for (const message of allMessages) {
+        console.log("getting user id of", message.userID);
+        const userId = await db_operations.getUserIDByUsername(message.userID);
+        message.userId = userId;
+        console.log("got userId of", userId);
+      }
 
       // Filter messages based on userIds
+      console.log("all messages: ", allMessages);
+      console.log("followingUserIds: ", followingUserIds);
       const filteredMessages = allMessages.filter((msg) =>
-        followingUserIds.includes(msg.userID)
+        followingUserIds.includes(msg.userId)
       );
 
       return filteredMessages;
@@ -288,7 +293,7 @@ const MessageBoard = ({ navigation, route }) => {
   const getLikes = async (responseID) => {
     return await db_operations.getLikes(promptID, responseID)
   }
-
+  
   return (
     <ThemeProvider>
       <View style={styles.container}>
@@ -298,6 +303,7 @@ const MessageBoard = ({ navigation, route }) => {
             source={require('../assets/images/chalk_logo.png')}
           />
         </View>
+        <Clock timestamp={promptDate} />
         <View style={styles.header}>
           <Text style={styles.qotd}>Question of the Day: </Text>
           <Text style={styles.logo}>{promptText}</Text>
