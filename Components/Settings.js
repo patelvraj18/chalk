@@ -214,7 +214,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 20,
   },
-
   settingsHeader: {
     paddingHorizontal: 24,
     paddingVertical: 8,

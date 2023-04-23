@@ -50,95 +50,128 @@ const ProfilePage = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-        <View style={styles.threeDotsContainer}>
-          <Image source={require('../assets/icons/threedots_icon.png')}
-            style={styles.threeDots} />
-        </View>
-      </TouchableOpacity>
-      <View style={styles.profilePicContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
-          <Image
-            source={require('../assets/images/dog_picture.jpg')}
-            style={styles.profilePicture}
-          />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.usernameContainer}>
-        <Text style={styles.username}>{name}</Text>
-      </View>
-      <View style={styles.itemsContainer}>
-        <View style={styles.followersContainer}>
-          <Text style={styles.followers}>Followers</Text>
-        </View>
-        <View style={styles.followingContainer}>
-          <Text style={styles.following}>Following</Text>
-        </View>
-        <View style={styles.charmaContainer}>
-          <Text style={styles.charma}>Charma</Text>
-        </View>
-      </View>
-      <View style={styles.itemsNumContainer}>
-        <View style={styles.followersNumContainer}>
-          <Text style={styles.followersNum}>76</Text>
-        </View>
-        <View style={styles.followingNumContainer}>
-          <Text style={styles.followingNum}>142</Text>
-        </View>
-        <View style={styles.charmaNumContainer}>
-          <Text style={styles.charmaNum}>{likes}</Text>
-        </View>
-      </View>
-      <View style={styles.bioContainer}>
-        <View style={styles.bioContainerBold} >
-          <Text style={styles.bio}>
-            Bio
-          </Text>
-        </View>
-        <View style={styles.bioTextContainer}>
-          <Text style={styles.bioText}>
-            i am a cool person.
-          </Text>
-        </View>
-      </View>
-      <View style={styles.locationContainer}>
-        <View style={styles.locationTextContainer}>
-          <Text style={styles.locationText}>
-            Location
-          </Text>
-        </View>
-        <View style={styles.locationInfoContainer}>
-          <Text style={styles.locationInfo}>los angeles, ca</Text>
-        </View>
-      </View>
-      {/* <View style={styles.memoriesContainer}>
-        <View style={styles.urMemoriesContainer}>
-          <Text style={styles.urMemories}>Your Memories</Text>
-        </View>
-        <View style={styles.visibleContainer}>
-          <Text style={styles.visible}>(visible only to you)</Text>
-        </View>
-      </View> */}
       {username === current_username &&
-        (<TouchableOpacity
-          onPress={handleLogout}
-        // style={{ backgroundColor: 'red', padding: 10, borderRadius: 5, marginTop: 20 }}
-        >
-          {/* <Text>Log out</Text> */}
-        </TouchableOpacity>)
+        (<View>
+          <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+            <View style={styles.threeDotsContainer}>
+              <Image source={require('../assets/icons/threedots_icon.png')}
+                style={styles.threeDots} />
+            </View>
+          </TouchableOpacity>
+          <View style={styles.profilePicContainer}>
+            <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
+              <Image
+                source={require('../assets/images/dog_picture.jpg')}
+                style={styles.profilePicture}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.usernameContainer}>
+            <Text style={styles.username}>{name}</Text>
+          </View>
+          <View style={styles.itemsContainer}>
+            <View style={styles.followersContainer}>
+              <Text style={styles.followers}>Followers</Text>
+            </View>
+            <View style={styles.followingContainer}>
+              <Text style={styles.following}>Following</Text>
+            </View>
+            <View style={styles.charmaContainer}>
+              <Text style={styles.charma}>Charma</Text>
+            </View>
+          </View>
+          <View style={styles.itemsNumContainer}>
+            <View style={styles.followersNumContainer}>
+              <Text style={styles.followersNum}>76</Text>
+            </View>
+            <View style={styles.followingNumContainer}>
+              <Text style={styles.followingNum}>142</Text>
+            </View>
+            <View style={styles.charmaNumContainer}>
+              <Text style={styles.charmaNum}>{likes}</Text>
+            </View>
+          </View>
+          <View style={styles.bioContainer}>
+            <View style={styles.bioContainerBold} >
+              <Text style={styles.bio}>
+                Bio
+              </Text>
+            </View>
+            <View style={styles.bioTextContainer}>
+              <Text style={styles.bioText}>
+                i am a cool person.
+              </Text>
+            </View>
+          </View>
+          <View style={styles.locationContainer}>
+            <View style={styles.locationTextContainer}>
+              <Text style={styles.locationText}>
+                Location
+              </Text>
+            </View>
+            <View style={styles.locationInfoContainer}>
+              <Text style={styles.locationInfo}>los angeles, ca</Text>
+            </View>
+          </View>
+        </View>)
       }
       {username != current_username &&
-        (<TouchableOpacity
-          onPress={handleFollow}
-        // style={{
-        //   backgroundColor: isFollowing ? 'gray' : 'blue',
-        //   padding: 10,
-        //   borderRadius: 5,
-        //   marginTop: 20,
-        // }}
-        >
-          <Text>{isFollowing ? 'Unfollow' : 'Follow'}</Text>
-        </TouchableOpacity>)
+        (
+          <View style={styles.container2}>
+            <TouchableOpacity onPress={() => navigation.navigate('MessageBoard')}>
+              <View style={styles.backArrowContainer}>
+                <Image source={require('../assets/icons/back_arrow_icon.png')}
+                  style={styles.backArrow} />
+              </View>
+            </TouchableOpacity>
+            <View style={styles.username2Container}>
+              <Text style={styles.username2}>{name}</Text>
+            </View>
+            <View style={styles.topRowContainer}>
+              <View style={styles.picContainer}>
+                <Image source={require('../assets/images/dog_picture.jpg')}
+                  style={styles.pic} />
+              </View>
+              <View style={styles.bottomRowContainer}>
+                <View style={styles.firstRowContainer}>
+                  <View style={styles.followers2Container}>
+                    <Text>Followers</Text>
+                  </View>
+                  <View style={styles.following2Container}>
+                    <Text>Following</Text>
+                  </View>
+                  <View style={styles.charma2Container}>
+                    <Text>Charma</Text>
+                  </View>
+                </View>
+                <View style={styles.secondRowContainer}>
+                  <View style={styles.followers2CountContainer}>
+                    <Text>20</Text>
+                  </View>
+                  <View style={styles.followers2CountContainer}>
+                    <Text>40</Text>
+                  </View>
+                  <View style={styles.followers2CountContainer}>
+                    <Text>{likes}</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <TouchableOpacity
+              onPress={handleFollow}
+              // eslint-disable-next-line react-native/no-inline-styles
+              style={{
+                backgroundColor: isFollowing ? 'gray' : 'blue',
+                padding: 10,
+                borderRadius: 5,
+                marginTop: 20,
+              }}
+            >
+              <Text>{isFollowing ? 'Unfollow' : 'Follow'}</Text>
+            </TouchableOpacity>
+
+          </View>
+        )
       }
     </View>
   );
@@ -147,6 +180,10 @@ const ProfilePage = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  container2: {
+    flex: 1,
+    backgroundColor: 'white',
   },
   profilePicContainer: {
     marginTop: 90,
@@ -307,6 +344,46 @@ const styles = StyleSheet.create({
     top: 50,
     right: 30,
   },
+  backArrow: {
+    width: 35,
+    height: 35,
+  },
+  backArrowContainer: {
+    marginLeft: 20,
+    marginTop: 50,
+  },
+  username2: {
+    fontFamily: 'InriaSans-Bold',
+    fontSize: 24,
+    color: '#464646',
+  },
+  username2Container: {
+    position: 'absolute',
+    top: 53,
+    right: 140,
+  },
+  topRowContainer: {
+    flexDirection: 'row',
+    marginTop: 30,
+  },
+  picContainer: {
+    marginLeft: 35,
+  },
+  pic: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  bottomRowContainer: {
+    flexDirection: 'column',
+  },
+  firstRowContainer: {
+    flexDirection: 'row',
+  },
+  secondRowContainer: {
+    flexDirection: 'row',
+  },
+
 });
 
 
