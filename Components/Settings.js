@@ -101,17 +101,17 @@ const Settings = ({ navigation, route }) => {
 
 
         {SECTIONS.map(({ header, items }) => (
-          <View style={styles.section} key={header}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionHeaderText}>{header}</Text>
+          <View style={styles.settings} key={header}>
+            <View style={styles.settingsHeader}>
+              <Text style={styles.settingsHeaderText}>{header}</Text>
             </View>
-            <View style={styles.sectionBody}>
+            <View style={styles.settingsBody}>
               {items.map(({ id, label, icon }, index) => {
                 return (
                   <View
                     key={id}
                     style={[
-                      styles.rowWrapper,
+                      styles.rowSettings,
                       index === 0 && { borderTopWidth: 0 },
                     ]}>
                     <TouchableOpacity
@@ -126,7 +126,7 @@ const Settings = ({ navigation, route }) => {
                           size={22}
                         />
                         <Text style={styles.rowLabel}>{label}</Text>
-                        <View style={styles.rowSpacer} />
+                        <View style={styles.rowSpace} />
                         <View style={styles.frontArrowContainer2}>
                           <Image source={require('../assets/icons/front_arrow_icon.png')}
                             style={styles.frontArrow2} />
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   container2: {
     backgroundColor: 'white',
   },
-  section: {
+  settings: {
     paddingTop: 12,
   },
   profilePicture: {
@@ -215,11 +215,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 
-  sectionHeader: {
+  settingsHeader: {
     paddingHorizontal: 24,
     paddingVertical: 8,
   },
-  sectionHeaderText: {
+  settingsHeaderText: {
     fontSize: 14,
     fontWeight: '600',
     color: '#a7a7a7',
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1.2,
     fontFamily: 'InriaSans-Bold'
   },
-  sectionBody: {
+  settingsBody: {
     borderColor: '#e3e3e3',
     marginLeft: 17,
     marginRight: 17,
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
     paddingRight: 24,
     height: 50,
   },
-  rowWrapper: {
+  rowSettings: {
     paddingLeft: 24,
     borderTopWidth: 1,
     borderColor: '#e3e3e3',
@@ -314,11 +314,10 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   rowLabel: {
-    fontSize: 17,
+    fontSize: 14.5,
     fontWeight: '500',
     color: '#484848',
     fontFamily: 'InriaSans-Bold'
-
   },
   rowValue: {
     fontSize: 17,
@@ -326,7 +325,7 @@ const styles = StyleSheet.create({
     marginRight: 4,
     fontFamily: 'InriaSans-Bold'
   },
-  rowSpacer: {
+  rowSpace: {
     flexGrow: 1,
     flexShrink: 1,
     flexBasis: 0,
