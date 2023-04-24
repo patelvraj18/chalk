@@ -36,6 +36,7 @@ const ReplyScreen = ({ route, navigation }) => {
   const [response, setResponse] = useState(null);
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState('');
+  const [profilePics, setProfilePics] = useState({});
   const SORTBYTOP = 0
   const SORTBYNEW = 1
   const SORTBYLOCATION = 2
@@ -43,10 +44,23 @@ const ReplyScreen = ({ route, navigation }) => {
   const [sortType, setSortType] = useState(SORTBYTOP)
 
   useEffect(() => {
+
+    const fetchProfilePics = async (comments) => {
+      const newProfilePics = { ...profilePics };
+      for (const message of comments) {
+        console.log("getting profile pic of", message.userID);
+        newProfilePics[message.userID] = await db_operations.getProfilePic(message.userID);
+      }
+      newProfilePics[route.params.userID] = await db_operations.getProfilePic(route.params.userID);
+      setProfilePics(newProfilePics);
+    }
+
     setResponse(responseText);
     db_operations.getComments(responseID).then(comments => {
       setComments(comments);
+      fetchProfilePics(comments);
     });
+
   }, []);
 
   const handleSubmitComment = () => {
@@ -121,10 +135,12 @@ const ReplyScreen = ({ route, navigation }) => {
             <View style={styles.responseContainer}>
               <View style={styles.topRow}>
                 <View style={styles.profilePictureContainer}>
+                  <TouchableOpacity onPress={() => console.log(route.params.userID)}>
                   <Image
                     style={styles.profPicture}
-                    source={require('../assets/images/dog_picture.jpg')}
+                    source={{uri: "data:image/png;base64," + profilePics[route.params.userID]}}
                   />
+                  </TouchableOpacity>
                 </View>
                 <View style={styles.moreInfo}>
                   <Text style={styles.username}>
@@ -192,7 +208,7 @@ const ReplyScreen = ({ route, navigation }) => {
                 <View style={styles.commentsProfContainer}>
                   <Image
                     style={styles.commentsProf}
-                    source={require('../assets/images/dog_picture.jpg')}
+                    source={{uri: "data:image/png;base64," + profilePics[comment.userID]}}
                   />
                 </View>
                 <View style={styles.moreInfo2}>

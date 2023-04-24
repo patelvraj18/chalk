@@ -11,6 +11,7 @@ const ProfilePage = ({ navigation, route }) => {
   const [questions, setQuestions] = useState([]); // array of past questions answered
   const [likes, setLikes] = useState(0); // number of likes user has gotten
   const [isFollowing, setIsFollowing] = useState(false);
+  const [profilePicture, setProfilePicture] = useState(null);
 
 
   useEffect(() => {
@@ -18,6 +19,12 @@ const ProfilePage = ({ navigation, route }) => {
     db_operations.getKarma(username).then(karma => {
       setLikes(karma)
     });
+    db_operations.getProfilePic(username).then(pic => {
+      console.log("got pic of user ", username);
+      console.log(pic);
+      setProfilePicture(pic);
+    });
+        
     let timerId = setInterval(() => {
       db_operations.getKarma(username).then(karma => {
         setLikes(karma)
@@ -50,16 +57,24 @@ const ProfilePage = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Settings', {
+                                          username: username, 
+                                          current_username: current_username,
+                                          isDefaultUser: false,
+                                        })}>
         <View style={styles.threeDotsContainer}>
           <Image source={require('../assets/icons/threedots_icon.png')}
             style={styles.threeDots} />
         </View>
       </TouchableOpacity>
       <View style={styles.profilePicContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
+        <TouchableOpacity onPress={() => navigation.navigate('EditProfile', {
+                                          username: username, 
+                                          current_username: current_username,
+                                          isDefaultUser: false,
+                                        })}>
           <Image
-            source={require('../assets/images/dog_picture.jpg')}
+            source={{uri: "data:image/png;base64," + profilePicture}}
             style={styles.profilePicture}
           />
         </TouchableOpacity>
