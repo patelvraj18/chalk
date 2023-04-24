@@ -1,10 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Button } from 'react-native';
 import * as db_operations from '../db_operations.js';
+import {launchImageLibrary} from 'react-native-image-picker';
+
 
 const EditProfile = ({ navigation, route }) => {
-  // const username = route.params.username
-  // const current_username = route.params.current_username
+  const username = route.params.username;
+  const current_username = route.params.current_username;
+  const [profilePicture, setProfilePicture] = useState(null);
+  
+  useEffect(() => {
+    const fetchProfilePicture = async () => {
+      const [profilePicBase64] = await db_operations.getProfilePic(username);
+      console.log("got pic 123", profilePicBase64);
+      if (profilePicBase64) {
+        setProfilePicture(profilePicBase64);
+      } else {
+
+        setProfilePicture(require('../assets/images/dog_picture.jpg'));
+      }
+      console.log("default profile pic", profilePicture);
+    };
+
+    fetchProfilePicture();
+  }, [username]);
+  console.log("edit profile username: ", username)
+  console.log("edit profile current_username ", current_username)
   // console.log('username', username);
   // console.log('current_username', current_username);
   // const [name, setName] = useState(username); // account name
@@ -48,10 +69,38 @@ const EditProfile = ({ navigation, route }) => {
   //   setIsFollowing(!isFollowing);
   // };
 
+  const handleProfilePictureChange = async () => {
+    const options = {
+      mediaType: 'photo',
+      includeBase64: true,
+      maxWidth: 128,
+      maxHeight: 128,
+    };
+
+    launchImageLibrary(options, async (response) => {
+      console.log('Response = ', response)
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.errorCode) {
+        console.log('ImagePicker Error: ', response.errorMessage);
+      } else {
+        const base64Image = response.assets[0].base64;
+        console.log("base64Image", base64Image)
+        setProfilePicture(base64Image)
+        console.log("after change", profilePicture)
+        await db_operations.setProfilePic(username, base64Image);
+      }
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('ProfilePage')}>
+        <TouchableOpacity onPress={() => navigation.navigate('ProfilePage', {
+                                                username: username, 
+                                                current_username: current_username,
+                                                isDefaultUser: false,
+                                              })}>
           <Image
             style={styles.icon}
             source={require('../assets/images/x-icon.png')}
@@ -60,7 +109,11 @@ const EditProfile = ({ navigation, route }) => {
       </View>
       <View style={styles.buttonContainer}>
         <Button
-          onPress={() => navigation.navigate('ProfilePage')}
+          onPress={() => navigation.navigate('ProfilePage', {
+            username: username, 
+            current_username: current_username,
+            isDefaultUser: false,
+          })}
           color="#464646"
           title="Save"
           fontFamily="Arial"
@@ -68,9 +121,9 @@ const EditProfile = ({ navigation, route }) => {
         />
       </View>
       <View style={styles.profilePicContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleProfilePictureChange}>
           <Image
-            source={require('../assets/images/dog_picture.jpg')}
+            source={{uri: "data:image/png;base64," + profilePicture}} 
             style={styles.profilePicture}
           />
         </TouchableOpacity>

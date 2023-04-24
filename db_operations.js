@@ -8,6 +8,8 @@ import {
   update,
 } from 'firebase/database';
 import { app } from './src/firebase/config';
+import { readFile, writeFile } from 'fs';
+import { promisify } from 'util';
 /* 
 page loads
 fetch comments (query db based on the date)
@@ -416,6 +418,36 @@ async function unfollowUser(username, targetUsername) {
     update(userRef, userObj);
   }
 }
+
+async function getProfilePic(username) {
+  console.debug('getProfilePic', username);
+  const userObj = await getUser(username);
+
+  if (userObj.hasOwnProperty('profilepic')) {
+    console.log("got pic", userObj.profilepic);
+    return userObj.profilepic;
+  } else {
+    // Load the default picture and convert it to base64
+    return "iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==";
+  }
+}
+
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+async function setProfilePic(username, base64Pic) {
+  console.debug('setProfilePic', username);
+  const userObj = await getUser(username);
+  const userRef = await getUserRef(username);
+
+  userObj.profilepic = base64Pic;
+  update(userRef, userObj);
+}
 /* real-time listening 
 const commentRef = ref(db, 'prompts/' + promptID + '/starCount');
 onValue(commentRef, (snapshot) => {
@@ -446,5 +478,7 @@ export {
   getFollowing,
   isFollowing,
   followUser,
-  unfollowUser
+  unfollowUser,
+  getProfilePic,
+  setProfilePic
 };

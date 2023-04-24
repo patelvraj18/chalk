@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -47,16 +47,23 @@ const Settings = ({ navigation, route }) => {
     wifi: false,
   });
 
-  // const username = route.params.username
-  // const current_username = route.params.current_username
+  const username = route.params.username
+  const current_username = route.params.current_username
   // console.log('username', username);
   // console.log('current_username', current_username);
   // const [name, setName] = useState(username); // account name
   const [questions, setQuestions] = useState([]); // array of past questions answered
   const [likes, setLikes] = useState(0); // number of likes user has gotten
   const [isFollowing, setIsFollowing] = useState(false);
+  const [profilePicture, setProfilePicture] = useState(null);
 
-
+  useEffect(() => {
+    db_operations.getProfilePic(username).then(pic => {
+      console.log("got pic of user ", username);
+      console.log(pic);
+      setProfilePicture(pic);
+    });
+  });
 
 
   const handleLogout = () => {
@@ -66,16 +73,24 @@ const Settings = ({ navigation, route }) => {
   return (
     <View style={styles.container2}>
       <ScrollView contentContainerStyle={styles.container}>
-        <TouchableOpacity onPress={() => navigation.navigate('ProfilePage')}>
+        <TouchableOpacity onPress={() => navigation.navigate('ProfilePage', {
+                                          username: username, 
+                                          current_username: current_username,
+                                          isDefaultUser: false,
+                                        })}>
           <View style={styles.backArrowContainer}>
             <Image source={require('../assets/icons/back_arrow_icon.png')}
               style={styles.backArrow} />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
+        <TouchableOpacity onPress={() => navigation.navigate('EditProfile', {
+                                          username: username, 
+                                          current_username: current_username,
+                                          isDefaultUser: false,
+                                        })}>
           <View style={styles.editProfileContainer}>
             <View style={styles.profilePictureContainer}>
-              <Image source={require('../assets/images/dog_picture.jpg')}
+              <Image source={{uri: "data:image/png;base64," + profilePicture}}
                 style={styles.profilePicture} />
             </View>
             <View style={styles.moreInfoContainer}>
