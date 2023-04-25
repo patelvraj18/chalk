@@ -712,7 +712,7 @@ export {
   togglePrivate,
   getPrivate,
   toggleNotifications,
-  getNotifications
+  getNotifications,
   incrementLikeComment,
   decrementLikeComment,
   handleLikeComment,
