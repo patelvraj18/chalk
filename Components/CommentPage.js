@@ -43,6 +43,7 @@ const CommentPage = ({ navigation, route }) => {
   const [imageUri, setImageUri] = useState('');
   const [voiceMemoUri, setVoiceMemoUri] = useState('');
   const [characterCount, setCharacterCount] = useState(0);
+  const [hasResponded, setHasResponded] = useState(false);
   const { usernameC, setUsernameC, promptIDC, setPromptIDC, promptTextC, setPromptTextC, inputTextC, setInputTextC, promptDateC, setPromptDateC } = useContext(AppContext);
   const { isEditing, messageText } = route.params;
   const [edit, setEdit] = useState(isEditing)
@@ -83,6 +84,14 @@ const CommentPage = ({ navigation, route }) => {
       setTime(today.getHours() + ":" + minutes + ":" + seconds);
       setCurrentTime(Date.now() - promptDateC);
     }, 1000);
+
+    db_operations.getResponses(promptIDC).then((responses) => {
+      for (response of responses) {
+        if (response.userID === usernameC) {
+          setHasResponded(true);
+        }
+      }
+    })
 
     return () => clearInterval(intervalId);
   }, [time])
@@ -135,11 +144,12 @@ const CommentPage = ({ navigation, route }) => {
               source={require('../assets/icons/picture_upload_icon.png')}
             />
           </TouchableOpacity>
-        </View> */}
-        <View style={styles.charContainer}>
+  </View> */}
+      
+        {!hasResponded && <View style={styles.charContainer}>
           <Text style={styles.char}> {characterCount}/300</Text>
-        </View>
-        <TextInput
+        </View>}
+        {!hasResponded && <TextInput
           style={styles.commentInput}
           placeholderTextColor={theme.createCommentColors.first}
           placeholder='Give me your best response.'
@@ -147,15 +157,24 @@ const CommentPage = ({ navigation, route }) => {
           value={text}
           maxLength={300}
           multiline={true}
-        />
-        <View style={styles.buttonContainer}>
+        />}
+        {!hasResponded && <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handlePost}>
             <Image
               style={styles.button}
               source={require('../assets/icons/post_icon.png')}
             />
           </TouchableOpacity>
-        </View>
+        </View>}
+
+        {
+          hasResponded && <View>
+            <Text>
+              You have already responded to this prompt.
+            </Text>
+            </View>
+        }
+        
         {/* <TouchableOpacity style={styles.imagePickerButton} onPress={handleImage}>
         <Text>Add Photo</Text>
       </TouchableOpacity>

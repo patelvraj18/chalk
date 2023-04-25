@@ -46,6 +46,7 @@ const ReplyScreen = ({ route, navigation }) => {
   const [commentText, setCommentText] = useState('');
   const [profilePics, setProfilePics] = useState({});
   const [likedResponseIDs, setLikedResponseIDs] = useState([]);
+  const [hasResponded, setHasResponded] = useState(false);
   const SORTBYTOP = 0
   const SORTBYNEW = 1
   const SORTBYLOCATION = 2
