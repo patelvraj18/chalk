@@ -158,11 +158,11 @@ const styles = StyleSheet.create({
   textWelcome: {
     color: theme.darkColors.secondary,
     fontSize: 13.5,
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
   },
   inputContainer: {
     padding: 10,
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     alignItems: 'center',
   },
   input: {
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: theme.navigationColors.secondary,
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontStyle: 'italic',
     fontWeight: '700',
     textAlign: 'center',
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   },
   forgot: {
     color: theme.navigationColors.primary,
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontWeight: 'bold',
   },
   buttonContainer: {
@@ -221,12 +221,12 @@ const styles = StyleSheet.create({
   signUp: {
     color: theme.darkColors.secondary,
     fontSize: 13,
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
   },
   signLink: {
     color: theme.navigationColors.primary,
     fontSize: 13,
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontWeight: 'bold',
   },
 });

@@ -39,6 +39,56 @@ const prompt = ref(db, 'prompts/' + promptID);
 
 const db = getDatabase(app);
 
+//report response
+function reportResponse(promptID, responseID) {
+  console.debug("reportResponse called")
+  const responseRef = getResponseRef(promptID, responseID);
+  get(responseRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      const response = snapshot.val();
+      const reportRef = ref(db, `reports/${promptID}/${responseID}`);
+      push(reportRef, response);
+    } else {
+      console.debug("response does not exist")
+    }
+  })
+}
+
+function reportComment(responseID, commentID) {
+  console.debug("reportResponse called")
+
+  const commentRef = ref(db, `comments/${responseID}/${commentID}`);
+  get(commentRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      const response = snapshot.val();
+      const reportRef = ref(db, `reports/${responseID}/${commentID}`);
+      push(reportRef, response);
+    } else {
+      console.debug("comment does not exist")
+    }
+  })
+}
+
+
+//get all prompts
+function getPrompts() {
+  console.debug("getPrompts called")
+  return new Promise((resolve, reject) => {
+    const dbRef = ref(db);
+    get(child(dbRef, 'prompt/prompts'))
+      .then(snapshot => {
+        if (snapshot.exists()) {
+          resolve(snapshot.val());
+        } else {
+          reject('No prompt data available');
+        }
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+}
+
 function setPrompt(text) {
   console.debug('setPrompt ', text)
   const promptsRef = ref(db, 'prompt/prompts');
@@ -265,6 +315,33 @@ const decrementLike = async (promptID, responseID) => {
   update(commentRef, { likeCount: commentObj.likeCount - 1 })
 }
 
+const incrementLikeComment = async (responseID, commentID) => {
+  console.debug('incrementLike', responseID, commentID)
+  commentRef = ref(db, `comments/${responseID}/${commentID}`)
+  get(commentRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      if (snapshot.val().hasOwnProperty('likeCount')) {
+        update(commentRef, { likeCount: snapshot.val().likeCount + 1 })
+      } else {
+        update(commentRef, { likeCount: 1 })
+      }
+    } else {
+      console.debug('incrementLike: No data available');
+    }
+  })
+}
+
+const decrementLikeComment = async (responseID, commentID) => {
+  console.debug('decrementLike', responseID, commentID)
+  commentRef = ref(db, `comments/${responseID}/${commentID}`)
+  get(commentRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      update(commentRef, { likeCount: snapshot.val().likeCount - 1 })
+    } else {
+      console.debug('incrementLike: No data available');
+    }
+  })
+}
 const getLikedMessages = async (username) => {
   const userObj = await getUser(username);
   if (!userObj.hasOwnProperty('likedResponses')) {
@@ -320,9 +397,23 @@ const handleDislike = async (username, posterUsername, promptID, responseID) => 
   await decrementKarma(posterUsername)
   newLikes = await dislikeResponse(username, responseID)
   return newLikes
-
 }
 
+const handleLikeComment = async (username, posterUsername, responseID, commentID) => {
+  console.debug('handleLikeComment', username, posterUsername, responseID, commentID)
+  await incrementLikeComment(responseID, commentID)
+  await incrementKarma(posterUsername)
+  newLikes = await likeResponse(username, commentID)
+  return newLikes
+}
+
+const handleDislikeComment = async (username, posterUsername, responseID, commentID) => {
+  console.debug('handleDislikeComment', username, posterUsername, responseID, commentID)
+  await decrementLikeComment(responseID, commentID)
+  await decrementKarma(posterUsername)
+  newLikes = await dislikeResponse(username, responseID)
+  return newLikes
+}
 function getUser(username) {
   console.debug('getUser', username)
   const dbRef = ref(db);
@@ -530,6 +621,9 @@ onValue(commentRef, (snapshot) => {
 });
 */
 export {
+  reportComment,
+  reportResponse,
+  getPrompts,
   setUsername,
   getUsername,
   setPrompt,
@@ -562,4 +656,8 @@ export {
   updateBio,
   getBio,
   updateUsername,
+  incrementLikeComment,
+  decrementLikeComment,
+  handleLikeComment,
+  handleDislikeComment,
 };

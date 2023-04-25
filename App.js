@@ -20,6 +20,7 @@ import ConfirmationPage from './Components/ConfirmationPage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { decode, encode } from 'base-64';
 import Settings from './Components/Settings';
+import CalView from './Components/CalView';
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -35,6 +36,7 @@ const CommentStack = createNativeStackNavigator();
 const ProfileStack = createNativeStackNavigator();
 
 import AppContext from './AppContext';
+import QOTD from './Components/QOTD';
 
 function MessageBoardTabStack({ route: { params } }) {
   return (
@@ -52,6 +54,8 @@ function ProfilePageTabStack({ route: { params } }) {
       <ProfileStack.Screen name="UserProfilePage" component={UserProfilePage} initialParams={params} options={{ headerShown: false }} />
       <ProfileStack.Screen name="EditProfile" component={EditProfile} initialParams={params} options={{ headerShown: false }} />
       <ProfileStack.Screen name="Settings" component={Settings} ititialParams={params} options={{ headerShown: false }} />
+      <ProfileStack.Screen name="CalView" component={CalView} ititialParams={params} options={{ headerShown: false }} />
+      <ProfileStack.Screen name="QOTD" component={QOTD} ititialParams={params} options={{ headerShown: false }} />
     </ProfileStack.Navigator>
   )
 }

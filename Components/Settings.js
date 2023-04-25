@@ -68,7 +68,11 @@ const Settings = ({ navigation, route }) => {
 
 
   const handleLogout = () => {
-    navigation.navigate('Home');
+    navigation.navigate('Home', { id: 'logout' });
+  };
+
+  const handleCal = () => {
+    navigation.navigate('CalView', { id: 'calendar', username: username });
   };
 
   return (
@@ -127,8 +131,8 @@ const Settings = ({ navigation, route }) => {
                       index === 0 && { borderTopWidth: 0 },
                     ]}>
                     <TouchableOpacity
-                      onPress={() => {
-                      }}>
+                      onPress={() => { navigation.navigate('CalView', { id: 'calendar', username: username }) }
+                      }>
                       <View style={styles.row}>
                         <FeatherIcon
                           color="#616161"
@@ -194,6 +198,7 @@ const styles = StyleSheet.create({
   location: {
     fontSize: 15,
     color: '#B9B9B9',
+    fontFamily: 'InriaSans-Bold',
   },
   frontArrow: {
     width: 28,
@@ -337,13 +342,13 @@ const styles = StyleSheet.create({
     fontSize: 14.5,
     fontWeight: '500',
     color: '#484848',
-    fontFamily: 'InriaSans-Bold'
+    fontFamily: 'InriaSans-Bold',
   },
   rowValue: {
     fontSize: 17,
     color: '#616161',
     marginRight: 4,
-    fontFamily: 'InriaSans-Bold'
+    fontFamily: 'InriaSans-Bold',
   },
   rowSpace: {
     flexGrow: 1,
