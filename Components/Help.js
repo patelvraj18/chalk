@@ -30,6 +30,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
+  backArrow: {
+    width: 40,
+    height: 40,
+  },
+  backArrowContainer: {
+  marginTop: 20,
+  marginBottom: 20,
+},
   email: {
     fontSize: 18,
     color: '#007AFF',

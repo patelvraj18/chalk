@@ -21,6 +21,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { decode, encode } from 'base-64';
 import Settings from './Components/Settings';
 import CalView from './Components/CalView';
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
+
 
 if (!global.btoa) {
   global.btoa = encode;

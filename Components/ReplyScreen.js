@@ -203,9 +203,6 @@ const ReplyScreen = ({ route, navigation }) => {
                     <Text style={styles.username}>
                       {username}
                     </Text>
-                    <Text style={styles.location}>
-                      1 hr
-                    </Text>
                   </View>
                   <View style={styles.threeDotsContainer2}>
                     <Menu>
@@ -221,15 +218,6 @@ const ReplyScreen = ({ route, navigation }) => {
                 <Text style={styles.usernameComments}>{responseUserID}</Text>
                 <Text style={styles.responseText}>{responseText}</Text>
                 <View style={styles.bottomRow}>
-                  <View style={styles.thumbsUpContainer}>
-                    <Image
-                      style={styles.thumbsUp}
-                      source={require('../assets/icons/black_thumb_icon.png')}
-                    />
-                  </View>
-                  <View style={styles.thumbsUpNumContainer}>
-                    <Text style={styles.thumbsUpNum}>1</Text>
-                  </View>
                   <View style={styles.commentsContainer}>
                     <Image
                       style={styles.commentsIcon}
@@ -275,9 +263,6 @@ const ReplyScreen = ({ route, navigation }) => {
                   <View style={styles.moreInfo2}>
                     <Text style={styles.username2}>
                       {comment.userID}
-                    </Text>
-                    <Text style={styles.location2}>
-                      1 hr
                     </Text>
                   </View>
                 </View>

@@ -27,7 +27,6 @@ const SECTIONS = [
     header: 'SETTINGS',
     items: [
       { id: 'submit', icon: 'send', label: 'submit a prompt', type: 'link' },
-      { id: 'contact', icon: 'bell', label: 'notifications', type: 'toggle' },
       // { id: 'private', icon: 'lock', label: 'use privacy', type: 'toggle' },
 
     ],
@@ -266,7 +265,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     marginLeft: 17,
     marginRight: 17,
-    marginTop: 35,
+    marginTop: 45,
     marginBottom: 55,
     flexDirection: 'row',
   },

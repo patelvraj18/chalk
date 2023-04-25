@@ -426,7 +426,7 @@ const MessageBoard = ({ navigation, route }) => {
                         <Text style={styles.username} onPress={
                           () => {
                             if (message.userID === username) {
-                              navigation.navigate('Profile Page', {
+                              navigation.navigate('profile', {
                                 username: username
                               });
                             }

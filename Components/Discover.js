@@ -69,10 +69,6 @@ const Discover = ({ route, navigation }) => {
               }
               )}>
                 <View style={styles.containerMain}>
-                  <View style={styles.profContainer}>
-                    <Image source={require('../assets/images/dog_picture.jpg')}
-                      style={styles.prof} />
-                  </View>
                   <Text style={styles.username}>{user.username}</Text>
                 </View>
               </TouchableOpacity>

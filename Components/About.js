@@ -34,5 +34,12 @@ const styles = StyleSheet.create({
     lineHeight: 25,
     textAlign: 'justify',
   },
-});
+  backArrow: {
+    width: 25,
+    height: 25,
+  },
+  backArrowContainer: {
+  marginTop: 20,
+  marginBottom: 20,
+}});
 export default About;
