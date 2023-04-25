@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -19,24 +19,24 @@ const SECTIONS = [
   {
     header: 'MEMORIES',
     items: [
-      { id: 'calendar', icon: 'calendar', label: 'previous prompts' },
-      { id: 'history', icon: 'archive', label: 'past replies' },
+      { id: 'calendar', icon: 'calendar', label: 'previous prompts', type: 'link' },
+      { id: 'history', icon: 'archive', label: 'past replies', type: 'link' },
     ],
   },
   {
     header: 'SETTINGS',
     items: [
-      { id: 'submit', icon: 'send', label: 'submit a prompt' },
-      { id: 'contact', icon: 'bell', label: 'notifications' },
-      { id: 'private', icon: 'lock', label: 'privacy' },
+      { id: 'submit', icon: 'send', label: 'submit a prompt', type: 'link' },
+      { id: 'contact', icon: 'bell', label: 'notifications', type: 'toggle' },
+      { id: 'private', icon: 'lock', label: 'use privacy', type: 'link' },
     ],
   },
   {
     header: 'MORE',
     items: [
-      { id: 'about', icon: 'info', label: 'about' },
-      { id: 'help', icon: 'help-circle', label: 'help' },
-      { id: 'logout', icon: 'log-out', label: 'log out' },
+      { id: 'about', icon: 'info', label: 'about', type: 'link' },
+      { id: 'help', icon: 'help-circle', label: 'help', type: 'link' },
+      { id: 'logout', icon: 'log-out', label: 'log out', type: 'link' },
     ],
   },
 ];
@@ -48,8 +48,15 @@ const Settings = ({ navigation, route }) => {
     wifi: false,
   });
 
-  const {username, location, bio} = route.params
+  const { username, location, bio } = route.params
   const [profilePicture, setProfilePicture] = useState(null);
+  const [switchValue, setSwitchValue] = useState(false);
+
+  const toggleSwitch = (value) => {
+    //To handle switch toggle
+    setSwitchValue(value);
+    //State changes according to switch
+  };
 
   useEffect(() => {
     db_operations.getProfilePic(username).then(pic => {
@@ -74,13 +81,13 @@ const Settings = ({ navigation, route }) => {
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('EditProfile', {
-                                          username: username, 
-                                          location: location,
-                                          bio: bio,
-                                        })}>
+          username: username,
+          location: location,
+          bio: bio,
+        })}>
           <View style={styles.editProfileContainer}>
             <View style={styles.profilePictureContainer}>
-              <Image source={{uri: "data:image/png;base64," + profilePicture}}
+              <Image source={{ uri: "data:image/png;base64," + profilePicture }}
                 style={styles.profilePicture} />
             </View>
             <View style={styles.moreInfoContainer}>
@@ -111,7 +118,7 @@ const Settings = ({ navigation, route }) => {
               <Text style={styles.settingsHeaderText}>{header}</Text>
             </View>
             <View style={styles.settingsBody}>
-              {items.map(({ id, label, icon }, index) => {
+              {items.map(({ id, label, icon, type, num }, index) => {
                 return (
                   <View
                     key={id}
@@ -121,7 +128,6 @@ const Settings = ({ navigation, route }) => {
                     ]}>
                     <TouchableOpacity
                       onPress={() => {
-                        // handle onPress
                       }}>
                       <View style={styles.row}>
                         <FeatherIcon
@@ -130,12 +136,21 @@ const Settings = ({ navigation, route }) => {
                           style={styles.rowIcon}
                           size={22}
                         />
+
                         <Text style={styles.rowLabel}>{label}</Text>
                         <View style={styles.rowSpace} />
-                        <View style={styles.frontArrowContainer2}>
-                          <Image source={require('../assets/icons/front_arrow_icon.png')}
-                            style={styles.frontArrow2} />
-                        </View>
+                        {type === 'toggle' && (
+                          <Switch
+                            onValueChange={toggleSwitch}
+                            value={switchValue}
+                          />
+                        )}
+                        {(type === 'select' || type === 'link') && (
+                          <View style={styles.frontArrowContainer2}>
+                            <Image source={require('../assets/icons/front_arrow_icon.png')}
+                              style={styles.frontArrow2} />
+                          </View>
+                        )}
                       </View>
                     </TouchableOpacity>
                   </View>
