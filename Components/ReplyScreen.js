@@ -19,6 +19,7 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu';
 import { MenuProvider } from 'react-native-popup-menu';
+import { StackActions } from '@react-navigation/native';
 
 const theme = createTheme({
   lightColors: {
@@ -44,6 +45,8 @@ const ReplyScreen = ({ route, navigation }) => {
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState('');
   const [profilePics, setProfilePics] = useState({});
+  const [likedResponseIDs, setLikedResponseIDs] = useState([]);
+  const [hasResponded, setHasResponded] = useState(false);
   const SORTBYTOP = 0
   const SORTBYNEW = 1
   const SORTBYLOCATION = 2
@@ -62,6 +65,9 @@ const ReplyScreen = ({ route, navigation }) => {
       setProfilePics(newProfilePics);
     }
 
+    db_operations.getLikedMessages(username).then(likedMessages => {
+      setLikedResponseIDs(likedMessages)
+    });
     setResponse(responseText);
     db_operations.getComments(responseID).then(comments => {
       setComments(comments);
@@ -120,17 +126,60 @@ const ReplyScreen = ({ route, navigation }) => {
 
   const handleSort = async (sortType) => {
     const compare = getCompareFunc(sortType)
-    var new_messages = await db_operations.getResponses(promptID)
-    new_messages.sort(compare)
-    setMessages(new_messages)
+    var new_comments= await db_operations.getComments(responseID)
+    new_comments.sort(compare)
+    setComments(new_comments)
+  }
+  const handleLike = async (username, posterUsername, responseID, commentID) => {
+    console.debug(likedResponseIDs)
+    const newLikedResponseIDs = await db_operations.handleLikeComment(username, posterUsername, responseID, commentID)
+    console.debug('liked responmes', newLikedResponseIDs)
+    setLikedResponseIDs(newLikedResponseIDs);
+    db_operations.getComments(responseID).then(comments => {
+      setComments(comments);
+    });
+  };
+  const handleDislike = async (username, posterUsername, responseID, commentID) => {
+    console.debug(likedResponseIDs)
+    const newLikedResponseIDs = await db_operations.handleDislikeComment(username, posterUsername, responseID, commentID)
+    console.debug('disliked responmes', newLikedResponseIDs)
+    setLikedResponseIDs(newLikedResponseIDs);
+    db_operations.getComments(responseID).then(comments => {
+      setComments(comments);
+    });
+  };
+  const handleLikeDislike = async (username, posterUsername, responseID, commentID) => {
+    if ([username, posterUsername, commentID, responseID].includes(undefined)) {
+      console.error(`got undefined in handleLikeDislike: username: ${username}, posterUsername: ${posterUsername}, commentID: ${commentID}, responseID: ${responseID}`)
 
+    }
+    console.debug(`got undefined in handleLikeDislike: username: ${username}, posterUsername: ${posterUsername}, commentID: ${commentID}, responseID: ${responseID}`)
+    if (likedResponseIDs.includes(commentID)) {
+      await handleDislike(username, posterUsername, responseID, commentID)
+    } else {
+      await handleLike(username, posterUsername, responseID, commentID)
+    }
   }
 
+  const handleReply = (responseText, commentID, userID) => {
+    if ([responseText, responseID, userID].includes(undefined)) {
+      console.error("got undefined in handleReply")
+    }
+    db_operations.getResponses(promptID).then(() => {
+      navigation.push('ReplyScreen', {
+        responseText: responseText,
+        promptID: responseID,
+        responseID: commentID,
+        userID: userID,
+        username: username,
+      });
+    });
+  }
   return (
     <MenuProvider>
       <ThemeProvider theme={theme}>
         <View style={styles.container}>
-          <TouchableOpacity onPress={() => navigation.navigate('MessageBoard')}>
+          <TouchableOpacity onPress={() => navigation.dispatch(StackActions.pop(1))}>
             <View style={styles.iconContainer}>
               <Image
                 style={styles.icon}
@@ -241,30 +290,35 @@ const ReplyScreen = ({ route, navigation }) => {
                     <Menu>
                       <MenuTrigger text='•••' customStyles={styles.threeDots} />
                       <MenuOptions>
-                        <MenuOption onSelect={() => alert(`Saved`)} text='Save' />
-                        <MenuOption onSelect={() => alert(`Reported`)} >
+                        <MenuOption onSelect={() => { db_operations.reportComment(responseID, comment.commentID)
+                                                      alert(`Reported`)}} >
                           <Text style={{ color: 'red' }}>Report</Text>
                         </MenuOption>
                       </MenuOptions>
                     </Menu>
                   </View>
-                  <View style={styles.replyContainer}>
-                    <Image
-                      style={styles.reply}
-                      source={require('../assets/icons/reply.png')}
-                    />
-                  </View>
-                  <View style={styles.replyNumContainer}>
-                    <Text style={styles.replyNum}>Reply</Text>
-                  </View>
-                  <View style={styles.thumbsUpContainer}>
-                    <Image
-                      style={styles.thumbsUp}
-                      source={require('../assets/icons/black_thumb_icon.png')}
-                    />
-                  </View>
+                  <TouchableOpacity onPress={() => handleReply(comment.text, comment.commentID, comment.userID)}>
+                    <View style={styles.replyContainer}>
+                      <Image
+                        style={styles.reply}
+                        source={require('../assets/icons/reply.png')}
+                      />
+                    </View>
+                    <View style={styles.replyNumContainer}>
+                      <Text style={styles.replyNum}>Reply</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => handleLikeDislike(username, comment.userID, responseID, comment.commentID)}>
+                    <View style={styles.thumbsUpContainer}>
+                      <Image
+                        style={styles.thumbsUp}
+                        source={
+                          likedResponseIDs != undefined && likedResponseIDs.includes(comment.commentID) ? require('../assets/icons/blue_thumb_icon.png') : require('../assets/icons/black_thumb_icon.png')} 
+                      />
+                    </View>
+                  </TouchableOpacity>
                   <View style={styles.commentsNumContainer}>
-                    <Text style={styles.commentsNum}>1</Text>
+                    <Text style={styles.commentsNum}>{comment.likeCount}</Text>
                   </View>
                 </View>
               </View>
@@ -308,12 +362,11 @@ const styles = StyleSheet.create({
   usernameComments: {
     fontWeight: 'bold',
     marginBottom: 5,
-    fontFamily: 'InriaSans-Bold',
   },
   responseText: {
     fontSize: 18,
     color: '#616161',
-    fontFamily: 'InriaSans-Bold',
+    fontFamily: 'Arial',
     fontWeight: 'bold',
     marginLeft: 15,
   },
@@ -335,8 +388,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingTop: 15,
     marginLeft: 10,
-    fontFamily: 'InriaSans-Italic',
+    fontFamily: 'Arial',
     color: '#616161',
+    fontStyle: 'italic',
   },
   rank: {
     flexDirection: 'row',
@@ -383,7 +437,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 10,
     fontSize: 16,
-    fontFamily: 'InriaSans-Bold',
   },
   headerMessage: {
     flex: 1,
@@ -405,7 +458,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginLeft: 8,
     fontStyle: 'italic',
-    fontFamily: 'InriaSans-Italic',
   },
   time: {
     color: '#BDBCBC',
@@ -431,7 +483,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 10,
     fontSize: 11.5,
-    fontFamily: 'InriaSans-Bold',
   },
   moreInfo: {
     marginTop: 12,
@@ -443,7 +494,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   username2: {
-    fontFamily: 'InriaSans-Bold',
+    fontWeight: 'bold',
     color: '#6A6A6A',
     marginBottom: 5,
     marginLeft: 10,
@@ -453,7 +504,7 @@ const styles = StyleSheet.create({
     color: '#9D9D9D',
     fontSize: 10,
     marginLeft: 8,
-    fontFamily: 'InriaSans-Italic',
+    fontStyle: 'italic',
   },
   bottomRow: {
     flexDirection: 'row',
@@ -483,7 +534,6 @@ const styles = StyleSheet.create({
   },
   replyNum: {
     color: '#726D6D',
-    fontFamily: 'InriaSans-Bold',
   },
   commentsIcon: {
     width: 18,
@@ -518,11 +568,9 @@ const styles = StyleSheet.create({
   commentsNum: {
     color: '#726D6D',
     marginLeft: 3,
-    fontFamily: 'InriaSans-Bold',
   },
   thumbsUpNum: {
     color: '#726D6D',
-    fontFamily: 'InriaSans-Bold',
   },
   thumbsUpNumContainer: {
     marginLeft: 5,

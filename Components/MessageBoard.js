@@ -59,6 +59,7 @@ const MessageBoard = ({ navigation, route }) => {
   const [promptDate, setPromptDate] = useState(0);
   const [showFollowing, setShowFollowing] = useState(false);
   const [profilePics, setProfilePics] = useState({});
+  const [hasResponded, setHasResponded] = useState(false);
   const SORTBYTOP = 0
   const SORTBYNEW = 1
   const SORTBYOLD = 3
@@ -93,6 +94,13 @@ const MessageBoard = ({ navigation, route }) => {
         setMessages(messages);
         handleSort(sortType)
         fetchProfilePics()
+        console.log(messages)
+        for (message of messages) {
+          if (message.userID === username) {
+            console.log(message)
+            setHasResponded(true)
+          }
+        }
       });
       console.log("got messages", messages)
       db_operations.getLikedMessages(username).then(likedMessages => {
@@ -139,6 +147,12 @@ const MessageBoard = ({ navigation, route }) => {
       setPromptID(prompt.promptID);
 
       db_operations.getResponses(prompt.promptID).then(messages => {
+        for (message of messages) {
+          if (message.userID === username) {
+            console.log(message)
+            setHasResponded(true)
+          }
+        }
         setMessages(messages);
         handleSort(sortType)
       });
@@ -358,7 +372,7 @@ const MessageBoard = ({ navigation, route }) => {
                 style={styles.followingButton}
                 onPress={() => setShowFollowing(!showFollowing)}
               >
-                <View style={styles.followingButtonSection}>
+                {!showFollowing && <View style={styles.followingButtonSection}>
                   <Text
                     style={[
                       styles.followingButtonText,
@@ -367,8 +381,8 @@ const MessageBoard = ({ navigation, route }) => {
                   >
                     All
                   </Text>
-                </View>
-                <View style={styles.followingButtonSection}>
+                </View>}
+                {showFollowing && <View style={styles.followingButtonSection}>
                   <Text
                     style={[
                       styles.followingButtonText,
@@ -377,7 +391,7 @@ const MessageBoard = ({ navigation, route }) => {
                   >
                     Following
                   </Text>
-                </View>
+                </View>}
               </TouchableOpacity>
             </View>
           </View>
@@ -397,7 +411,7 @@ const MessageBoard = ({ navigation, route }) => {
               tintColor="#979797" // Change the spinning wheel color, if needed
             />}
           >
-            <View style={styles.messageContainer}>
+            {hasResponded && <View style={styles.messageContainer}>
               {messages.map((message, index) => (
                 <View key={index}
                   style={styles.message}>
@@ -436,8 +450,10 @@ const MessageBoard = ({ navigation, route }) => {
                         <Menu>
                           <MenuTrigger text='•••' customStyles={styles.threeDots} />
                           <MenuOptions>
-                            <MenuOption onSelect={() => alert(`Saved`)} text='Save' />
-                            <MenuOption onSelect={() => alert(`Reported`)} >
+                            <MenuOption onSelect={() => {
+                                                    db_operations.reportResponse(promptID, message.responseID);
+                                                    alert(`Reported`);
+                                                    }} >
                               <Text style={{ color: 'red' }}>Report</Text>
                             </MenuOption>
                           </MenuOptions>
@@ -484,7 +500,12 @@ const MessageBoard = ({ navigation, route }) => {
                   </View>
                 </View>
               ))}
-            </View>
+            </View>}
+            {!hasResponded && <View>
+                <Text>
+                  Need to respond to prompt first!
+                </Text>
+              </View>}
           </ScrollView>
           {/* <View style={styles.inputContainer}>
             <TextInput

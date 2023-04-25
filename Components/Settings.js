@@ -29,6 +29,7 @@ const SECTIONS = [
       { id: 'submit', icon: 'send', label: 'submit a prompt', type: 'link' },
       { id: 'contact', icon: 'bell', label: 'notifications', type: 'toggle' },
       { id: 'private', icon: 'lock', label: 'use privacy', type: 'toggle' },
+
     ],
   },
   {
@@ -64,6 +65,7 @@ const Settings = ({ navigation, route }) => {
     //To handle switch toggle
     setIsContact(value);
     db_operations.toggleNotifications(username);
+
     //State changes according to switch
   };
 
@@ -174,6 +176,7 @@ const Settings = ({ navigation, route }) => {
                           style={styles.rowIcon}
                           size={22}
                         />
+
                         <Text style={styles.rowLabel}>{label}</Text>
                         <View style={styles.rowSpace} />
                         {type === 'toggle' && id === 'private' && (
