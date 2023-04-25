@@ -1,74 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Button } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Button, Alert } from 'react-native';
 import * as db_operations from '../db_operations.js';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { StackActions } from '@react-navigation/native';
 
 const EditProfile = ({ navigation, route }) => {
-  const username = route.params.username;
-  const current_username = route.params.current_username;
+  const {username, location, bio} = route.params
   const [profilePicture, setProfilePicture] = useState(null);
-
+  const [updatedUsername, setUpdatedUsername] = useState(username)
+  const [updatedBio, setUpdatedBio] = useState(bio)
+  const [updatedLocation, setUpdatedLocation] = useState(location)
+  const [isProfilePictureChanged, setIsProfilePictureChanged] = useState(false)
+  
   useEffect(() => {
-    const fetchProfilePicture = async () => {
-      const [profilePicBase64] = await db_operations.getProfilePic(username);
-      console.log("got pic 123", profilePicBase64);
-      if (profilePicBase64) {
-        setProfilePicture(profilePicBase64);
-      } else {
-
-        setProfilePicture(require('../assets/images/dog_picture.jpg'));
-      }
-      console.log("default profile pic", profilePicture);
-    };
-
-    fetchProfilePicture();
+    db_operations.getProfilePic(username).then(pic => {
+      setProfilePicture(pic);
+    });
   }, [username]);
-  console.log("edit profile username: ", username)
-  console.log("edit profile current_username ", current_username)
-  // console.log('username', username);
-  // console.log('current_username', current_username);
-  // const [name, setName] = useState(username); // account name
-  const [questions, setQuestions] = useState([]); // array of past questions answered
-  const [likes, setLikes] = useState(0); // number of likes user has gotten
-  const [isFollowing, setIsFollowing] = useState(false);
-
-
-  // useEffect(() => {
-  //   setName(username)
-  //   db_operations.getKarma(username).then(karma => {
-  //     setLikes(karma)
-  //   });
-  //   let timerId = setInterval(() => {
-  //     db_operations.getKarma(username).then(karma => {
-  //       setLikes(karma)
-  //     });
-  //   }, 5000);
-  //   const checkFollowingStatus = async () => {
-  //     const isUserFollowing = await db_operations.isFollowing(current_username, username);
-  //     setIsFollowing(isUserFollowing);
-
-  //   };
-  //   checkFollowingStatus();
-  //   return () => clearInterval(timerId);
-  // }, [username, current_username, likes]);
-
-  // const handleNameChange = (text) => {
-  //   setName(text);
-  // }
-
-  // const handleLogout = () => {
-  //   navigation.navigate('Home')
-  // }
-  // const handleFollow = async () => {
-  //   if (isFollowing) {
-  //     await db_operations.unfollowUser(current_username, username);
-  //   } else {
-  //     await db_operations.followUser(current_username, username);
-  //   }
-  //   setIsFollowing(!isFollowing);
-  // };
-
+  
   const handleProfilePictureChange = async () => {
     const options = {
       mediaType: 'photo',
@@ -84,18 +33,36 @@ const EditProfile = ({ navigation, route }) => {
       } else if (response.errorCode) {
         console.log('ImagePicker Error: ', response.errorMessage);
       } else {
-        const base64Image = response.assets[0].base64;
-        console.log("base64Image", base64Image)
-        setProfilePicture(base64Image)
-        console.log("after change", profilePicture)
-        await db_operations.setProfilePic(username, base64Image);
+        if (response.assets[0].hasOwnProperty('base64')) {
+          const base64Image = response.assets[0].base64;
+          console.log("base64Image", base64Image)
+          setProfilePicture(base64Image)
+          // console.log("after change", profilePicture)
+          setIsProfilePictureChanged(true)
+        } else {
+          Alert.alert("Picture too large, cannot set profile picture.")
+        }
       }
     });
   };
+  const handleUsernameChange = (text) => {
+      setUpdatedUsername(text)
+  }
 
-  const handleSave = () => {
+  const handleSave = async() => {
     //TODO: add ability to save username/prof picture
-    navigation.dispatch(StackActions.pop(1))
+    if(isProfilePictureChanged){
+      setIsProfilePictureChanged(false)
+      await db_operations.setProfilePic(username, profilePicture);
+    }
+    if(location !== updatedLocation){
+      db_operations.updateLocation(username, updatedLocation)
+    }
+    if(bio !== updatedBio){
+      db_operations.updateBio(username, updatedBio)
+    }
+    navigation.dispatch(StackActions.pop(2))
+    
   }
 
   return (
@@ -104,7 +71,7 @@ const EditProfile = ({ navigation, route }) => {
         <TouchableOpacity onPress={() => navigation.dispatch(StackActions.pop(1))}>
           <Image
             style={styles.icon}
-            source={require('../assets/images/x-icon.png')}
+            source={require('../assets/icons/back_arrow_icon.png')}
           />
         </TouchableOpacity>
       </View>
@@ -133,6 +100,7 @@ const EditProfile = ({ navigation, route }) => {
           />
         </TouchableOpacity>
       </View>
+      {/* <TouchableOpacity onPress={()=>console.log(username)}>
       <View style={styles.usernameContainer}>
         <View style={styles.usernameTagContainer} >
           <Text style={styles.usernameTag}>
@@ -140,11 +108,12 @@ const EditProfile = ({ navigation, route }) => {
           </Text>
         </View>
         <View style={styles.usernameEditContainer}>
-          <Text style={styles.usernameEdit}>
-            amour123
-          </Text>
+          <TextInput style={styles.usernameEdit} onChangeText={text => setUpdatedUsername(text)}>
+            {updatedUsername}
+          </TextInput>
         </View>
       </View>
+      </TouchableOpacity> */}
       <View style={styles.bioContainer}>
         <View style={styles.bioContainerBold} >
           <Text style={styles.bio}>
@@ -152,9 +121,9 @@ const EditProfile = ({ navigation, route }) => {
           </Text>
         </View>
         <View style={styles.bioTextContainer}>
-          <Text style={styles.bioText}>
-            i am a cool person.
-          </Text>
+          <TextInput style={styles.bioText} onChangeText={text => setUpdatedBio(text)}>
+            {updatedBio}
+          </TextInput>
         </View>
       </View>
       <View style={styles.locationMainContainer}>
@@ -164,9 +133,9 @@ const EditProfile = ({ navigation, route }) => {
           </Text>
         </View>
         <View style={styles.locationContainer}>
-          <Text style={styles.location}>
-            los angeles, ca
-          </Text>
+          <TextInput style={styles.location} onChangeText={text => setUpdatedLocation(text)}>
+            {updatedLocation}
+          </TextInput>
         </View>
       </View>
       {/* {username === current_username &&
@@ -203,9 +172,10 @@ const styles = StyleSheet.create({
     marginLeft: 30,
   },
   icon: {
-    width: 18,
-    height: 18,
+    width: 30,
+    height: 30,
     opacity: 0.4,
+    
   },
   cameraIcon: {
     width: 20,

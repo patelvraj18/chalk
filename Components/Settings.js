@@ -48,14 +48,7 @@ const Settings = ({ navigation, route }) => {
     wifi: false,
   });
 
-  const username = route.params.username
-  const current_username = route.params.current_username
-  // console.log('username', username);
-  // console.log('current_username', current_username);
-  // const [name, setName] = useState(username); // account name
-  const [questions, setQuestions] = useState([]); // array of past questions answered
-  const [likes, setLikes] = useState(0); // number of likes user has gotten
-  const [isFollowing, setIsFollowing] = useState(false);
+  const {username, location, bio} = route.params
   const [profilePicture, setProfilePicture] = useState(null);
 
   useEffect(() => {
@@ -85,10 +78,10 @@ const Settings = ({ navigation, route }) => {
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('EditProfile', {
-          username: username,
-          current_username: current_username,
-          isDefaultUser: false,
-        })}>
+                                          username: username, 
+                                          location: location,
+                                          bio: bio,
+                                        })}>
           <View style={styles.editProfileContainer}>
             <View style={styles.profilePictureContainer}>
               <Image source={{ uri: "data:image/png;base64," + profilePicture }}
@@ -97,12 +90,12 @@ const Settings = ({ navigation, route }) => {
             <View style={styles.moreInfoContainer}>
               <View style={styles.usernameContainer}>
                 <Text style={styles.username}>
-                  amour123
+                  {username}
                 </Text>
               </View>
               <View style={styles.locationContainer}>
                 <Text style={styles.location}>
-                  los angeles, california
+                  {location}
                 </Text>
               </View>
             </View>
