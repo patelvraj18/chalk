@@ -133,7 +133,7 @@ const ProfilePage = ({ navigation, route }) => {
                     style={styles.backArrow} />
                 </View>
               </TouchableOpacity>
-              <View style={styles.username2Container}>
+              <View style={styles.usernameContainer2}>
                 <Text style={styles.username2}>{name}</Text>
               </View>
               <View style={styles.topRowContainer}>
@@ -445,7 +445,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#464646',
   },
-  username2Container: {
+  usernameContainer2: {
     position: 'absolute',
     top: 53,
     right: 140,
