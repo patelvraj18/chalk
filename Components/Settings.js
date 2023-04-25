@@ -28,7 +28,7 @@ const SECTIONS = [
     items: [
       { id: 'submit', icon: 'send', label: 'submit a prompt', type: 'link' },
       { id: 'contact', icon: 'bell', label: 'notifications', type: 'toggle' },
-      { id: 'private', icon: 'lock', label: 'use privacy', type: 'toggle' },
+      // { id: 'private', icon: 'lock', label: 'use privacy', type: 'toggle' },
 
     ],
   },
@@ -266,8 +266,8 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     marginLeft: 17,
     marginRight: 17,
-    marginTop: 45,
-    marginBottom: 35,
+    marginTop: 35,
+    marginBottom: 55,
     flexDirection: 'row',
   },
   profilePictureContainer: {
@@ -278,8 +278,8 @@ const styles = StyleSheet.create({
     height: 35,
   },
   backArrowContainer: {
-    marginLeft: 20,
-    marginTop: 20,
+    marginLeft: 25,
+    marginTop: 40,
   },
 
   settingsHeader: {
