@@ -1,0 +1,118 @@
+info Found Xcode workspace "TestProject.xcworkspace"
+info Found booted iPhone 14
+info Launching iPhone 14
+info Building (using "xcodebuild -workspace TestProject.xcworkspace -configuration Debug -scheme TestProject -destination id=337B65A8-2155-49BA-AAEC-2BA53A2975CA")
+Command line invocation:
+    /Users/bradley/Downloads/Xcode.app/Contents/Developer/usr/bin/xcodebuild -workspace TestProject.xcworkspace -configuration Debug -scheme TestProject -destination id=337B65A8-2155-49BA-AAEC-2BA53A2975CA
+
+User defaults from command line:
+    IDEPackageSupportUseBuiltinSCM = YES
+
+Prepare packages
+
+Computing target dependency graph and provisioning inputs
+
+Create build description
+Build description signature: 7d5cd2af46a0307b4d8ac4cf6ef7cd67
+Build description path: /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Intermediates.noindex/XCBuildData/7d5cd2af46a0307b4d8ac4cf6ef7cd67-desc.xcbuild
+
+note: Building targets in dependency order
+ProcessInfoPlistFile /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/React-Core/AccessibilityResources.bundle/Info.plist /Users/bradley/school/swe_workshop/swe_workshop_thing/ios/Pods/Target\ Support\ Files/React-Core/ResourceBundle-AccessibilityResources-React-Core-Info.plist (in target 'React-Core-AccessibilityResources' from project 'Pods')
+    cd /Users/bradley/school/swe_workshop/swe_workshop_thing/ios/Pods
+    builtin-infoPlistUtility /Users/bradley/school/swe_workshop/swe_workshop_thing/ios/Pods/Target\ Support\ Files/React-Core/ResourceBundle-AccessibilityResources-React-Core-Info.plist -producttype com.apple.product-type.bundle -expandbuildsettings -format binary -platform iphonesimulator -o /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/React-Core/AccessibilityResources.bundle/Info.plist
+
+ProcessInfoPlistFile /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/React-Core-60309c9c/AccessibilityResources.bundle/Info.plist /Users/bradley/school/swe_workshop/swe_workshop_thing/ios/Pods/Target\ Support\ Files/React-Core-60309c9c/ResourceBundle-AccessibilityResources-React-Core-60309c9c-Info.plist (in target 'React-Core-60309c9c-AccessibilityResources' from project 'Pods')
+    cd /Users/bradley/school/swe_workshop/swe_workshop_thing/ios/Pods
+    builtin-infoPlistUtility /Users/bradley/school/swe_workshop/swe_workshop_thing/ios/Pods/Target\ Support\ Files/React-Core-60309c9c/ResourceBundle-AccessibilityResources-React-Core-60309c9c-Info.plist -producttype com.apple.product-type.bundle -expandbuildsettings -format binary -platform iphonesimulator -o /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/React-Core-60309c9c/AccessibilityResources.bundle/Info.plist
+
+CodeSign /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/React-Core-60309c9c/AccessibilityResources.bundle (in target 'React-Core-60309c9c-AccessibilityResources' from project 'Pods')
+    cd /Users/bradley/school/swe_workshop/swe_workshop_thing/ios/Pods
+    
+    Signing Identity:     "-"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/React-Core-60309c9c/AccessibilityResources.bundle
+/Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/React-Core-60309c9c/AccessibilityResources.bundle: replacing existing signature
+
+ProcessProductPackaging "" /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Intermediates.noindex/TestProject.build/Debug-iphonesimulator/TestProject.build/TestProject.app-Simulated.xcent (in target 'TestProject' from project 'TestProject')
+    cd /Users/bradley/school/swe_workshop/swe_workshop_thing/ios
+    
+    Entitlements:
+    
+    {
+    "application-identifier" = "MR36TU7NHW.com.example.chalk";
+}
+    
+    builtin-productPackagingUtility -entitlements -format xml -o /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Intermediates.noindex/TestProject.build/Debug-iphonesimulator/TestProject.build/TestProject.app-Simulated.xcent
+
+ProcessProductPackaging "" /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Intermediates.noindex/TestProject.build/Debug-iphonesimulator/TestProject.build/TestProject.app.xcent (in target 'TestProject' from project 'TestProject')
+    cd /Users/bradley/school/swe_workshop/swe_workshop_thing/ios
+    
+    Entitlements:
+    
+    {
+    "com.apple.security.get-task-allow" = 1;
+}
+    
+    builtin-productPackagingUtility -entitlements -format xml -o /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Intermediates.noindex/TestProject.build/Debug-iphonesimulator/TestProject.build/TestProject.app.xcent
+
+ProcessProductPackagingDER /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Intermediates.noindex/TestProject.build/Debug-iphonesimulator/TestProject.build/TestProject.app-Simulated.xcent /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Intermediates.noindex/TestProject.build/Debug-iphonesimulator/TestProject.build/TestProject.app-Simulated.xcent.der (in target 'TestProject' from project 'TestProject')
+    cd /Users/bradley/school/swe_workshop/swe_workshop_thing/ios
+    /usr/bin/derq query -f xml -i /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Intermediates.noindex/TestProject.build/Debug-iphonesimulator/TestProject.build/TestProject.app-Simulated.xcent -o /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Intermediates.noindex/TestProject.build/Debug-iphonesimulator/TestProject.build/TestProject.app-Simulated.xcent.der --raw
+
+ProcessProductPackagingDER /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Intermediates.noindex/TestProject.build/Debug-iphonesimulator/TestProject.build/TestProject.app.xcent /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Intermediates.noindex/TestProject.build/Debug-iphonesimulator/TestProject.build/TestProject.app.xcent.der (in target 'TestProject' from project 'TestProject')
+    cd /Users/bradley/school/swe_workshop/swe_workshop_thing/ios
+    /usr/bin/derq query -f xml -i /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Intermediates.noindex/TestProject.build/Debug-iphonesimulator/TestProject.build/TestProject.app.xcent -o /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Intermediates.noindex/TestProject.build/Debug-iphonesimulator/TestProject.build/TestProject.app.xcent.der --raw
+
+PhaseScriptExecution Start\ Packager /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Intermediates.noindex/TestProject.build/Debug-iphonesimulator/TestProject.build/Script-FD10A7F022414F080027D42C.sh (in target 'TestProject' from project 'TestProject')
+    cd /Users/bradley/school/swe_workshop/swe_workshop_thing/ios
+    /bin/sh -c /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Intermediates.noindex/TestProject.build/Debug-iphonesimulator/TestProject.build/Script-FD10A7F022414F080027D42C.sh
+Connection to localhost port 8081 [tcp/sunproxyadmin] succeeded!
+
+CpResource /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app/Roboto-Light.ttf /Users/bradley/school/swe_workshop/swe_workshop_thing/assets/fonts/Roboto-Light.ttf (in target 'TestProject' from project 'TestProject')
+    cd /Users/bradley/school/swe_workshop/swe_workshop_thing/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/bradley/school/swe_workshop/swe_workshop_thing/assets/fonts/Roboto-Light.ttf /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app
+
+CpResource /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app/TestProjectTests.xctest /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app/PlugIns/TestProjectTests.xctest (in target 'TestProject' from project 'TestProject')
+    cd /Users/bradley/school/swe_workshop/swe_workshop_thing/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app/PlugIns/TestProjectTests.xctest /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app
+error: /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app/PlugIns/TestProjectTests.xctest: No such file or directory (in target 'TestProject' from project 'TestProject')
+
+CpResource /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app/Roboto-Italic.ttf /Users/bradley/school/swe_workshop/swe_workshop_thing/assets/fonts/Roboto-Italic.ttf (in target 'TestProject' from project 'TestProject')
+    cd /Users/bradley/school/swe_workshop/swe_workshop_thing/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/bradley/school/swe_workshop/swe_workshop_thing/assets/fonts/Roboto-Italic.ttf /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app
+
+CpResource /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app/Roboto-BoldItalic.ttf /Users/bradley/school/swe_workshop/swe_workshop_thing/assets/fonts/Roboto-BoldItalic.ttf (in target 'TestProject' from project 'TestProject')
+    cd /Users/bradley/school/swe_workshop/swe_workshop_thing/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/bradley/school/swe_workshop/swe_workshop_thing/assets/fonts/Roboto-BoldItalic.ttf /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app
+
+CpResource /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app/Roboto-Bold.ttf /Users/bradley/school/swe_workshop/swe_workshop_thing/assets/fonts/Roboto-Bold.ttf (in target 'TestProject' from project 'TestProject')
+    cd /Users/bradley/school/swe_workshop/swe_workshop_thing/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/bradley/school/swe_workshop/swe_workshop_thing/assets/fonts/Roboto-Bold.ttf /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app
+
+CpResource /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app/Roboto-BlackItalic.ttf /Users/bradley/school/swe_workshop/swe_workshop_thing/assets/fonts/Roboto-BlackItalic.ttf (in target 'TestProject' from project 'TestProject')
+    cd /Users/bradley/school/swe_workshop/swe_workshop_thing/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/bradley/school/swe_workshop/swe_workshop_thing/assets/fonts/Roboto-BlackItalic.ttf /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app
+
+CpResource /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app/Roboto-Black.ttf /Users/bradley/school/swe_workshop/swe_workshop_thing/assets/fonts/Roboto-Black.ttf (in target 'TestProject' from project 'TestProject')
+    cd /Users/bradley/school/swe_workshop/swe_workshop_thing/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/bradley/school/swe_workshop/swe_workshop_thing/assets/fonts/Roboto-Black.ttf /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app
+
+CpResource /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app/Octicons.ttf /Users/bradley/school/swe_workshop/swe_workshop_thing/assets/fonts/Octicons.ttf (in target 'TestProject' from project 'TestProject')
+    cd /Users/bradley/school/swe_workshop/swe_workshop_thing/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/bradley/school/swe_workshop/swe_workshop_thing/assets/fonts/Octicons.ttf /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app
+
+CpResource /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app/MaterialIcons.ttf /Users/bradley/school/swe_workshop/swe_workshop_thing/assets/fonts/MaterialIcons.ttf (in target 'TestProject' from project 'TestProject')
+    cd /Users/bradley/school/swe_workshop/swe_workshop_thing/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/bradley/school/swe_workshop/swe_workshop_thing/assets/fonts/MaterialIcons.ttf /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app
+
+warning: Run script build phase 'Start Packager' will be run during every build because it does not specify any outputs. To address this warning, either add output dependencies to the script phase, or configure it to run in every build by unchecking "Based on dependency analysis" in the script phase. (in target 'TestProject' from project 'TestProject')
+warning: Run script build phase 'Bundle React Native code and images' will be run during every build because it does not specify any outputs. To address this warning, either add output dependencies to the script phase, or configure it to run in every build by unchecking "Based on dependency analysis" in the script phase. (in target 'TestProject' from project 'TestProject')
+
+** BUILD FAILED **
+
+
+The following build commands failed:
+	CpResource /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app/TestProjectTests.xctest /Users/bradley/Library/Developer/Xcode/DerivedData/TestProject-dfnxukozwhreiscquoksesbysefi/Build/Products/Debug-iphonesimulator/TestProject.app/PlugIns/TestProjectTests.xctest (in target 'TestProject' from project 'TestProject')
+(1 failure)
+
+info Run CLI with --verbose flag for more details.

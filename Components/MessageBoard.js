@@ -60,6 +60,7 @@ const MessageBoard = ({ navigation, route }) => {
   const [promptID, setPromptID] = useState('');
   const [promptDate, setPromptDate] = useState(0);
   const [showFollowing, setShowFollowing] = useState(false);
+  const [profilePics, setProfilePics] = useState({});
   const SORTBYTOP = 0
   const SORTBYNEW = 1
   const SORTBYOLD = 3
@@ -67,6 +68,7 @@ const MessageBoard = ({ navigation, route }) => {
   const { username } = route.params;
   const { usernameC, setUsernameC, promptIDC, setPromptIDC, promptTextC, setPromptTextC } = useContext(AppContext);
   const [refreshing, setRefreshing] = useState(false);
+  
 
   const data1 = [
     { key: SORTBYTOP, value: 'top' },
@@ -92,7 +94,9 @@ const MessageBoard = ({ navigation, route }) => {
       db_operations.getResponses(prompt.promptID).then(messages => {
         setMessages(messages);
         handleSort(sortType)
+        fetchProfilePics()
       });
+      console.log("got messages", messages)
       db_operations.getLikedMessages(username).then(likedMessages => {
         setLikedResponseIDs(likedMessages)
       });
@@ -110,6 +114,20 @@ const MessageBoard = ({ navigation, route }) => {
     });
 
   }, [usernameC, promptIDC, promptTextC, showFollowing]);
+
+
+  const fetchProfilePics = async () => {
+    const newProfilePics = { ...profilePics };
+    const cur_messages = await db_operations.getResponses(promptID);
+    console.log("fetching profile pics", cur_messages);
+
+    for (const message of cur_messages) {
+      console.log("getting profile pic of", message.userID)
+      newProfilePics[message.userID] = await db_operations.getProfilePic(message.userID);
+    }
+    setProfilePics(newProfilePics)
+    console.log(profilePics)
+  };
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -137,8 +155,8 @@ const MessageBoard = ({ navigation, route }) => {
     const filteredMessages = await getFilteredMessages();
     filteredMessages.sort(getCompareFunc(sortType));
     setMessages(filteredMessages);
+    fetchProfilePics();
     setRefreshing(false);
-
   }
 
   const getFilteredMessages = async () => {
@@ -374,36 +392,36 @@ const MessageBoard = ({ navigation, route }) => {
         <Button onPress={
           () => handleSort(SORTBYTOP)
         } title="Old" /> */}
-          <ScrollView style={styles.scrollView}
-            refreshControl={<RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor="#979797" // Change the spinning wheel color, if needed
-            />}
-          >
-            <View style={styles.messageContainer}>
-              {messages.map((message, index) => (
-                <View key={index}
-                  style={styles.message}>
-                  <View style={styles.allInfo}>
-                    <View style={styles.headerMessage}>
-                      <Image
-                        style={styles.profPicture}
-                        source={require('../assets/images/dog_picture.jpg')}
-                      />
-                      <View style={styles.furtherInfo}>
-                        <Text style={styles.username} onPress={
-                          () => {
-                            navigation.navigate('ProfilePage', {
-                              username: message.userID,
-                              current_username: username,
-                              isDefaultUser: false,
-                            });
-                          }
-                        }>{message.userID}</Text>
-                        <View style={styles.subsetMessage}>
-                          {/* <Text style={styles.location}> Los Angeles ~~~ </Text> */}
-                          {/* <View style={styles.dotMessage}>
+        <ScrollView style={styles.scrollView}
+          refreshControl={<RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#979797" // Change the spinning wheel color, if needed
+          />}
+        >
+          <View style={styles.messageContainer}>
+            {messages.map((message, index) => (
+              <View key={index}
+                style={styles.message}>
+                <View style={styles.allInfo}>
+                  <View style={styles.headerMessage}>
+                    <Image
+                      style={styles.profPicture}
+                      source={{uri: "data:image/png;base64," + profilePics[message.userID]}}
+                    />
+                    <View style={styles.furtherInfo}>
+                      <Text style={styles.username} onPress={
+                        () => {
+                          navigation.navigate('Profile Page', {
+                            username: message.userID,
+                            current_username: username,
+                            isDefaultUser: false,
+                          });
+                        }
+                      }>{message.userID}</Text>
+                      <View style={styles.subsetMessage}>
+                        {/* <Text style={styles.location}> Los Angeles ~~~ </Text> */}
+                        {/* <View style={styles.dotMessage}>
                             <Text style={styles.dot}> • </Text>
                           </View> */}
                           <Text style={styles.location}>{timePassed(message.timestamp)}</Text>

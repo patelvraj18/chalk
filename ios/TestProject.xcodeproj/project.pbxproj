@@ -34,8 +34,6 @@
 		992F45CCD7FE47ADBCC7CBA0 /* InriaSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7F7D10AC1ACD4267B474E4B8 /* InriaSans-Italic.ttf */; };
 		9FEE95353FC64030813FE361 /* JosefinSans-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 577D8BDB4D31437BB5AAC4A0 /* JosefinSans-SemiBoldItalic.ttf */; };
 		AAE9D1DDCB354DF388EE1F1C /* JosefinSans-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EF17FEFAB00F4983948BC534 /* JosefinSans-ExtraLightItalic.ttf */; };
-		AC254C4029E86F6500B9B4BE /* TestProjectTests.xctest in Resources */ = {isa = PBXBuildFile; fileRef = 00E356EE1AD99517003FC87E /* TestProjectTests.xctest */; };
-		AC254C4129E86F7A00B9B4BE /* TestProject.app in Resources */ = {isa = PBXBuildFile; fileRef = 13B07F961A680F5B00A75B9A /* TestProject.app */; platformFilter = ios; };
 		AC254C4229E8744B00B9B4BE /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E3DA489BA1AC43C393CAD09D /* AntDesign.ttf */; };
 		AC254C4329E8744B00B9B4BE /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 36A3D110A72B46898EEAAB31 /* Entypo.ttf */; };
 		AC254C4429E8744B00B9B4BE /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 06A7C5B1BC264673A9B9DE8F /* EvilIcons.ttf */; };
@@ -413,7 +411,6 @@
 				AC254C5029E8744B00B9B4BE /* SimpleLineIcons.ttf in Resources */,
 				AC254C5129E8744B00B9B4BE /* Zocial.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				AC254C4029E86F6500B9B4BE /* TestProjectTests.xctest in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				1E319D96B6864615A680C7AA /* InriaSans-Bold.ttf in Resources */,
 				8C456D0C410D4F448FA6135B /* InriaSans-BoldItalic.ttf in Resources */,
@@ -437,7 +434,6 @@
 				C5FCBF282ACD47F0A3E58E1A /* JosefinSans-ThinItalic.ttf in Resources */,
 				E1C8A656C1EE4AB19FFED977 /* Roboto-Black.ttf in Resources */,
 				186850B7BC6940F48EC42430 /* Roboto-BlackItalic.ttf in Resources */,
-				AC254C4129E86F7A00B9B4BE /* TestProject.app in Resources */,
 				50D3C29171DB4310AAF5C097 /* Roboto-Bold.ttf in Resources */,
 				BD5F9E097A064036A77A5CC0 /* Roboto-BoldItalic.ttf in Resources */,
 				322B7C28A384433B966A1A25 /* Roboto-Italic.ttf in Resources */,
