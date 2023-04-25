@@ -16,7 +16,13 @@ import { ThemeProvider, createTheme } from '@rneui/themed';
 import { Dropdown } from 'react-native-material-dropdown';
 import { SelectList } from 'react-native-dropdown-select-list'
 import Clock from './Clock';
-
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from 'react-native-popup-menu';
+import { MenuProvider } from 'react-native-popup-menu';
 
 const theme = createTheme({
   lightColors: {
@@ -314,177 +320,184 @@ const MessageBoard = ({ navigation, route }) => {
   }
   
   return (
-    <ThemeProvider>
-      <View style={styles.container}>
-        <View style={styles.logoContainer}>
-          <Image
-            style={styles.logoChalk}
-            source={require('../assets/images/chalk_logo.png')}
-          />
-        </View>
-        <View style={styles.header}>
-          <Text style={styles.qotd}>Question of the Day: </Text>
-          <Text style={styles.logo}>{promptText}</Text>
-        </View>
-        <View style={styles.rank}>
-          <View style={styles.rankStack}>
+    <MenuProvider>
+      <ThemeProvider>
+        <View style={styles.container}>
+          <View style={styles.logoContainer}>
             <Image
-              style={styles.stack}
-              source={require('../assets/icons/stackview_icon.png')}
+              style={styles.logoChalk}
+              source={require('../assets/images/chalk_logo.png')}
             />
-            <View style={styles.list}>
-              <SelectList
-                setSelected={(key) => setSortType(key)}
-                data={data1}
-                save="key"
-                search={false}
-                boxStyles={{ borderRadius: 0, height: 45, width: 120, borderColor: '#FFFFFF', paddingLeft: 8 }} //override default styles
-                dropdownStyles={{ position: "absolute", top: 40, width: "100%", zIndex: 2, borderColor: '#000000', borderrRadius: 10, backgroundColor: '#F1F1F1' }}
-                inputStyles={{ fontSize: 13 }}
-                placeholder={sortType}
-                onSelect={() => handleSort(sortType)}
+          </View>
+          <View style={styles.header}>
+            <Text style={styles.qotd}>Question of the Day: </Text>
+            <Text style={styles.logo}>{promptText}</Text>
+          </View>
+          <View style={styles.rank}>
+            <View style={styles.rankStack}>
+              <Image
+                style={styles.stack}
+                source={require('../assets/icons/stackview_icon.png')}
               />
+              <View style={styles.list}>
+                <SelectList
+                  setSelected={(key) => setSortType(key)}
+                  data={data1}
+                  save="key"
+                  search={false}
+                  boxStyles={{ borderRadius: 0, height: 45, width: 120, borderColor: '#FFFFFF', paddingLeft: 8 }} //override default styles
+                  dropdownStyles={{ position: "absolute", top: 40, width: "100%", zIndex: 2, borderColor: '#000000', borderrRadius: 10, backgroundColor: '#F1F1F1' }}
+                  inputStyles={{ fontSize: 13 }}
+                  placeholder={sortType}
+                  onSelect={() => handleSort(sortType)}
+                />
+              </View>
+            </View>
+            <View style={styles.followingButtonContainer}>
+              <TouchableOpacity
+                style={styles.followingButton}
+                onPress={() => setShowFollowing(!showFollowing)}
+              >
+                <View style={styles.followingButtonSection}>
+                  <Text
+                    style={[
+                      styles.followingButtonText,
+                      !showFollowing && styles.followingButtonSelected,
+                    ]}
+                  >
+                    All
+                  </Text>
+                </View>
+                <View style={styles.followingButtonSection}>
+                  <Text
+                    style={[
+                      styles.followingButtonText,
+                      showFollowing && styles.followingButtonSelected,
+                    ]}
+                  >
+                    Following
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
-          <View style={styles.followingButtonContainer}>
-            <TouchableOpacity
-              style={styles.followingButton}
-              onPress={() => setShowFollowing(!showFollowing)}
-            >
-              <View style={styles.followingButtonSection}>
-                <Text
-                  style={[
-                    styles.followingButtonText,
-                    !showFollowing && styles.followingButtonSelected,
-                  ]}
-                >
-                  All
-                </Text>
-              </View>
-              <View style={styles.followingButtonSection}>
-                <Text
-                  style={[
-                    styles.followingButtonText,
-                    showFollowing && styles.followingButtonSelected,
-                  ]}
-                >
-                  Following
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
-        {/* <Button onPress={
-          () => handleSort(SORTBYNEW)
-        } title="Top" />
-        <Button onPress={
-          () => handleSort(SORTBYOLD)
-        } title="New" />
-        <Button onPress={
-          () => handleSort(SORTBYTOP)
-        } title="Old" /> */}
-        <ScrollView style={styles.scrollView}
-          refreshControl={<RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            tintColor="#979797" // Change the spinning wheel color, if needed
-          />}
-        >
-          <View style={styles.messageContainer}>
-            {messages.map((message, index) => (
-              <View key={index}
-                style={styles.message}>
-                <View style={styles.allInfo}>
-                  <View style={styles.headerMessage}>
-                    <Image
-                      style={styles.profPicture}
-                      source={{uri: "data:image/png;base64," + profilePics[message.userID]}}
-                    />
-                    <View style={styles.furtherInfo}>
-                      <Text style={styles.username} onPress={
-                        () => {
-                          if(message.userID === username){
-                            navigation.navigate('Profile Page',{
-                              username: username
-                            });
+          {/* <Button onPress={
+            () => handleSort(SORTBYNEW)
+          } title="Top" />
+          <Button onPress={
+            () => handleSort(SORTBYOLD)
+          } title="New" />
+          <Button onPress={
+            () => handleSort(SORTBYTOP)
+          } title="Old" /> */}
+          <ScrollView style={styles.scrollView}
+            refreshControl={<RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor="#979797" // Change the spinning wheel color, if needed
+            />}
+          >
+            <View style={styles.messageContainer}>
+              {messages.map((message, index) => (
+                <View key={index}
+                  style={styles.message}>
+                  <View style={styles.allInfo}>
+                    <View style={styles.headerMessage}>
+                      <Image
+                        style={styles.profPicture}
+                        source={{uri: "data:image/png;base64," + profilePics[message.userID]}}
+                      />
+                      <View style={styles.furtherInfo}>
+                        <Text style={styles.username} onPress={
+                          () => {
+                            if(message.userID === username){
+                              navigation.navigate('Profile Page',{
+                                username: username
+                              });
+                            }
+                            else{
+                              navigation.navigate('OtherProfilePage', {
+                                username: message.userID,
+                                current_username: username,
+                                isDefaultUser: false,
+                              });
+                            }
                           }
-                          else{
-                            navigation.navigate('OtherProfilePage', {
-                              username: message.userID,
-                              current_username: username,
-                              isDefaultUser: false,
-                            });
-                          }
-                        }
-                      }>{message.userID}</Text>
-                      <View style={styles.subsetMessage}>
-                        {/* <Text style={styles.location}> Los Angeles ~~~ </Text> */}
-                        {/* <View style={styles.dotMessage}>
-                            <Text style={styles.dot}> • </Text>
-                          </View> */}
-                        <Text style={styles.location}>{timePassed(message.timestamp)}</Text>
+                        }>{message.userID}</Text>
+                        <View style={styles.subsetMessage}>
+                          {/* <Text style={styles.location}> Los Angeles ~~~ </Text> */}
+                          {/* <View style={styles.dotMessage}>
+                              <Text style={styles.dot}> • </Text>
+                            </View> */}
+                          <Text style={styles.location}>{timePassed(message.timestamp)}</Text>
+                        </View>
+                      </View>
+                      <View>
+                        <Menu>
+                          <MenuTrigger text='•••' customStyles={styles.threeDots} />
+                          <MenuOptions>
+                            <MenuOption onSelect={() => alert(`Saved`)} text='Save' />
+                            <MenuOption onSelect={() => alert(`Reported`)} >
+                              <Text style={{ color: 'red' }}>Report</Text>
+                            </MenuOption>
+                          </MenuOptions>
+                        </Menu>
                       </View>
                     </View>
-                    <View style={styles.threeDotsContainer}>
-                      <Image
-                        style={styles.threeDots}
-                        source={require('../assets/icons/threedots_icon.png')}
-                      />
+                    <View styles={styles.mainMessage}>
+                      <Text style={styles.messageText}>{message.text}</Text>
                     </View>
                   </View>
-                  <View styles={styles.mainMessage}>
-                    <Text style={styles.messageText}>{message.text}</Text>
+                  <View style={styles.bottomRow}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        handleLongPress(username, message.userID, promptID, message.responseID) //old method with old name... should change later
+                      }}>
+                      <Image style={styles.upvoteImage}
+                        source={
+                          likedResponseIDs != undefined && likedResponseIDs.includes(message.responseID) ? require('../assets/icons/blue_thumb_icon.png') : require('../assets/icons/black_thumb_icon.png')} />
+                    </TouchableOpacity>
+                    <Text style={styles.likeCountText}>{message.likeCount}</Text>
+                    <TouchableOpacity
+                      onPress={() => {
+                        handleReply(message.text, message.responseID, message.userID);
+                      }
+                      }
+                    >
+                      <Image style={styles.commentImage} source={require('../assets/icons/comments_icon.png')} />
+                    </TouchableOpacity>
+                    <Text style={styles.commentNumber}>{message.replyCount}</Text>
+                    {false && message.userID === username &&
+                      (
+                        <TouchableOpacity
+                          onPress={() => {
+                            navigation.navigate('Comment Page', {
+                              isEditing: true,
+                              messageText: message.text
+                            });
+                          }}>
+                          <Image style={styles.editImage} source={require('../assets/icons/pencil_icon.png')} />
+                          <Text style={styles.editText}>Edit</Text>
+                        </TouchableOpacity>
+                      )}
+
                   </View>
                 </View>
-                <View style={styles.bottomRow}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      handleLongPress(username, message.userID, promptID, message.responseID) //old method with old name... should change later
-                    }}>
-                    <Image style={styles.upvoteImage}
-                      source={
-                        likedResponseIDs != undefined && likedResponseIDs.includes(message.responseID) ? require('../assets/icons/blue_thumb_icon.png') : require('../assets/icons/black_thumb_icon.png')} />
-                  </TouchableOpacity>
-                  <Text style={styles.likeCountText}>{message.likeCount}</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      handleReply(message.text, message.responseID, message.userID);
-                    }
-                    }
-                  >
-                    <Image style={styles.commentImage} source={require('../assets/icons/comments_icon.png')} />
-                  </TouchableOpacity>
-                  <Text style={styles.commentNumber}>{message.replyCount}</Text>
-                  {false && message.userID === username &&
-                    (
-                      <TouchableOpacity
-                        onPress={() => {
-                          navigation.navigate('Comment Page', {
-                            isEditing: true,
-                            messageText: message.text
-                          });
-                        }}>
-                        <Image style={styles.editImage} source={require('../assets/icons/pencil_icon.png')} />
-                        <Text style={styles.editText}>Edit</Text>
-                      </TouchableOpacity>
-                    )}
-
-                </View>
-              </View>
-            ))}
-          </View>
-        </ScrollView>
-        {/* <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            onChangeText={text => setInputText(text)}
-            value={inputText}
-            placeholder="Add a comment..."
-          />
-          <Button title="Post" onPress={handleSend} />
-        </View> */}
-      </View>
-    </ThemeProvider>
+              ))}
+            </View>
+          </ScrollView>
+          {/* <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              onChangeText={text => setInputText(text)}
+              value={inputText}
+              placeholder="Add a comment..."
+            />
+            <Button title="Post" onPress={handleSend} />
+          </View> */}
+        </View>
+      </ThemeProvider>
+    </MenuProvider>
   );
 };
 
