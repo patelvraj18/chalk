@@ -463,6 +463,45 @@ async function updateBio(username, bio){
   update(userRef, userObj)
 }
 
+async function togglePrivate(username){
+  const userObj = await getUser(username);
+  const userRef = await getUserRef(username);
+  if (!userObj.hasOwnProperty("private")) {
+    userObj.private = false
+  }
+  userObj.private = !userObj.private
+  update(userRef, userObj)
+}
+
+async function getPrivate(username){
+  const userObj = await getUser(username);
+  if (userObj.hasOwnProperty("private")) {
+    return userObj.private
+  } else {
+    return false
+  }
+}
+
+async function toggleNotifications(username){
+  const userObj = await getUser(username);
+  const userRef = await getUserRef(username);
+  if (!userObj.hasOwnProperty("notifications")) {
+    userObj.notifications = true
+  }
+  userObj.notifications = !userObj.notifications
+  update(userRef, userObj)
+}
+
+async function getNotifications(username){
+  const userObj = await getUser(username);
+  if (userObj.hasOwnProperty("notifications")) {
+    return userObj.notifications
+  } else {
+    return true
+  }
+}
+
+
 async function getBio(username){
   const userObj = await getUser(username);
   if (userObj.hasOwnProperty("bio")) {
@@ -542,6 +581,19 @@ async function setProfilePic(username, base64Pic) {
   userObj.profilepic = base64Pic;
   update(userRef, userObj);
 }
+
+async function submitSuggestionPrompt(promptText) {
+  const promptRef = ref(db, 'suggestionPrompts');
+  const newPromptRef = push(promptRef);
+  const newPromptID = newPromptRef.key;
+
+  const promptObj = {
+    promptID: newPromptID,
+    promptText: promptText,
+  };
+
+  set(newPromptRef, promptObj);
+}
 /* real-time listening 
 const commentRef = ref(db, 'prompts/' + promptID + '/starCount');
 onValue(commentRef, (snapshot) => {
@@ -583,4 +635,9 @@ export {
   updateBio,
   getBio,
   updateUsername,
+  submitSuggestionPrompt,
+  togglePrivate,
+  getPrivate,
+  toggleNotifications,
+  getNotifications
 };

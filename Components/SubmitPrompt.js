@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { StackActions } from '@react-navigation/native';
+import { StackActions} from '@react-navigation/native';
+import * as db_operations from '../db_operations.js';
 
 
-const SubmitPrompt = (navigation) => {
+const SubmitPrompt = ({navigation}) => {
   const [promptText, setPromptText] = useState('');
 
   const handlePress = () => {
@@ -11,6 +12,7 @@ const SubmitPrompt = (navigation) => {
       Alert.alert('Error', 'Please enter a prompt before submitting.');
       return;
     }
+    db_operations.submitSuggestionPrompt(promptText)
     // code to submit prompt goes here
     Alert.alert('Success', 'Your prompt has been submitted.');
     setPromptText('');
@@ -37,7 +39,6 @@ const SubmitPrompt = (navigation) => {
       />
       <View style={styles.submit}>
         <Button title="Submit" onPress={handlePress} color="#464646"
-          fontFamily="InriaSans-Bold"
         />
       </View>
     </View>
@@ -62,7 +63,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 10,
-    fontFamily: 'InriaSans-BoldItalic',
     marginTop: 20,
     textAlign: 'center',
     color: '#464646',
@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 32,
     marginTop: 5,
-    fontFamily: 'InriaSans',
     marginLeft: 20,
     marginRight: 20,
     textAlign: 'center',
