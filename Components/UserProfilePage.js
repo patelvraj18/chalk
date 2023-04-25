@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { StackActions } from '@react-navigation/native';
 import * as db_operations from '../db_operations.js';
 
-const ProfilePage = ({ navigation, route }) => {
+const UserProfilePage = ({ navigation, route }) => {
   const username = route.params.username
-  const current_username = route.params.current_username
-  console.log('username', username);
-  console.log('current_username', current_username);
   const [name, setName] = useState(username); // account name
   const [questions, setQuestions] = useState([]); // array of past questions answered
   const [likes, setLikes] = useState(0); // number of likes user has gotten
   const [isFollowing, setIsFollowing] = useState(false);
   const [profilePicture, setProfilePicture] = useState(null);
-  
 
 
   useEffect(() => {
@@ -39,32 +34,18 @@ const ProfilePage = ({ navigation, route }) => {
     };
     checkFollowingStatus();
     return () => clearInterval(timerId);
-  }, [username, current_username, likes]);
-
-  const handleNameChange = (text) => {
-    setName(text);
-  }
-
-  const handleLogout = () => {
-    navigation.navigate('Home')
-  }
-  const handleFollow = async () => {
-    if (isFollowing) {
-      await db_operations.unfollowUser(current_username, username);
-    } else {
-      await db_operations.followUser(current_username, username);
-    }
-    setIsFollowing(!isFollowing);
-  };
+  }, [username, likes]);
 
   return (
     <View style={styles.container}>
-       <TouchableOpacity onPress={() => navigation.dispatch(StackActions.pop(1))}>
-          <View style={styles.backArrowContainer}>
-            <Image source={require('../assets/icons/back_arrow_icon.png')}
-              style={styles.backArrow} />
-          </View>
-        </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Settings', {
+                                          username: username
+                                        })}>
+        <View style={styles.threeDotsContainer}>
+          <Image source={require('../assets/icons/threedots_icon.png')}
+            style={styles.threeDots} />
+        </View>
+      </TouchableOpacity>
       <View style={styles.profilePicContainer}>
         <TouchableOpacity onPress={() => navigation.navigate('EditProfile', {
                                           username: username, 
@@ -124,35 +105,6 @@ const ProfilePage = ({ navigation, route }) => {
           <Text style={styles.locationInfo}>los angeles, ca</Text>
         </View>
       </View>
-      {/* <View style={styles.memoriesContainer}>
-        <View style={styles.urMemoriesContainer}>
-          <Text style={styles.urMemories}>Your Memories</Text>
-        </View>
-        <View style={styles.visibleContainer}>
-          <Text style={styles.visible}>(visible only to you)</Text>
-        </View>
-      </View> */}
-      {username === current_username &&
-        (<TouchableOpacity
-          onPress={handleLogout}
-        // style={{ backgroundColor: 'red', padding: 10, borderRadius: 5, marginTop: 20 }}
-        >
-          {/* <Text>Log out</Text> */}
-        </TouchableOpacity>)
-      }
-      {username != current_username &&
-        (<TouchableOpacity
-          onPress={handleFollow}
-        // style={{
-        //   backgroundColor: isFollowing ? 'gray' : 'blue',
-        //   padding: 10,
-        //   borderRadius: 5,
-        //   marginTop: 20,
-        // }}
-        >
-          <Text>{isFollowing ? 'Unfollow' : 'Follow'}</Text>
-        </TouchableOpacity>)
-      }
     </View>
   );
 };
@@ -310,29 +262,17 @@ const styles = StyleSheet.create({
     marginLeft: 7,
     fontWeight: 'bold',
   },
-  // threeDots: {
-  //   width: 22,
-  //   height: 22,
-  //   opacity: 0.8,
-  // },
-  // threeDotsContainer: {
-  //   position: 'absolute',
-  //   top: 50,
-  //   right: 30,
-  // },
-  backArrow: {
-    width: 35,
-    height: 35,
+  threeDots: {
+    width: 22,
+    height: 22,
     opacity: 0.8,
-    
   },
-  backArrowContainer: {
+  threeDotsContainer: {
     position: 'absolute',
     top: 50,
-    left: 20,
-    backgroundColor: 'lightgray', //TODO, change this
+    right: 30,
   },
 });
 
 
-export default ProfilePage;
+export default UserProfilePage;
