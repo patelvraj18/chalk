@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react - native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { StackActions } from '@react-navigation/native';
 
-const About = (navigation) => {
+const About = ({navigation}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => navigation.dispatch(StackActions.pop(1))}>

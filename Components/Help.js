@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { StackActions } from '@react-navigation/native';
 
 
-const Help = (navigation) => {
+const Help = ({navigation}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => navigation.dispatch(StackActions.pop(1))}>
