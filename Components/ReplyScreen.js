@@ -46,7 +46,6 @@ const ReplyScreen = ({ route, navigation }) => {
   const [commentText, setCommentText] = useState('');
   const [profilePics, setProfilePics] = useState({});
   const [likedResponseIDs, setLikedResponseIDs] = useState([]);
-  const [hasResponded, setHasResponded] = useState(false);
   const SORTBYTOP = 0
   const SORTBYNEW = 1
   const SORTBYLOCATION = 2
@@ -79,7 +78,10 @@ const ReplyScreen = ({ route, navigation }) => {
   const handleSubmitComment = () => {
     if (commentText.trim() !== '') {
       db_operations.replyToResponse(username, commentText, promptID, responseID);
-      setComments([...comments, { userID: username, text: commentText }]);
+      db_operations.getComments(responseID).then(comments => {
+        setComments(comments);
+        fetchProfilePics(comments);
+      });
       setCommentText('');
     }
   };
