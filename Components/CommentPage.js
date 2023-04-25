@@ -79,7 +79,8 @@ const CommentPage = ({ navigation, route }) => {
     const intervalId = setInterval(() => {
       const today = new Date();
       const seconds = today.getSeconds() < 10 ? '0'+today.getSeconds() : today.getSeconds()
-      setTime(today.getHours() + ":" + today.getMinutes() + ":" + seconds);
+      const minutes = today.getMinutes() < 10 ? '0'+today.getMinutes() : today.getMinutes()
+      setTime(today.getHours() + ":" + minutes + ":" + seconds);
       setCurrentTime(Date.now() -  promptDateC);
     }, 1000);
 
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
     opacity: 0.35,
   },
   timeText: {
-    paddingLeft: 75,
+    paddingLeft: 100,
     color: theme.createCommentColors.third,
     fontSize: 15,
     fontFamily: 'Helvetica',
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
-    right: -340,
+    right: -100,
     top: -15,
   },
   button: {
