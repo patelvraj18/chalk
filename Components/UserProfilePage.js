@@ -548,5 +548,4 @@ const styles = StyleSheet.create({
     },
    });
 
-
 export default UserProfilePage;

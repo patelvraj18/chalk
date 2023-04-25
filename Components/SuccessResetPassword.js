@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center',
     fontWeight: 'bold',
-    fontFamily: 'Helvetica',
+    fontFamily: 'InriaSans-Bold',
     color: theme.darkColors.primary,
   },
   main: {
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     width: '85%',
   },
   mainText: {
-    fontFamily: 'Helvetica',
+    fontFamily: 'InriaSans-Bold',
     fontStyle: 'italic',
     fontSize: 17,
     textAlign: 'center',

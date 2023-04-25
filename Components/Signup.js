@@ -114,7 +114,7 @@ export default function Signup({ navigation }) {
               backgroundColor: theme.darkColors.primary,
               marginTop: 20,
               marginLeft: 23,
-              fontFamily: 'Arial',
+              fontFamily: 'InriaSans-Bold',
               fontSize: 13,
             }} />
         </View>
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
   },
   iconContainer: {
     position: 'absolute',
@@ -172,16 +172,18 @@ const styles = StyleSheet.create({
   },
   textWelcome: {
     color: theme.darkColors.secondary,
+    fontFamily: 'InriaSans-Bold',
     fontSize: 14,
   },
   inputContainer: {
     padding: 10,
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     alignItems: 'center',
     marginTop: 100,
   },
   input: {
     width: '90%',
+    fontFamily: 'InriaSans-Bold',
     height: 40,
     borderWidth: 2,
     borderColor: '#ccc',
@@ -201,7 +203,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: theme.navigationColors.secondary,
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontStyle: 'italic',
     fontWeight: '700',
     textAlign: 'center',
@@ -214,9 +216,11 @@ const styles = StyleSheet.create({
   },
   logIn: {
     color: theme.lightColors.primary,
+    fontFamily: 'InriaSans-Bold',
   },
   logLink: {
     color: theme.navigationColors.primary,
     fontWeight: 'bold',
+    fontFamily: 'InriaSans-Bold',
   },
 });
