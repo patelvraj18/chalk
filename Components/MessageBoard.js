@@ -60,7 +60,7 @@ const MessageBoard = ({ navigation, route }) => {
   const { username } = route.params;
   const { usernameC, setUsernameC, promptIDC, setPromptIDC, promptTextC, setPromptTextC } = useContext(AppContext);
   const [refreshing, setRefreshing] = useState(false);
-  
+
 
   const data1 = [
     { key: SORTBYTOP, value: 'top' },
@@ -98,7 +98,7 @@ const MessageBoard = ({ navigation, route }) => {
         setMessages(filteredMessages);
       };
       refreshMessages();
-      
+
       setPromptIDC(promptID);
       setPromptTextC(promptText);
       setUsernameC(username);
@@ -157,7 +157,7 @@ const MessageBoard = ({ navigation, route }) => {
       const followingUserIds = await db_operations.getFollowing(username);
       console.log("got following usernames: ", followingUserIds);
       console.log("all messages: ", allMessages);
-  
+
 
       for (const message of allMessages) {
         console.log("getting user id of", message.userID);
@@ -311,7 +311,7 @@ const MessageBoard = ({ navigation, route }) => {
   const getLikes = async (responseID) => {
     return await db_operations.getLikes(promptID, responseID)
   }
-  
+
   return (
     <ThemeProvider>
       <View style={styles.container}>
@@ -398,17 +398,17 @@ const MessageBoard = ({ navigation, route }) => {
                   <View style={styles.headerMessage}>
                     <Image
                       style={styles.profPicture}
-                      source={{uri: "data:image/png;base64," + profilePics[message.userID]}}
+                      source={{ uri: "data:image/png;base64," + profilePics[message.userID] }}
                     />
                     <View style={styles.furtherInfo}>
                       <Text style={styles.username} onPress={
                         () => {
-                          if(message.userID === username){
-                            navigation.navigate('Profile Page',{
+                          if (message.userID === username) {
+                            navigation.navigate('Profile Page', {
                               username: username
                             });
                           }
-                          else{
+                          else {
                             navigation.navigate('OtherProfilePage', {
                               username: message.userID,
                               current_username: username,
@@ -503,11 +503,11 @@ const styles = StyleSheet.create({
   },
   qotd: {
     fontWeight: 'bold',
-    fontFamily: 'Helvetica',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 20,
   },
   logo: {
-    fontFamily: 'Helvetica',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 15,
     marginTop: 7,
   },
@@ -557,6 +557,7 @@ const styles = StyleSheet.create({
   messageText: {
     color: '#616161',
     fontSize: 16,
+    fontFamily: 'InriaSans-Bold',
     fontWeight: 'bold',
     marginTop: 15,
     marginLeft: 9,
@@ -587,12 +588,14 @@ const styles = StyleSheet.create({
   location: {
     color: '#9D9D9D',
     fontSize: 10,
+    fontFamily: 'InriaSans-LightItalic',
     marginLeft: 8,
     fontStyle: 'italic',
   },
   time: {
     color: '#BDBCBC',
     fontSize: 10,
+    fontFamily: 'InriaSans-LightItalic',
     marginLeft: -3,
     fontStyle: 'italic',
   },
@@ -656,10 +659,12 @@ const styles = StyleSheet.create({
   commentNumber: {
     color: '#726D6D',
     fontSize: 14,
+    fontFamily: 'InriaSans-Regular',
   },
   editText: {
     color: '#726D6D',
     fontSize: 13,
+    fontFamily: 'InriaSans-Regular',
     marginLeft: 55,
     marginTop: -19,
   },
@@ -674,6 +679,7 @@ const styles = StyleSheet.create({
   likeCountText: {
     color: '#726D6D',
     fontSize: 14,
+    fontFamily: 'InriaSans-Regular',
   },
   username: {
     fontWeight: 'bold',
@@ -682,6 +688,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 10,
     fontSize: 11.5,
+    fontFamily: 'InriaSans-Bold',
+
   },
   inputContainer: {
     flexDirection: 'row',
@@ -715,6 +723,7 @@ const styles = StyleSheet.create({
   followingButtonText: {
     fontSize: 13,
     color: '#5c64b0',
+    fontFamily: 'InriaSans-Bold',
   },
   followingButtonSelected: {
     fontWeight: 'bold',

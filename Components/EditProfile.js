@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Button } from 'react-native';
 import * as db_operations from '../db_operations.js';
-import {launchImageLibrary} from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import { StackActions } from '@react-navigation/native';
 
 const EditProfile = ({ navigation, route }) => {
   const username = route.params.username;
   const current_username = route.params.current_username;
   const [profilePicture, setProfilePicture] = useState(null);
-  
+
   useEffect(() => {
     const fetchProfilePicture = async () => {
       const [profilePicBase64] = await db_operations.getProfilePic(username);
@@ -113,14 +113,14 @@ const EditProfile = ({ navigation, route }) => {
           onPress={() => handleSave()}
           color="#464646"
           title="Save"
-          fontFamily="Arial"
+          fontFamily="InriaSans-Bold"
           fontWeight="bold"
         />
       </View>
       <View style={styles.profilePicContainer}>
         <TouchableOpacity onPress={handleProfilePictureChange}>
           <Image
-            source={{uri: "data:image/png;base64," + profilePicture}} 
+            source={{ uri: "data:image/png;base64," + profilePicture }}
             style={styles.profilePicture}
           />
         </TouchableOpacity>
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
   },
   usernameTag: {
     color: '#464545',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
   },
   usernameEdit: {
     color: '#5C64B0',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
   },
   bio: {
     color: '#464545',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
   },
   bioText: {
     color: '#5C64B0',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
   },
   locationEdit: {
     color: '#464545',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
   },
   location: {
     color: '#5C64B0',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },

@@ -13,7 +13,7 @@ const ProfilePage = ({ navigation, route }) => {
   const [likes, setLikes] = useState(0); // number of likes user has gotten
   const [isFollowing, setIsFollowing] = useState(false);
   const [profilePicture, setProfilePicture] = useState(null);
-  
+
 
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const ProfilePage = ({ navigation, route }) => {
       console.log(pic);
       setProfilePicture(pic);
     });
-        
+
     let timerId = setInterval(() => {
       db_operations.getKarma(username).then(karma => {
         setLikes(karma)
@@ -59,20 +59,20 @@ const ProfilePage = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-       <TouchableOpacity onPress={() => navigation.dispatch(StackActions.pop(1))}>
-          <View style={styles.backArrowContainer}>
-            <Image source={require('../assets/icons/back_arrow_icon.png')}
-              style={styles.backArrow} />
-          </View>
-        </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.dispatch(StackActions.pop(1))}>
+        <View style={styles.backArrowContainer}>
+          <Image source={require('../assets/icons/back_arrow_icon.png')}
+            style={styles.backArrow} />
+        </View>
+      </TouchableOpacity>
       <View style={styles.profilePicContainer}>
         <TouchableOpacity onPress={() => navigation.navigate('EditProfile', {
-                                          username: username, 
-                                          current_username: current_username,
-                                          isDefaultUser: false,
-                                        })}>
+          username: username,
+          current_username: current_username,
+          isDefaultUser: false,
+        })}>
           <Image
-            source={{uri: "data:image/png;base64," + profilePicture}}
+            source={{ uri: "data:image/png;base64," + profilePicture }}
             style={styles.profilePicture}
           />
         </TouchableOpacity>
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   },
   username: {
     color: '#464646',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 24,
     fontWeight: 'bold',
   },
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   },
   followers: {
     color: '#616161',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   },
   following: {
     color: '#616161',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   },
   charma: {
     color: '#616161',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   followersNum: {
     color: '#969696',
     opacity: 0.52,
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   followingNum: {
     color: '#969696',
     opacity: 0.52,
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
   charmaNum: {
     color: '#969696',
     opacity: 0.52,
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
@@ -254,13 +254,13 @@ const styles = StyleSheet.create({
   },
   bio: {
     color: '#616161',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
   locationText: {
     color: '#616161',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
@@ -269,14 +269,14 @@ const styles = StyleSheet.create({
   },
   bioText: {
     color: '#969696',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
     marginTop: 20,
   },
   locationInfo: {
     color: '#969696',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
     marginTop: 20,
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
   },
   urMemories: {
     color: '#616161',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
   },
   visible: {
     color: '#999999',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 11,
     marginLeft: 7,
     fontWeight: 'bold',
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
     opacity: 0.8,
-    
+
   },
   backArrowContainer: {
     position: 'absolute',

@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   },
   promptText: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: 'InriaSans-Bold',
   },
   icon: {
     width: 18,
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     paddingLeft: 75,
     color: theme.createCommentColors.third,
     fontSize: 15,
-    fontFamily: 'Helvetica',
+    fontFamily: 'InriaSans-Bold',
     fontWeight: 'bold',
   },
   buttonContainer: {
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   },
   char: {
     fontSize: 12,
-    fontFamily: 'Helvetica',
+    fontFamily: 'InriaSans-Bold',
     color: theme.createCommentColors.second,
   },
   commentInput: {
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     marginLeft: 18,
     marginTop: 120,
     color: theme.createCommentColors.first,
-    fontFamily: 'Helvetica',
+    fontFamily: 'InriaSans-Bold',
     fontWeight: 'bold',
     paddingRight: 25,
     marginBottom: 10,
