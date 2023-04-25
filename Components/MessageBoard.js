@@ -436,8 +436,10 @@ const MessageBoard = ({ navigation, route }) => {
                         <Menu>
                           <MenuTrigger text='•••' customStyles={styles.threeDots} />
                           <MenuOptions>
-                            <MenuOption onSelect={() => alert(`Saved`)} text='Save' />
-                            <MenuOption onSelect={() => alert(`Reported`)} >
+                            <MenuOption onSelect={() => {
+                                                    db_operations.reportResponse(promptID, message.responseID);
+                                                    alert(`Reported`);
+                                                    }} >
                               <Text style={{ color: 'red' }}>Report</Text>
                             </MenuOption>
                           </MenuOptions>
