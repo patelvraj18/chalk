@@ -144,7 +144,7 @@ const ReplyScreen = ({ route, navigation }) => {
                 </View>
                 <View style={styles.moreInfo}>
                   <Text style={styles.username}>
-                    surferdude123
+                    {username}
                   </Text>
                   <Text style={styles.location}>
                     1 hr
