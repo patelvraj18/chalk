@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, Image } from 'react-native';
 import { Agenda } from 'react-native-calendars';
 import { Card } from 'react-native-paper';
 import { StackActions } from '@react-navigation/native';
+import * as db_operations from '../db_operations.js';
 
 const timeToDate = (time) => {
   const date = new Date(time);
@@ -11,29 +12,23 @@ const timeToDate = (time) => {
 
 const QOTD = ({ navigation, route }) => {
   const [items, setItems] = useState({});
+  const [yourResponse, setYourResponse] = useState("You didn't respond to this one");
 
-  // const loadQOTD = (day) => {
-  //   setTimeout(() => {
-  //     for (let i = -30; i < 1; i++) {
-  //       const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-  //       const date = timeToDate(time);
-  //       //console.log(time);
-  //       if (!items[date]) {
-  //         items[date] = [];
-  //         items[date].push({
-  //           date: 'QOTD from ' + date + ': ',
-  //           question: '[What is your favorite season of Friends?]',
-  //           height: Math.max(50, Math.floor(Math.random() * 150)),
-  //         });
-  //       }
-  //     }
-  //     const newItems = {};
-  //     Object.keys(items).forEach((key) => {
-  //       newItems[key] = items[key];
-  //     });
-  //     setItems(newItems);
-  //   }, 1000);
-  // };
+  useEffect(() => {
+    //get all responses to prompt, then set yourResponse to the response with username username
+    db_operations.getResponses(route.params.prompt.promptID).then((responses) => {
+      console.log(responses)
+      for (response of Object.values(responses)) {
+        if (response.userID == route.params.username) {
+          setYourResponse(response.text);
+        }
+      }
+    })
+   }, [])
+  console.log(route.params)
+  console.log(route.params.date)
+  console.log(route.params.prompt)
+
 
   return (
     <View style={styles.container}>
@@ -45,7 +40,7 @@ const QOTD = ({ navigation, route }) => {
       </TouchableOpacity>
       <View style={styles.dateContainer}>
         <Text style={styles.date}>
-          04/25/2023
+          {route.params.date}
         </Text>
       </View>
       <View style={styles.qotdContainer}>
@@ -55,7 +50,7 @@ const QOTD = ({ navigation, route }) => {
       </View>
       <View style={styles.questionContainer}>
         <Text style={styles.question}>
-          [This was the question from the date.]
+          {route.params.prompt.text}
         </Text>
       </View>
       <View style={styles.urResponseContainer}>
@@ -65,7 +60,7 @@ const QOTD = ({ navigation, route }) => {
       </View>
       <View style={styles.responseContainer}>
         <Text style={styles.response}>
-          [This was your response.]
+          {yourResponse}
         </Text>
       </View>
     </View>

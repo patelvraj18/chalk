@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, Image } from 'react-native';
 import { Agenda } from 'react-native-calendars';
 import { Card } from 'react-native-paper';
 import { StackActions } from '@react-navigation/native';
+import * as db_operations from '../db_operations.js';
 
 const timeToDate = (time) => {
   const date = new Date(time);
@@ -11,33 +12,46 @@ const timeToDate = (time) => {
 
 const CalView = ({ navigation, route }) => {
   const [items, setItems] = useState({});
+  const itemsRef = useRef(items);
+
+  useEffect(() => {
+  }, [])
 
   const loadQOTD = (day) => {
-    setTimeout(() => {
-      for (let i = -30; i < 1; i++) {
-        const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-        const date = timeToDate(time);
-        //console.log(time);
-        if (!items[date]) {
-          items[date] = [];
-          items[date].push({
-            date: 'QOTD from ' + date + ': ',
-            question: '[What is your favorite season of Friends?]',
-            height: Math.max(50, Math.floor(Math.random() * 150)),
-          });
+    new_items = {}
+    for (let i = -30; i < 30; i++) {
+      const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+      const date = timeToDate(time);
+      new_items[date] = [];
+    }
+    db_operations.getPrompts().then((prompts) => {
+      console.log(prompts)
+      for (prompt of Object.values(prompts)) {
+        console.log("prompt", prompt)
+        const date = timeToDate(prompt.date);
+        console.log(date)
+        if (!new_items[date]) {
+          new_items[date] = [];
         }
+        new_items[date].push({
+          date: date,
+          question: prompt.text,
+          height: Math.max(50, Math.floor(Math.random() * 150)),
+          prompt: prompt,
+        });
       }
-      const newItems = {};
-      Object.keys(items).forEach((key) => {
-        newItems[key] = items[key];
-      });
-      setItems(newItems);
-    }, 1000);
+      console.log(new_items)
+    })
+    setItems(new_items)
   };
 
   const renderQOTD = (item) => {
     return (
-      <TouchableOpacity style={styles.itemQOTD} onPress={() => { navigation.navigate('QOTD'); }}>
+      <TouchableOpacity style={styles.itemQOTD} onPress={() => {navigation.navigate('QOTD', {
+                                                                  prompt: item.prompt,
+                                                                  date: item.date,
+                                                                  username: route.params.username,
+                                                                }); }}>
         <Card style={styles.cards}>
           <Card.Content>
             <View

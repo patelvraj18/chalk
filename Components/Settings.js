@@ -72,7 +72,7 @@ const Settings = ({ navigation, route }) => {
   };
 
   const handleCal = () => {
-    navigation.navigate('CalView', { id: 'calendar' });
+    navigation.navigate('CalView', { id: 'calendar', username: username });
   };
 
   return (
@@ -131,7 +131,7 @@ const Settings = ({ navigation, route }) => {
                       index === 0 && { borderTopWidth: 0 },
                     ]}>
                     <TouchableOpacity
-                      onPress={() => { navigation.navigate('CalView', { id: 'calendar' }) }
+                      onPress={() => { navigation.navigate('CalView', { id: 'calendar', username: username }) }
                       }>
                       <View style={styles.row}>
                         <FeatherIcon
