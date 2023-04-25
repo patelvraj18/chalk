@@ -39,6 +39,26 @@ const prompt = ref(db, 'prompts/' + promptID);
 
 const db = getDatabase(app);
 
+
+//get all prompts
+function getPrompts() {
+  console.debug("getPrompts called")
+  return new Promise((resolve, reject) => {
+    const dbRef = ref(db);
+    get(child(dbRef, 'prompt/prompts'))
+      .then(snapshot => {
+        if (snapshot.exists()) {
+          resolve(snapshot.val());
+        } else {
+          reject('No prompt data available');
+        }
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+}
+
 function setPrompt(text) {
   console.debug('setPrompt ', text)
   const promptsRef = ref(db, 'prompt/prompts');
@@ -530,6 +550,7 @@ onValue(commentRef, (snapshot) => {
 });
 */
 export {
+  getPrompts,
   setUsername,
   getUsername,
   setPrompt,
