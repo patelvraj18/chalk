@@ -5,13 +5,13 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { StackActions } from '@react-navigation/native';
 
 const EditProfile = ({ navigation, route }) => {
-  const {username, location, bio} = route.params
+  const { username, location, bio } = route.params
   const [profilePicture, setProfilePicture] = useState(null);
   const [updatedUsername, setUpdatedUsername] = useState(username)
   const [updatedBio, setUpdatedBio] = useState(bio)
   const [updatedLocation, setUpdatedLocation] = useState(location)
   const [isProfilePictureChanged, setIsProfilePictureChanged] = useState(false)
-  
+
   useEffect(() => {
     db_operations.getProfilePic(username).then(pic => {
       setProfilePicture(pic);
@@ -46,23 +46,34 @@ const EditProfile = ({ navigation, route }) => {
     });
   };
   const handleUsernameChange = (text) => {
-      setUpdatedUsername(text)
+    setUpdatedUsername(text)
   }
 
-  const handleSave = async() => {
+  const handleSave = async () => {
     //TODO: add ability to save username/prof picture
-    if(isProfilePictureChanged){
+    if (isProfilePictureChanged) {
       setIsProfilePictureChanged(false)
       await db_operations.setProfilePic(username, profilePicture);
     }
-    if(location !== updatedLocation){
+    if (location !== updatedLocation) {
       db_operations.updateLocation(username, updatedLocation)
     }
-    if(bio !== updatedBio){
+    if (bio !== updatedBio) {
       db_operations.updateBio(username, updatedBio)
     }
+    // Alert.alert(
+    //   'Save?',
+    //   'You sure you want to save?',
+    //   [
+    //     { text: 'Save', onPress: () => console.log('Yes button clicked') },
+    //     { text: 'Cancel', onPress: () => console.log('No button clicked'), style: 'cancel' },
+    //   ],
+    //   {
+    //     cancelable: true
+    //   }
+    // );
+
     navigation.dispatch(StackActions.pop(2))
-    
   }
 
   return (
@@ -90,14 +101,12 @@ const EditProfile = ({ navigation, route }) => {
             source={{ uri: "data:image/png;base64," + profilePicture }}
             style={styles.profilePicture}
           />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.cameraIconContainer}>
-        <TouchableOpacity>
-          <Image
-            style={styles.cameraIcon}
-            source={require('../assets/icons/camera.png')}
-          />
+          <View style={styles.cameraIconContainer} >
+            <Image
+              style={styles.cameraIcon}
+              source={require('../assets/icons/camera.png')}
+            />
+          </View>
         </TouchableOpacity>
       </View>
       {/* <TouchableOpacity onPress={()=>console.log(username)}>
@@ -121,7 +130,7 @@ const EditProfile = ({ navigation, route }) => {
           </Text>
         </View>
         <View style={styles.bioTextContainer}>
-          <TextInput style={styles.bioText} onChangeText={text => setUpdatedBio(text)}>
+          <TextInput style={styles.bioText} onChangeText={text => setUpdatedBio(text)} multiline={true}>
             {updatedBio}
           </TextInput>
         </View>
@@ -133,7 +142,7 @@ const EditProfile = ({ navigation, route }) => {
           </Text>
         </View>
         <View style={styles.locationContainer}>
-          <TextInput style={styles.location} onChangeText={text => setUpdatedLocation(text)}>
+          <TextInput style={styles.location} onChangeText={text => setUpdatedLocation(text)} multiline={true}>
             {updatedLocation}
           </TextInput>
         </View>
@@ -166,6 +175,7 @@ const EditProfile = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
   iconContainer: {
     marginTop: 55,
@@ -175,7 +185,6 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     opacity: 0.4,
-    
   },
   cameraIcon: {
     width: 20,
@@ -189,8 +198,7 @@ const styles = StyleSheet.create({
     paddingTop: 9,
   },
   cameraIconContainer: {
-    marginTop: -10,
-    marginLeft: 185,
+    marginLeft: 70,
   },
   profilePicContainer: {
     marginTop: 30,
@@ -231,6 +239,7 @@ const styles = StyleSheet.create({
   },
   bioContainerBold: {
     marginLeft: 40,
+    marginTop: 7,
   },
   bio: {
     color: '#464545',
@@ -239,7 +248,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   bioTextContainer: {
-    marginLeft: 135,
+    marginLeft: 100,
+    width: 185,
+    height: 120,
   },
   bioText: {
     color: '#5C64B0',
@@ -250,7 +261,7 @@ const styles = StyleSheet.create({
   locationMainContainer: {
     flexDirection: 'row',
     marginLeft: 10,
-    marginTop: 60,
+    marginTop: 30,
   },
   locationEditContainer: {
     marginLeft: 40,
@@ -262,7 +273,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   locationContainer: {
-    marginLeft: 90,
+    marginLeft: 55,
+    marginRight: 20,
+    width: 185,
   },
   location: {
     color: '#5C64B0',

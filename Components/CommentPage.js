@@ -50,7 +50,7 @@ const CommentPage = ({ navigation, route }) => {
   const [currentTime, setCurrentTime] = useState(null);
 
   const formatTime = (time, offset) => {
-    const adjustedTime = time-offset
+    const adjustedTime = time - offset
     const seconds = Math.floor(adjustedTime / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
@@ -62,9 +62,9 @@ const CommentPage = ({ navigation, route }) => {
       return `${hours}h ${minutes % 60}m late`;
     } else if (minutes > 0) {
       return `${minutes}m ${seconds % 60}s late`;
-    } else if (seconds > 0){
+    } else if (seconds > 0) {
       return `${seconds}s late`;
-    } else if (minutes < 0){
+    } else if (minutes < 0) {
       return `${-minutes}m ${-seconds % 60}s remain`;
     } else {
       return `${-seconds}s remain`;
@@ -78,18 +78,18 @@ const CommentPage = ({ navigation, route }) => {
     }
     const intervalId = setInterval(() => {
       const today = new Date();
-      const seconds = today.getSeconds() < 10 ? '0'+today.getSeconds() : today.getSeconds()
-      const minutes = today.getMinutes() < 10 ? '0'+today.getMinutes() : today.getMinutes()
+      const seconds = today.getSeconds() < 10 ? '0' + today.getSeconds() : today.getSeconds()
+      const minutes = today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes()
       setTime(today.getHours() + ":" + minutes + ":" + seconds);
-      setCurrentTime(Date.now() -  promptDateC);
+      setCurrentTime(Date.now() - promptDateC);
     }, 1000);
 
     return () => clearInterval(intervalId);
-  },[time])
+  }, [time])
 
 
   const handlePost = async () => {
-    // navigation.navigate('ConfirmationPage')
+    // navigation.navigate('ConfirmationPage');
     const userID = usernameC;
     const responseID = await db_operations.respondToPrompt(
       userID,
@@ -110,20 +110,13 @@ const CommentPage = ({ navigation, route }) => {
     <ThemeProvider>
       <View style={styles.container}>
         <View style={styles.iconContainer}>
-
-          <Text style={styles.timeText}>
-            {time + ' - ' + formatTime(currentTime, 300000)}
-          </Text>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={handlePost}>
-              <Image
-                style={styles.button}
-                source={require('../assets/icons/post_icon.png')}
-              />
-            </TouchableOpacity>
+          <View style={styles.timeContainer}>
+            <Text style={styles.timeText}>
+              {time + ' - ' + formatTime(currentTime, 300000)}
+            </Text>
           </View>
         </View>
-        
+
         <View style={styles.promptTextView}>
           <Text style={styles.promptText}>{promptTextC}</Text>
         </View>
@@ -155,6 +148,14 @@ const CommentPage = ({ navigation, route }) => {
           maxLength={300}
           multiline={true}
         />
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={handlePost}>
+            <Image
+              style={styles.button}
+              source={require('../assets/icons/post_icon.png')}
+            />
+          </TouchableOpacity>
+        </View>
         {/* <TouchableOpacity style={styles.imagePickerButton} onPress={handleImage}>
         <Text>Add Photo</Text>
       </TouchableOpacity>
@@ -189,9 +190,12 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     marginTop: 105,
     marginBottom: -15,
+    marginRight: 50,
   },
   promptText: {
     fontSize: 20,
+    fontWeight: 'bold',
+    color: '#3A3A3A',
     fontFamily: 'InriaSans-Bold',
   },
   icon: {
@@ -199,22 +203,24 @@ const styles = StyleSheet.create({
     height: 18,
     opacity: 0.35,
   },
+  timeContainer: {
+
+  },
   timeText: {
-    paddingLeft: 100,
+    paddingLeft: 95,
     color: theme.createCommentColors.third,
     fontSize: 15,
     fontFamily: 'InriaSans-Bold',
     fontWeight: 'bold',
   },
   buttonContainer: {
-    position: 'absolute',
-    right: -100,
-    top: -15,
+    marginTop: 100,
+    marginLeft: 135,
   },
   button: {
     resizeMode: 'contain',
-    height: 50,
-    width: 70,
+    height: 90,
+    width: 100,
   },
   postText: {
     fontSize: 11,

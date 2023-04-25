@@ -73,19 +73,19 @@ function MessageBoardTabs({ route: { params } }) {
   const { username: currentUser } = params;
   return (
     <Tab.Navigator initalRouteName="Message Board">
-      <Tab.Screen name="Message Board" component={MessageBoardTabStack} initialParams={params} options={{
+      <Tab.Screen name="home" component={MessageBoardTabStack} initialParams={params} options={{
         headerShown: false,
         tabBarIcon: ({ color, size }) => (
           <Icon name="home" color={color} size={size} />
         ),
       }} />
-      <Tab.Screen name="Comment Page" component={CommentTabStack} initialParams={params} options={{
+      <Tab.Screen name="create" component={CommentTabStack} initialParams={params} options={{
         headerShown: false,
         tabBarIcon: ({ color, size }) => (
           <Icon name="message" color={color} size={size} />
         ),
       }} />
-      <Tab.Screen name="Profile Page" component={ProfilePageTabStack} initialParams={{ username: currentUser, current_username: currentUser }} options={{
+      <Tab.Screen name="profile" component={ProfilePageTabStack} initialParams={{ username: currentUser, current_username: currentUser }} options={{
         headerShown: false,
         tabBarIcon: ({ color, size }) => (
           <Icon name="person" color={color} size={size} />
