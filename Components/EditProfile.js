@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Button, Alert } from 'react-native';
 import * as db_operations from '../db_operations.js';
-import {launchImageLibrary} from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import { StackActions } from '@react-navigation/native';
 
 const EditProfile = ({ navigation, route }) => {
@@ -16,7 +16,7 @@ const EditProfile = ({ navigation, route }) => {
     db_operations.getProfilePic(username).then(pic => {
       setProfilePicture(pic);
     });
-  }, [username, profilePicture]);
+  }, [username]);
   
   const handleProfilePictureChange = async () => {
     const options = {
@@ -37,7 +37,7 @@ const EditProfile = ({ navigation, route }) => {
           const base64Image = response.assets[0].base64;
           console.log("base64Image", base64Image)
           setProfilePicture(base64Image)
-          console.log("after change", profilePicture)
+          // console.log("after change", profilePicture)
           setIsProfilePictureChanged(true)
         } else {
           Alert.alert("Picture too large, cannot set profile picture.")
@@ -53,7 +53,7 @@ const EditProfile = ({ navigation, route }) => {
     //TODO: add ability to save username/prof picture
     if(isProfilePictureChanged){
       setIsProfilePictureChanged(false)
-      await db_operations.setProfilePic(username, base64Image);
+      await db_operations.setProfilePic(username, profilePicture);
     }
     if(location !== updatedLocation){
       db_operations.updateLocation(username, updatedLocation)
@@ -80,14 +80,14 @@ const EditProfile = ({ navigation, route }) => {
           onPress={() => handleSave()}
           color="#464646"
           title="Save"
-          fontFamily="Arial"
+          fontFamily="InriaSans-Bold"
           fontWeight="bold"
         />
       </View>
       <View style={styles.profilePicContainer}>
         <TouchableOpacity onPress={handleProfilePictureChange}>
           <Image
-            source={{uri: "data:image/png;base64," + profilePicture}} 
+            source={{ uri: "data:image/png;base64," + profilePicture }}
             style={styles.profilePicture}
           />
         </TouchableOpacity>
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
   },
   usernameTag: {
     color: '#464545',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
   },
   usernameEdit: {
     color: '#5C64B0',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
   },
   bio: {
     color: '#464545',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
   },
   bioText: {
     color: '#5C64B0',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
   },
   locationEdit: {
     color: '#464545',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
   },
   location: {
     color: '#5C64B0',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 17,
     fontWeight: 'bold',
   },

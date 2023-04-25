@@ -308,11 +308,12 @@ const styles = StyleSheet.create({
   usernameComments: {
     fontWeight: 'bold',
     marginBottom: 5,
+    fontFamily: 'InriaSans-Bold',
   },
   responseText: {
     fontSize: 18,
     color: '#616161',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontWeight: 'bold',
     marginLeft: 15,
   },
@@ -334,9 +335,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingTop: 15,
     marginLeft: 10,
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Italic',
     color: '#616161',
-    fontStyle: 'italic',
   },
   rank: {
     flexDirection: 'row',
@@ -383,6 +383,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 10,
     fontSize: 16,
+    fontFamily: 'InriaSans-Bold',
   },
   headerMessage: {
     flex: 1,
@@ -404,6 +405,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginLeft: 8,
     fontStyle: 'italic',
+    fontFamily: 'InriaSans-Italic',
   },
   time: {
     color: '#BDBCBC',
@@ -429,6 +431,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 10,
     fontSize: 11.5,
+    fontFamily: 'InriaSans-Bold',
   },
   moreInfo: {
     marginTop: 12,
@@ -440,7 +443,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   username2: {
-    fontWeight: 'bold',
+    fontFamily: 'InriaSans-Bold',
     color: '#6A6A6A',
     marginBottom: 5,
     marginLeft: 10,
@@ -450,7 +453,7 @@ const styles = StyleSheet.create({
     color: '#9D9D9D',
     fontSize: 10,
     marginLeft: 8,
-    fontStyle: 'italic',
+    fontFamily: 'InriaSans-Italic',
   },
   bottomRow: {
     flexDirection: 'row',
@@ -480,6 +483,7 @@ const styles = StyleSheet.create({
   },
   replyNum: {
     color: '#726D6D',
+    fontFamily: 'InriaSans-Bold',
   },
   commentsIcon: {
     width: 18,
@@ -514,9 +518,11 @@ const styles = StyleSheet.create({
   commentsNum: {
     color: '#726D6D',
     marginLeft: 3,
+    fontFamily: 'InriaSans-Bold',
   },
   thumbsUpNum: {
     color: '#726D6D',
+    fontFamily: 'InriaSans-Bold',
   },
   thumbsUpNumContainer: {
     marginLeft: 5,

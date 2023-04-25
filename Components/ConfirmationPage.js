@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     paddingLeft: 75,
     color: theme.createCommentColors.third,
     fontSize: 15,
-    fontFamily: 'Helvetica',
+    fontFamily: 'InriaSans-Bold',
     fontWeight: 'bold',
   },
   messageContainer: {
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   },
   message: {
     color: theme.createCommentColors.first,
-    fontFamily: 'Helvetica',
+    fontFamily: 'InriaSans-Bold',
     fontWeight: 'bold',
     textAlign: 'left',
     textAlignVertical: 'top',

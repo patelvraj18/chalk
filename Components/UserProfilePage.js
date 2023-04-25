@@ -36,6 +36,9 @@ const UserProfilePage = ({ navigation, route }) => {
         console.log('BRO', followerCount)
         setFollowerCount(followerCount)
       })
+    db_operations.getProfilePic(username).then(pic => {
+        setProfilePicture(pic);
+      });
     db_operations.getBio(username).then(bio => {
         setBio(bio)
       })
@@ -57,6 +60,9 @@ const UserProfilePage = ({ navigation, route }) => {
       });
       db_operations.getLocation(username).then(location =>{
         setLocation(location)
+      });
+      db_operations.getProfilePic(username).then(pic => {
+        setProfilePicture(pic);
       });
     }, 5000);
     return () => clearInterval(timerId);
@@ -547,6 +553,5 @@ const styles = StyleSheet.create({
      fontSize: 14,
     },
    });
-
 
 export default UserProfilePage;
