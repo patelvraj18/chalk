@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 30,
     fontWeight: 'bold',
-    fontFamily: 'Helvetica',
+    fontFamily: 'InriaSans-Bold',
     color: theme.darkColors.primary,
   },
   main: {
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     width: '85%',
   },
   mainText: {
-    fontFamily: 'Helvetica',
+    fontFamily: 'InriaSans-Bold',
     fontStyle: 'italic',
     fontSize: 13,
     textAlign: 'center',
@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     marginLeft: 15,
     fontSize: 13,
+    fontFamily: 'InriaSans-Regular',
   },
   errorContainer: {
     position: 'absolute',
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: theme.navigationColors.secondary,
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontStyle: 'italic',
     fontWeight: '700',
     textAlign: 'center',

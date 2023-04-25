@@ -12,13 +12,6 @@ import { ThemeProvider, createTheme } from '@rneui/themed';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Image } from '@rneui/themed';
 import { SelectList } from 'react-native-dropdown-select-list';
-import {
-  Menu,
-  MenuOptions,
-  MenuOption,
-  MenuTrigger,
-} from 'react-native-popup-menu';
-import { MenuProvider } from 'react-native-popup-menu';
 
 const theme = createTheme({
   lightColors: {
@@ -127,160 +120,151 @@ const ReplyScreen = ({ route, navigation }) => {
   }
 
   return (
-    <MenuProvider>
-      <ThemeProvider theme={theme}>
-        <View style={styles.container}>
-          <TouchableOpacity onPress={() => navigation.navigate('MessageBoard')}>
-            <View style={styles.iconContainer}>
-              <Image
-                style={styles.icon}
-                source={require('../assets/icons/back_arrow_icon.png')}
-              />
-            </View>
-          </TouchableOpacity>
-          <View>
-            {response && (
-              <View style={styles.responseContainer}>
-                <View style={styles.topRow}>
-                  <View style={styles.profilePictureContainer}>
+    <ThemeProvider theme={theme}>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={() => navigation.navigate('MessageBoard')}>
+          <View style={styles.iconContainer}>
+            <Image
+              style={styles.icon}
+              source={require('../assets/icons/back_arrow_icon.png')}
+            />
+          </View>
+        </TouchableOpacity>
+        <View>
+          {response && (
+            <View style={styles.responseContainer}>
+              <View style={styles.topRow}>
+                <View style={styles.profilePictureContainer}>
+                  <TouchableOpacity onPress={() => console.log(route.params.userID)}>
                     <Image
                       style={styles.profPicture}
-                      source={{uri: "data:image/png;base64," + profilePics[route.params.userID]}}
+                      source={{ uri: "data:image/png;base64," + profilePics[route.params.userID] }}
                     />
-                  </View>
-                  <View style={styles.moreInfo}>
-                    <Text style={styles.username}>
-                      surferdude123
-                    </Text>
-                    <Text style={styles.location}>
-                      1 hr
-                    </Text>
-                  </View>
-                  <View style={styles.threeDotsContainer}>
-                    <Menu>
-                      <MenuTrigger text='•••' customStyles={styles.threeDots} />
-                      <MenuOptions>
-                        <MenuOption onSelect={() => alert(`Saved`)} text='Save' />
-                        <MenuOption onSelect={() => alert(`Reported`)} >
-                          <Text style={{ color: 'red' }}>Report</Text>
-                        </MenuOption>
-                      </MenuOptions>
-                    </Menu>
-                  </View>
+                  </TouchableOpacity>
                 </View>
-                <Text style={styles.usernameComments}>{responseUserID}</Text>
-                <Text style={styles.responseText}>{responseText}</Text>
-                <View style={styles.bottomRow}>
-                  <View style={styles.thumbsUpContainer}>
-                    <Image
-                      style={styles.thumbsUp}
-                      source={require('../assets/icons/black_thumb_icon.png')}
-                    />
-                  </View>
-                  <View style={styles.thumbsUpNumContainer}>
-                    <Text style={styles.thumbsUpNum}>1</Text>
-                  </View>
-                  <View style={styles.commentsContainer}>
-                    <Image
-                      style={styles.commentsIcon}
-                      source={require('../assets/icons/comments_icon.png')}
-                    />
-                  </View>
-                  <View style={styles.commentsNumContainer}>
-                    <Text style={styles.commentsNum}>1</Text>
-                  </View>
+                <View style={styles.moreInfo}>
+                  <Text style={styles.username}>
+                    {username}
+                  </Text>
+                  <Text style={styles.location}>
+                    1 hr
+                  </Text>
+                </View>
+                <View style={styles.threeDotsContainer2}>
+                  <Image
+                    style={styles.threeDots2}
+                    source={require('../assets/icons/threedots_icon.png')}
+                  />
                 </View>
               </View>
-            )}
-          </View>
-          <View style={styles.rankStack}>
-            <Image
-              style={styles.stack}
-              source={require('../assets/icons/stackview_icon.png')}
-            />
-            <View style={styles.list1}>
-              <SelectList
-                setSelected={(key) => setSortType(key)}
-                data={data1}
-                save="key"
-                search={false}
-                boxStyles={{ borderRadius: 0, height: 45, width: 120, borderColor: '#FFFFFF', paddingLeft: 8 }} //override default styles
-                dropdownStyles={{ position: "absolute", top: 35, width: "100%", zIndex: 2, borderColor: '#000000', borderrRadius: 10, backgroundColor: '#F1F1F1' }}
-                inputStyles={{ fontSize: 13 }}
-                placeholder={sortType}
-                onSelect={() => handleSort(sortType)}
-              />
+              <Text style={styles.usernameComments}>{responseUserID}</Text>
+              <Text style={styles.responseText}>{responseText}</Text>
+              <View style={styles.bottomRow}>
+                <View style={styles.thumbsUpContainer}>
+                  <Image
+                    style={styles.thumbsUp}
+                    source={require('../assets/icons/black_thumb_icon.png')}
+                  />
+                </View>
+                <View style={styles.thumbsUpNumContainer}>
+                  <Text style={styles.thumbsUpNum}>1</Text>
+                </View>
+                <View style={styles.commentsContainer}>
+                  <Image
+                    style={styles.commentsIcon}
+                    source={require('../assets/icons/comments_icon.png')}
+                  />
+                </View>
+                <View style={styles.commentsNumContainer}>
+                  <Text style={styles.commentsNum}>1</Text>
+                </View>
+              </View>
             </View>
-          </View>
-          <ScrollView style={styles.scrollView}>
-            {comments.map((comment, index) => (
-              <View key={index} style={styles.comment}>
-                <View style={styles.topRow}>
-                  <View style={styles.commentsProfContainer}>
-                    <Image
-                      style={styles.commentsProf}
-                      source={{uri: "data:image/png;base64," + profilePics[comment.userID]}}
-                    />
-                  </View>
-                  <View style={styles.moreInfo2}>
-                    <Text style={styles.username2}>
-                      {comment.userID}
-                    </Text>
-                    <Text style={styles.location2}>
-                      1 hr
-                    </Text>
-                  </View>
-                </View>
-                {/* <Text style={styles.usernameComments}>{comment.userID}</Text> */}
-                <View style={styles.commentTextContainer}>
-                  <Text style={styles.commentText}>{comment.text}</Text>
-                </View>
-                <View style={styles.bottomRow2}>
-                  <View style={styles.threeDotsContainer2}>
-                    <Menu>
-                      <MenuTrigger text='•••' customStyles={styles.threeDots} />
-                      <MenuOptions>
-                        <MenuOption onSelect={() => alert(`Saved`)} text='Save' />
-                        <MenuOption onSelect={() => alert(`Reported`)} >
-                          <Text style={{ color: 'red' }}>Report</Text>
-                        </MenuOption>
-                      </MenuOptions>
-                    </Menu>
-                  </View>
-                  <View style={styles.replyContainer}>
-                    <Image
-                      style={styles.reply}
-                      source={require('../assets/icons/reply.png')}
-                    />
-                  </View>
-                  <View style={styles.replyNumContainer}>
-                    <Text style={styles.replyNum}>Reply</Text>
-                  </View>
-                  <View style={styles.thumbsUpContainer}>
-                    <Image
-                      style={styles.thumbsUp}
-                      source={require('../assets/icons/black_thumb_icon.png')}
-                    />
-                  </View>
-                  <View style={styles.commentsNumContainer}>
-                    <Text style={styles.commentsNum}>1</Text>
-                  </View>
-                </View>
-              </View>
-            ))}
-          </ScrollView>
-          <View style={styles.commentInputContainer}>
-            <TextInput
-              style={styles.commentInput}
-              placeholder="Add a comment"
-              value={commentText}
-              onChangeText={text => setCommentText(text)}
+          )}
+        </View>
+        <View style={styles.rankStack}>
+          <Image
+            style={styles.stack}
+            source={require('../assets/icons/stackview_icon.png')}
+          />
+          <View style={styles.list1}>
+            <SelectList
+              setSelected={(key) => setSortType(key)}
+              data={data1}
+              save="key"
+              search={false}
+              boxStyles={{ borderRadius: 0, height: 45, width: 120, borderColor: '#FFFFFF', paddingLeft: 8 }} //override default styles
+              dropdownStyles={{ position: "absolute", top: 35, width: "100%", zIndex: 2, borderColor: '#000000', borderrRadius: 10, backgroundColor: '#F1F1F1' }}
+              inputStyles={{ fontSize: 13 }}
+              placeholder={sortType}
+              onSelect={() => handleSort(sortType)}
             />
-            <Button title="Post" onPress={handleSubmitComment} color='#555454' />
           </View>
         </View>
-      </ThemeProvider>
-    </MenuProvider>
+        <ScrollView style={styles.scrollView}>
+          {comments.map((comment, index) => (
+            <View key={index} style={styles.comment}>
+              <View style={styles.topRow}>
+                <View style={styles.commentsProfContainer}>
+                  <Image
+                    style={styles.commentsProf}
+                    source={{ uri: "data:image/png;base64," + profilePics[comment.userID] }}
+                  />
+                </View>
+                <View style={styles.moreInfo2}>
+                  <Text style={styles.username2}>
+                    {comment.userID}
+                  </Text>
+                  <Text style={styles.location2}>
+                    1 hr
+                  </Text>
+                </View>
+              </View>
+              {/* <Text style={styles.usernameComments}>{comment.userID}</Text> */}
+              <View style={styles.commentTextContainer}>
+                <Text style={styles.commentText}>{comment.text}</Text>
+              </View>
+              <View style={styles.bottomRow2}>
+                <View style={styles.threeDotsContainer}>
+                  <Image
+                    style={styles.threeDots}
+                    source={require('../assets/icons/threedots_icon.png')}
+                  />
+                </View>
+                <View style={styles.replyContainer}>
+                  <Image
+                    style={styles.reply}
+                    source={require('../assets/icons/reply.png')}
+                  />
+                </View>
+                <View style={styles.replyNumContainer}>
+                  <Text style={styles.replyNum}>Reply</Text>
+                </View>
+                <View style={styles.thumbsUpContainer}>
+                  <Image
+                    style={styles.thumbsUp}
+                    source={require('../assets/icons/black_thumb_icon.png')}
+                  />
+                </View>
+                <View style={styles.commentsNumContainer}>
+                  <Text style={styles.commentsNum}>1</Text>
+                </View>
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+        <View style={styles.commentInputContainer}>
+          <TextInput
+            style={styles.commentInput}
+            placeholder="Add a comment"
+            value={commentText}
+            onChangeText={text => setCommentText(text)}
+          />
+          <Button title="Post" onPress={handleSubmitComment} color='#555454' />
+        </View>
+      </View>
+    </ThemeProvider>
+
   );
 };
 
@@ -307,11 +291,12 @@ const styles = StyleSheet.create({
   usernameComments: {
     fontWeight: 'bold',
     marginBottom: 5,
+    fontFamily: 'InriaSans-Bold',
   },
   responseText: {
     fontSize: 18,
     color: '#616161',
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Bold',
     fontWeight: 'bold',
     marginLeft: 15,
   },
@@ -333,9 +318,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingTop: 15,
     marginLeft: 10,
-    fontFamily: 'Arial',
+    fontFamily: 'InriaSans-Italic',
     color: '#616161',
-    fontStyle: 'italic',
   },
   rank: {
     flexDirection: 'row',
@@ -382,6 +366,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 10,
     fontSize: 16,
+    fontFamily: 'InriaSans-Bold',
   },
   headerMessage: {
     flex: 1,
@@ -403,6 +388,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginLeft: 8,
     fontStyle: 'italic',
+    fontFamily: 'InriaSans-Italic',
   },
   time: {
     color: '#BDBCBC',
@@ -428,6 +414,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 10,
     fontSize: 11.5,
+    fontFamily: 'InriaSans-Bold',
   },
   moreInfo: {
     marginTop: 12,
@@ -439,7 +426,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   username2: {
-    fontWeight: 'bold',
+    fontFamily: 'InriaSans-Bold',
     color: '#6A6A6A',
     marginBottom: 5,
     marginLeft: 10,
@@ -449,7 +436,7 @@ const styles = StyleSheet.create({
     color: '#9D9D9D',
     fontSize: 10,
     marginLeft: 8,
-    fontStyle: 'italic',
+    fontFamily: 'InriaSans-Italic',
   },
   bottomRow: {
     flexDirection: 'row',
@@ -479,6 +466,7 @@ const styles = StyleSheet.create({
   },
   replyNum: {
     color: '#726D6D',
+    fontFamily: 'InriaSans-Bold',
   },
   commentsIcon: {
     width: 18,
@@ -486,17 +474,20 @@ const styles = StyleSheet.create({
     opacity: 0.75,
   },
   threeDotsContainer: {
-    position: 'absolute',
-    top: 25,
-    right: 15,
-  },
-  threeDotsContainer2: {
-    marginRight: 20,
+    marginRight: 27,
   },
   threeDots: {
     width: 20,
     height: 20,
     opacity: 0.7,
+  },
+  threeDotsContainer2: {
+    marginLeft: 150,
+    marginTop: 20,
+  },
+  threeDots2: {
+    width: 20,
+    height: 20,
   },
   commentsContainer: {
     marginLeft: 10,
@@ -510,9 +501,11 @@ const styles = StyleSheet.create({
   commentsNum: {
     color: '#726D6D',
     marginLeft: 3,
+    fontFamily: 'InriaSans-Bold',
   },
   thumbsUpNum: {
     color: '#726D6D',
+    fontFamily: 'InriaSans-Bold',
   },
   thumbsUpNumContainer: {
     marginLeft: 5,

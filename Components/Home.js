@@ -68,6 +68,7 @@ const Home = ({ navigation }) => {
               backgroundColor: theme.lightColors.primary,
               borderRadius: 50,
               fontSize: 17,
+              fontFamily: 'InriaSans-Bold',
             }}
             onPress={() => navigation.navigate('Login')}
             title="Log In"
@@ -83,6 +84,7 @@ const Home = ({ navigation }) => {
               marginTop: 25,
               borderRadius: 50,
               fontSize: 17,
+              fontFamily: 'InriaSans-Bold',
             }}
             onPress={() => navigation.navigate('Sign up')}
             title="Sign Up"

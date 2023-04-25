@@ -16,14 +16,6 @@ import { ThemeProvider, createTheme } from '@rneui/themed';
 import { Dropdown } from 'react-native-material-dropdown';
 import { SelectList } from 'react-native-dropdown-select-list'
 import Clock from './Clock';
-import {
-  Menu,
-  MenuOptions,
-  MenuOption,
-  MenuTrigger,
-} from 'react-native-popup-menu';
-import { MenuProvider } from 'react-native-popup-menu';
-
 
 
 const theme = createTheme({
@@ -66,9 +58,9 @@ const MessageBoard = ({ navigation, route }) => {
   const SORTBYOLD = 3
   const [sortType, setSortType] = useState(SORTBYTOP)
   const { username } = route.params;
-  const { usernameC, setUsernameC, promptIDC, setPromptIDC, promptTextC, setPromptTextC } = useContext(AppContext);
+  const { usernameC, setUsernameC, promptIDC, setPromptIDC, promptTextC, setPromptTextC, promptDateC, setPromptDateC } = useContext(AppContext);
   const [refreshing, setRefreshing] = useState(false);
-  
+
 
   const data1 = [
     { key: SORTBYTOP, value: 'top' },
@@ -111,6 +103,7 @@ const MessageBoard = ({ navigation, route }) => {
       setPromptTextC(promptText);
       setUsernameC(username);
       setPromptDate(promptDate);
+      setPromptDateC(promptDate)
     });
 
   }, [usernameC, promptIDC, promptTextC, showFollowing]);
@@ -321,69 +314,67 @@ const MessageBoard = ({ navigation, route }) => {
   }
 
   return (
-    <MenuProvider>
-      <ThemeProvider>
-        <View style={styles.container}>
-          <View style={styles.logoContainer}>
+    <ThemeProvider>
+      <View style={styles.container}>
+        <View style={styles.logoContainer}>
+          <Image
+            style={styles.logoChalk}
+            source={require('../assets/images/chalk_logo.png')}
+          />
+        </View>
+        <View style={styles.header}>
+          <Text style={styles.qotd}>Question of the Day: </Text>
+          <Text style={styles.logo}>{promptText}</Text>
+        </View>
+        <View style={styles.rank}>
+          <View style={styles.rankStack}>
             <Image
-              style={styles.logoChalk}
-              source={require('../assets/images/chalk_logo.png')}
+              style={styles.stack}
+              source={require('../assets/icons/stackview_icon.png')}
             />
-          </View>
-          <Clock timestamp={promptDate} />
-          <View style={styles.header}>
-            <Text style={styles.qotd}>Question of the Day: </Text>
-            <Text style={styles.logo}>{promptText}</Text>
-          </View>
-          <View style={styles.rank}>
-            <View style={styles.rankStack}>
-              <Image
-                style={styles.stack}
-                source={require('../assets/icons/stackview_icon.png')}
+            <View style={styles.list}>
+              <SelectList
+                setSelected={(key) => setSortType(key)}
+                data={data1}
+                save="key"
+                search={false}
+                boxStyles={{ borderRadius: 0, height: 45, width: 120, borderColor: '#FFFFFF', paddingLeft: 8 }} //override default styles
+                dropdownStyles={{ position: "absolute", top: 40, width: "100%", zIndex: 2, borderColor: '#000000', borderrRadius: 10, backgroundColor: '#F1F1F1' }}
+                inputStyles={{ fontSize: 13 }}
+                placeholder={sortType}
+                onSelect={() => handleSort(sortType)}
               />
-              <View style={styles.list}>
-                <SelectList
-                  setSelected={(key) => setSortType(key)}
-                  data={data1}
-                  save="key"
-                  search={false}
-                  boxStyles={{ borderRadius: 0, height: 45, width: 120, borderColor: '#FFFFFF', paddingLeft: 8 }} //override default styles
-                  dropdownStyles={{ position: "absolute", top: 40, width: "100%", zIndex: 2, borderColor: '#000000', borderrRadius: 10, backgroundColor: '#F1F1F1' }}
-                  inputStyles={{ fontSize: 13 }}
-                  placeholder={sortType}
-                  onSelect={() => handleSort(sortType)}
-                />
-              </View>
-            </View>
-            <View style={styles.followingButtonContainer}>
-              <TouchableOpacity
-                style={styles.followingButton}
-                onPress={() => setShowFollowing(!showFollowing)}
-              >
-                <View style={styles.followingButtonSection}>
-                  <Text
-                    style={[
-                      styles.followingButtonText,
-                      !showFollowing && styles.followingButtonSelected,
-                    ]}
-                  >
-                    All
-                  </Text>
-                </View>
-                <View style={styles.followingButtonSection}>
-                  <Text
-                    style={[
-                      styles.followingButtonText,
-                      showFollowing && styles.followingButtonSelected,
-                    ]}
-                  >
-                    Following
-                  </Text>
-                </View>
-              </TouchableOpacity>
             </View>
           </View>
-          {/* <Button onPress={
+          <View style={styles.followingButtonContainer}>
+            <TouchableOpacity
+              style={styles.followingButton}
+              onPress={() => setShowFollowing(!showFollowing)}
+            >
+              <View style={styles.followingButtonSection}>
+                <Text
+                  style={[
+                    styles.followingButtonText,
+                    !showFollowing && styles.followingButtonSelected,
+                  ]}
+                >
+                  All
+                </Text>
+              </View>
+              <View style={styles.followingButtonSection}>
+                <Text
+                  style={[
+                    styles.followingButtonText,
+                    showFollowing && styles.followingButtonSelected,
+                  ]}
+                >
+                  Following
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+        {/* <Button onPress={
           () => handleSort(SORTBYNEW)
         } title="Top" />
         <Button onPress={
@@ -407,16 +398,23 @@ const MessageBoard = ({ navigation, route }) => {
                   <View style={styles.headerMessage}>
                     <Image
                       style={styles.profPicture}
-                      source={{uri: "data:image/png;base64," + profilePics[message.userID]}}
+                      source={{ uri: "data:image/png;base64," + profilePics[message.userID] }}
                     />
                     <View style={styles.furtherInfo}>
                       <Text style={styles.username} onPress={
                         () => {
-                          navigation.navigate('Profile Page', {
-                            username: message.userID,
-                            current_username: username,
-                            isDefaultUser: false,
-                          });
+                          if (message.userID === username) {
+                            navigation.navigate('Profile Page', {
+                              username: username
+                            });
+                          }
+                          else {
+                            navigation.navigate('OtherProfilePage', {
+                              username: message.userID,
+                              current_username: username,
+                              isDefaultUser: false,
+                            });
+                          }
                         }
                       }>{message.userID}</Text>
                       <View style={styles.subsetMessage}>
@@ -424,70 +422,59 @@ const MessageBoard = ({ navigation, route }) => {
                         {/* <View style={styles.dotMessage}>
                             <Text style={styles.dot}> • </Text>
                           </View> */}
-                          <Text style={styles.location}>{timePassed(message.timestamp)}</Text>
-                        </View>
+                        <Text style={styles.location}>{timePassed(message.timestamp)}</Text>
                       </View>
-                      <View>
-                        <Menu>
-                          <MenuTrigger text='•••' customStyles={styles.threeDots} />
-                          <MenuOptions>
-                            <MenuOption onSelect={() => alert(`Saved`)} text='Save' />
-                            <MenuOption onSelect={() => alert(`Reported`)} >
-                              <Text style={{ color: 'red' }}>Report</Text>
-                            </MenuOption>
-                          </MenuOptions>
-                        </Menu>
-                      </View>
-                      {/* <View style={styles.threeDotsContainer}>
-                        <Image
-                          style={styles.threeDots}
-                          source={require('../assets/icons/threedots_icon.png')}
-                        />
-                      </View> */}
                     </View>
-                    <View styles={styles.mainMessage}>
-                      <Text style={styles.messageText}>{message.text}</Text>
+                    <View style={styles.threeDotsContainer}>
+                      <Image
+                        style={styles.threeDots}
+                        source={require('../assets/icons/threedots_icon.png')}
+                      />
                     </View>
                   </View>
-                  <View style={styles.bottomRow}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        handleLongPress(username, message.userID, promptID, message.responseID) //old method with old name... should change later
-                      }}>
-                      <Image style={styles.upvoteImage}
-                        source={
-                          likedResponseIDs != undefined && likedResponseIDs.includes(message.responseID) ? require('../assets/icons/blue_thumb_icon.png') : require('../assets/icons/black_thumb_icon.png')} />
-                    </TouchableOpacity>
-                    <Text style={styles.likeCountText}>{message.likeCount}</Text>
-                    <TouchableOpacity
-                      onPress={() => {
-                        handleReply(message.text, message.responseID, message.userID);
-                      }
-                      }
-                    >
-                      <Image style={styles.commentImage} source={require('../assets/icons/comments_icon.png')} />
-                    </TouchableOpacity>
-                    <Text style={styles.commentNumber}>{message.replyCount}</Text>
-                    {false && message.userID === username &&
-                      (
-                        <TouchableOpacity
-                          onPress={() => {
-                            navigation.navigate('Comment Page', {
-                              isEditing: true,
-                              messageText: message.text
-                            });
-                          }}>
-                          <Image style={styles.editImage} source={require('../assets/icons/pencil_icon.png')} />
-                          <Text style={styles.editText}>Edit</Text>
-                        </TouchableOpacity>
-                      )}
-
+                  <View styles={styles.mainMessage}>
+                    <Text style={styles.messageText}>{message.text}</Text>
                   </View>
                 </View>
-              ))}
-            </View>
-          </ScrollView>
-          {/* <View style={styles.inputContainer}>
+                <View style={styles.bottomRow}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      handleLongPress(username, message.userID, promptID, message.responseID) //old method with old name... should change later
+                    }}>
+                    <Image style={styles.upvoteImage}
+                      source={
+                        likedResponseIDs != undefined && likedResponseIDs.includes(message.responseID) ? require('../assets/icons/blue_thumb_icon.png') : require('../assets/icons/black_thumb_icon.png')} />
+                  </TouchableOpacity>
+                  <Text style={styles.likeCountText}>{message.likeCount}</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      handleReply(message.text, message.responseID, message.userID);
+                    }
+                    }
+                  >
+                    <Image style={styles.commentImage} source={require('../assets/icons/comments_icon.png')} />
+                  </TouchableOpacity>
+                  <Text style={styles.commentNumber}>{message.replyCount}</Text>
+                  {false && message.userID === username &&
+                    (
+                      <TouchableOpacity
+                        onPress={() => {
+                          navigation.navigate('Comment Page', {
+                            isEditing: true,
+                            messageText: message.text
+                          });
+                        }}>
+                        <Image style={styles.editImage} source={require('../assets/icons/pencil_icon.png')} />
+                        <Text style={styles.editText}>Edit</Text>
+                      </TouchableOpacity>
+                    )}
+
+                </View>
+              </View>
+            ))}
+          </View>
+        </ScrollView>
+        {/* <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
             onChangeText={text => setInputText(text)}
@@ -496,9 +483,8 @@ const MessageBoard = ({ navigation, route }) => {
           />
           <Button title="Post" onPress={handleSend} />
         </View> */}
-        </View>
-      </ThemeProvider>
-    </MenuProvider>
+      </View>
+    </ThemeProvider>
   );
 };
 
@@ -517,11 +503,11 @@ const styles = StyleSheet.create({
   },
   qotd: {
     fontWeight: 'bold',
-    fontFamily: 'Helvetica',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 20,
   },
   logo: {
-    fontFamily: 'Helvetica',
+    fontFamily: 'InriaSans-Bold',
     fontSize: 15,
     marginTop: 7,
   },
@@ -571,6 +557,7 @@ const styles = StyleSheet.create({
   messageText: {
     color: '#616161',
     fontSize: 16,
+    fontFamily: 'InriaSans-Bold',
     fontWeight: 'bold',
     marginTop: 15,
     marginLeft: 9,
@@ -601,12 +588,14 @@ const styles = StyleSheet.create({
   location: {
     color: '#9D9D9D',
     fontSize: 10,
+    fontFamily: 'InriaSans-LightItalic',
     marginLeft: 8,
     fontStyle: 'italic',
   },
   time: {
     color: '#BDBCBC',
     fontSize: 10,
+    fontFamily: 'InriaSans-LightItalic',
     marginLeft: -3,
     fontStyle: 'italic',
   },
@@ -656,7 +645,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   threeDots: {
-    color: '#726D6D',
+    width: 20,
+    height: 20,
   },
   commentImage: {
     width: 19,
@@ -669,10 +659,12 @@ const styles = StyleSheet.create({
   commentNumber: {
     color: '#726D6D',
     fontSize: 14,
+    fontFamily: 'InriaSans-Regular',
   },
   editText: {
     color: '#726D6D',
     fontSize: 13,
+    fontFamily: 'InriaSans-Regular',
     marginLeft: 55,
     marginTop: -19,
   },
@@ -687,6 +679,7 @@ const styles = StyleSheet.create({
   likeCountText: {
     color: '#726D6D',
     fontSize: 14,
+    fontFamily: 'InriaSans-Regular',
   },
   username: {
     fontWeight: 'bold',
@@ -695,6 +688,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 10,
     fontSize: 11.5,
+    fontFamily: 'InriaSans-Bold',
+
   },
   inputContainer: {
     flexDirection: 'row',
@@ -728,6 +723,7 @@ const styles = StyleSheet.create({
   followingButtonText: {
     fontSize: 13,
     color: '#5c64b0',
+    fontFamily: 'InriaSans-Bold',
   },
   followingButtonSelected: {
     fontWeight: 'bold',
