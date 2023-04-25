@@ -16,7 +16,7 @@ const EditProfile = ({ navigation, route }) => {
     db_operations.getProfilePic(username).then(pic => {
       setProfilePicture(pic);
     });
-  }, [username, profilePicture]);
+  }, [username]);
   
   const handleProfilePictureChange = async () => {
     const options = {
@@ -37,7 +37,7 @@ const EditProfile = ({ navigation, route }) => {
           const base64Image = response.assets[0].base64;
           console.log("base64Image", base64Image)
           setProfilePicture(base64Image)
-          console.log("after change", profilePicture)
+          // console.log("after change", profilePicture)
           setIsProfilePictureChanged(true)
         } else {
           Alert.alert("Picture too large, cannot set profile picture.")
@@ -53,7 +53,7 @@ const EditProfile = ({ navigation, route }) => {
     //TODO: add ability to save username/prof picture
     if(isProfilePictureChanged){
       setIsProfilePictureChanged(false)
-      await db_operations.setProfilePic(username, base64Image);
+      await db_operations.setProfilePic(username, profilePicture);
     }
     if(location !== updatedLocation){
       db_operations.updateLocation(username, updatedLocation)
